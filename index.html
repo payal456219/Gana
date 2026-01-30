@@ -1,60 +1,91 @@
 <!DOCTYPE html>
-<html lang="mr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CA Course Partner</title>
-    
-    <link rel="icon" type="image/png" href="https://i.postimg.cc/YqJMPdbb/1769782227060.png">
-    <link rel="apple-touch-icon" href="https://i.postimg.cc/YqJMPdbb/1769782227060.png">
-    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/dist/css/all.min.css">
     <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #000000;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
-        }
-        .logo-box {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 3px solid #8b5cf6;
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
-        }
-        .logo-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        h1 {
-            margin-top: 25px;
-            font-size: 32px;
-            background: linear-gradient(to right, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        p {
-            color: #94a3b8;
-            font-size: 18px;
-        }
+        body { background-color: #020617; color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .glass { background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
+        .tab-content { display: none; padding-bottom: 80px; }
+        .active-tab { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .subject-card { background: #1e293b; border-radius: 12px; padding: 15px; margin-bottom: 10px; border-left: 5px solid #8b5cf6; }
     </style>
 </head>
 <body>
+    <header class="p-4 glass sticky top-0 z-50 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <img src="https://i.postimg.cc/YqJMPdbb/1769782227060.png" class="w-10 h-10 rounded-full border-2 border-purple-500">
+            <span class="font-bold text-lg tracking-wide uppercase">CA Partner</span>
+        </div>
+        <button onclick="showTab('profile')" class="text-2xl text-purple-400"><i class="fas fa-user-circle"></i></button>
+    </header>
 
-    <div class="logo-box">
-        <img src="https://i.postimg.cc/YqJMPdbb/1769782227060.png" alt="CA Course Partner">
-    </div>
+    <main class="p-4">
+        <div id="home" class="tab-content active-tab">
+            <div class="mb-6">
+                <h2 class="text-sm font-bold text-purple-400 mb-2 uppercase tracking-widest">ICAI Latest News</h2>
+                <div class="glass p-4 rounded-2xl overflow-hidden relative">
+                    <marquee direction="up" scrollamount="2" class="h-20 text-sm">
+                        <p class="text-blue-300">📌 May 2026 Exam Schedule released by ICAI.</p>
+                        <p class="text-green-300">📅 New updates in Advanced Auditing module.</p>
+                        <p class="text-yellow-300">📢 Results for CA Foundation released.</p>
+                    </marquee>
+                </div>
+            </div>
+            <h2 class="text-sm font-bold text-purple-400 mb-4 uppercase tracking-widest">Levels</h2>
+            <div class="space-y-4">
+                <details class="glass rounded-xl p-2"><summary class="font-bold p-2 text-blue-400">Foundation</summary><div class="p-2 space-y-2 text-xs text-gray-300"><div class="subject-card">Accounting</div><div class="subject-card">Quant Aptitude</div></div></details>
+                <details class="glass rounded-xl p-2"><summary class="font-bold p-2 text-green-400">Intermediate</summary><div class="p-2 space-y-2 text-xs text-gray-300"><div class="subject-card">Adv. Accounting</div><div class="subject-card">Taxation</div></div></details>
+                <details class="glass rounded-xl p-2"><summary class="font-bold p-2 text-red-400">Final</summary><div class="p-2 space-y-2 text-xs text-gray-300"><div class="subject-card">Financial Reporting</div><div class="subject-card">Adv. Auditing</div></div></details>
+            </div>
+        </div>
 
-    <h1>CA Course Partner</h1>
-    <p>तुमचा AI आधारित CA अभ्यासाचा सोबती</p>
+        <div id="ai" class="tab-content text-center">
+            <h2 class="text-xl font-bold mb-4">Gemini AI Mentor</h2>
+            <div id="chatbox" class="glass h-[55vh] rounded-2xl p-4 overflow-y-auto mb-4 text-left text-sm">
+                <p class="text-gray-400 italic">Hello! Ask me any CA doubt...</p>
+            </div>
+            <div class="flex gap-2">
+                <input type="text" id="aiInput" class="flex-1 bg-gray-800 p-3 rounded-xl border border-gray-700 outline-none">
+                <button onclick="askAI()" class="bg-purple-600 p-3 rounded-xl px-5"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
 
+        <div id="practice" class="tab-content"><h2 class="text-xl font-bold mb-4">Practice Zone</h2><div class="glass p-5 rounded-2xl mb-4">50+ Papers Available</div><div class="glass p-5 rounded-2xl">20+ Flashcards</div></div>
+
+        <div id="profile" class="tab-content text-center">
+            <img src="https://i.postimg.cc/YqJMPdbb/1769782227060.png" class="w-24 h-24 rounded-full mx-auto border-4 border-purple-500 mb-4 shadow-lg">
+            <h2 class="text-xl font-bold">CA Student</h2>
+            <div class="mt-6 space-y-3 px-4">
+                <a href="tel:7719081975" class="block w-full glass p-4 rounded-xl text-green-400 font-bold"><i class="fas fa-phone mr-3"></i>Contact Support</a>
+            </div>
+        </div>
+    </main>
+
+    <nav class="fixed bottom-0 left-0 right-0 glass p-3 flex justify-around border-t border-gray-800">
+        <button onclick="showTab('home')" class="nav-btn text-purple-500 flex flex-col items-center"><i class="fas fa-home"></i><span class="text-[10px]">Home</span></button>
+        <button onclick="showTab('ai')" class="nav-btn text-gray-400 flex flex-col items-center"><i class="fas fa-robot"></i><span class="text-[10px]">AI</span></button>
+        <button onclick="showTab('practice')" class="nav-btn text-gray-400 flex flex-col items-center"><i class="fas fa-book"></i><span class="text-[10px]">Study</span></button>
+        <button onclick="showTab('profile')" class="nav-btn text-gray-400 flex flex-col items-center"><i class="fas fa-user"></i><span class="text-[10px]">Profile</span></button>
+    </nav>
+
+    <script>
+        function showTab(id) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active-tab'));
+            document.getElementById(id).classList.add('active-tab');
+        }
+        function askAI() {
+            let i = document.getElementById('aiInput');
+            let c = document.getElementById('chatbox');
+            if(i.value) {
+                c.innerHTML += `<p class='mb-2'><b>You:</b> ${i.value}</p><p class='text-blue-300'><b>AI:</b> Working on it...</p>`;
+                i.value = ""; c.scrollTop = c.scrollHeight;
+            }
+        }
+    </script>
 </body>
 </html>
