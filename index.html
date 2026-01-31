@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CA Mentor AI - Premium</title>
+    <title>CA Partner - All Subjects</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/dist/css/all.min.css">
     <style>
@@ -13,13 +13,11 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .glass-card { background: #161b2c; border: 1px solid #2d364f; border-radius: 20px; }
-        
-        /* Quick Action Buttons (3 Buttons as per your request) */
         .action-card { background: #1c233a; border-radius: 18px; padding: 15px; text-align: center; border: 1px solid #2d364f; cursor: pointer; }
         
-        /* Subject List Cards (Large style like your photo) */
+        /* Subject Cards */
         .subject-row { background: #161b2c; border-radius: 18px; padding: 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border: 1px solid #2d364f; cursor: pointer; }
-        .sub-icon-box { width: 45px; height: 45px; border-radius: 12px; display: flex; items-center; justify-content: center; margin-right: 15px; }
+        .sub-icon-box { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 15px; }
 
         .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0b0f1a; border-top: 1px solid #2d364f; display: flex; justify-content: space-around; padding: 12px; z-index: 100; }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #64748b; font-size: 10px; cursor: pointer; }
@@ -38,42 +36,41 @@
             <h1 class="text-2xl font-bold">Welcome back!</h1>
             <p class="text-gray-400 text-sm mt-2">Select Level to Continue</p>
         </div>
+        
         <div onclick="openDashboard('Foundation')" class="subject-row" style="border-left: 5px solid #10b981;">
-            <div class="flex items-center"><div class="sub-icon-box bg-green-900/30 text-green-500"><i class="fas fa-book"></i></div><span class="font-bold">Foundation</span></div>
+            <div class="flex items-center"><div class="sub-icon-box bg-green-900/30 text-green-500"><i class="fas fa-seedling"></i></div><span class="font-bold">Foundation</span></div>
             <i class="fas fa-chevron-right text-gray-600"></i>
         </div>
+
         <div onclick="openDashboard('Intermediate')" class="subject-row" style="border-left: 5px solid #3b82f6;">
             <div class="flex items-center"><div class="sub-icon-box bg-blue-900/30 text-blue-500"><i class="fas fa-layer-group"></i></div><span class="font-bold">Intermediate</span></div>
+            <i class="fas fa-chevron-right text-gray-600"></i>
+        </div>
+
+        <div onclick="openDashboard('Final')" class="subject-row" style="border-left: 5px solid #f43f5e;">
+            <div class="flex items-center"><div class="sub-icon-box bg-red-900/30 text-red-500"><i class="fas fa-trophy"></i></div><span class="font-bold">Final</span></div>
             <i class="fas fa-chevron-right text-gray-600"></i>
         </div>
     </div>
 
     <div id="dashboard" class="tab-content p-5">
         <div class="flex justify-between items-center mb-6">
-            <div><p class="text-gray-400 text-xs uppercase tracking-widest">Welcome back!</p><h1 class="text-xl font-bold">CA Mentor AI</h1></div>
+            <div><p class="text-gray-400 text-xs uppercase tracking-widest">Dashboard</p><h1 class="text-xl font-bold">CA Mentor AI</h1></div>
             <div class="bg-blue-600/20 text-blue-400 px-3 py-1 rounded-full text-[10px] font-bold border border-blue-500/30" id="displayLevel">Level</div>
         </div>
 
-        <h2 class="text-[10px] font-bold text-gray-500 mb-4 uppercase tracking-widest">Quick Actions</h2>
         <div class="grid grid-cols-3 gap-3 mb-8">
             <div onclick="showTab('aiChat')" class="action-card"><i class="fas fa-comment-dots text-blue-500 mb-2 text-xl"></i><p class="text-[10px] font-bold">Ask AI</p></div>
-            <div onclick="alert('Loading Materials...')" class="action-card"><i class="fas fa-book text-green-500 mb-2 text-xl"></i><p class="text-[10px] font-bold">Practice</p></div>
-            <div onclick="alert('Latest News...')" class="action-card"><i class="fas fa-newspaper text-orange-500 mb-2 text-xl"></i><p class="text-[10px] font-bold">News</p></div>
+            <div onclick="alert('Materials Loading...')" class="action-card"><i class="fas fa-book text-green-500 mb-2 text-xl"></i><p class="text-[10px] font-bold">Practice</p></div>
+            <div onclick="alert('News Loading...')" class="action-card"><i class="fas fa-newspaper text-orange-500 mb-2 text-xl"></i><p class="text-[10px] font-bold">News</p></div>
         </div>
 
-        <div class="grid grid-cols-3 gap-3 mb-8 text-center">
-            <div class="glass-card p-3"><p class="text-orange-400 font-bold">10</p><p class="text-[8px] text-gray-500 uppercase">Latest News</p></div>
-            <div class="glass-card p-3"><p class="text-green-400 font-bold">4</p><p class="text-[8px] text-gray-500 uppercase">Study Topics</p></div>
-            <div class="glass-card p-3"><p class="text-blue-400 font-bold">3</p><p class="text-[8px] text-gray-500 uppercase">Questions</p></div>
-        </div>
-
-        <h2 class="text-[10px] font-bold text-gray-500 mb-4 uppercase tracking-widest">Subjects</h2>
-        <div id="subjectList" class="space-y-4 mb-8">
-            </div>
+        <h2 class="text-[10px] font-bold text-gray-500 mb-4 uppercase tracking-widest">Your Subjects</h2>
+        <div id="subjectList" class="space-y-4 mb-8"></div>
 
         <h2 class="text-[10px] font-bold text-gray-500 mb-4 uppercase tracking-widest">Career & Jobs</h2>
         <div class="glass-card p-5 flex items-center justify-between border-l-4 border-yellow-500">
-            <div><p class="font-bold text-xs">Post-CA Job Opportunities</p><p class="text-[9px] text-gray-400">Apply for Top Firms</p></div>
+            <div><p class="font-bold text-xs">Post-CA Opportunities</p><p class="text-[9px] text-gray-400">Apply for Top Firms</p></div>
             <button class="bg-yellow-600 text-[9px] px-3 py-1 rounded-lg">VIEW ALL</button>
         </div>
     </div>
@@ -81,15 +78,11 @@
     <div id="profile" class="tab-content p-5">
         <div class="text-center mt-10 mb-10">
             <div class="w-20 h-20 bg-slate-800 rounded-full mx-auto mb-3 flex items-center justify-center border-2 border-blue-500"><i class="fas fa-user text-2xl"></i></div>
-            <h2 class="font-bold text-xl">CA Student Profile</h2>
+            <h2 class="font-bold text-xl">CA Student</h2>
         </div>
         <div class="space-y-3">
-            <button class="profile-option"><i class="fas fa-cog text-gray-400"></i><span>Settings</span></button>
-            <button class="profile-option"><i class="fas fa-bullhorn text-gray-400"></i><span>Send Feedback</span></button>
-            <a href="https://wa.me/917719081975?text=Hi, I need help with CA Partner App" class="profile-option">
-                <i class="fab fa-whatsapp text-green-500 text-xl"></i>
-                <div><p class="font-bold text-sm">Chat with Admin</p><p class="text-[10px] text-gray-500">No calls, WhatsApp only</p></div>
-            </a>
+            <button class="profile-option"><i class="fas fa-cog"></i><span>Settings</span></button>
+            <a href="https://wa.me/917719081975?text=Hi, Admin!" class="profile-option"><i class="fab fa-whatsapp text-green-500"></i><span>Chat with Admin (7719081975)</span></a>
             <button onclick="showTab('welcomeScreen')" class="profile-option text-red-400 mt-10"><i class="fas fa-sign-out-alt"></i><span>Change Level / Logout</span></button>
         </div>
     </div>
@@ -97,13 +90,13 @@
     <div id="aiChat" class="tab-content">
         <div class="p-5 border-b border-gray-800 flex items-center gap-4">
             <button onclick="showTab('dashboard')"><i class="fas fa-arrow-left"></i></button>
-            <h2 class="font-bold">AI Study Assistant</h2>
+            <h2 class="font-bold">AI Assistant</h2>
         </div>
-        <div id="chatbox" class="h-[65vh] overflow-y-auto p-5 space-y-4 text-sm">
-            <div class="bg-slate-800 p-4 rounded-2xl border border-gray-700">Hello! Ask me any CA doubt.</div>
+        <div id="chatbox" class="h-[65vh] overflow-y-auto p-5 space-y-4">
+            <div class="bg-slate-800 p-4 rounded-2xl border border-gray-700 text-sm">Hello! I'm ready to help with your CA preparation.</div>
         </div>
         <div class="fixed bottom-24 left-5 right-5 flex gap-2">
-            <input type="text" id="aiInput" placeholder="Ask anything about CA..." class="flex-1 bg-slate-800 border border-gray-700 rounded-full px-5 py-3 text-sm outline-none">
+            <input type="text" id="aiInput" placeholder="Ask anything..." class="flex-1 bg-slate-800 border border-gray-700 rounded-full px-5 py-3 text-sm outline-none">
             <button class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
@@ -119,12 +112,25 @@
         const subsData = {
             'Foundation': [
                 { name: 'Accounting', icon: 'fa-calculator', color: 'bg-green-900/30', text: 'text-green-500' },
-                { name: 'Quantitative Aptitude', icon: 'fa-chart-line', color: 'bg-orange-900/30', text: 'text-orange-500' },
-                { name: 'Business Studies', icon: 'fa-briefcase', color: 'bg-blue-900/30', text: 'text-blue-500' }
+                { name: 'Quantitative Aptitude', icon: 'fa-chart-line', color: 'bg-blue-900/30', text: 'text-blue-500' },
+                { name: 'Business Law', icon: 'fa-gavel', color: 'bg-orange-900/30', text: 'text-orange-500' },
+                { name: 'Business Economics', icon: 'fa-coins', color: 'bg-purple-900/30', text: 'text-purple-500' }
             ],
             'Intermediate': [
+                { name: 'Advanced Accounting', icon: 'fa-book-reader', color: 'bg-green-900/30', text: 'text-green-500' },
+                { name: 'Corporate Law', icon: 'fa-balance-scale', color: 'bg-blue-900/30', text: 'text-blue-500' },
                 { name: 'Taxation', icon: 'fa-file-invoice-dollar', color: 'bg-red-900/30', text: 'text-red-500' },
-                { name: 'Auditing', icon: 'fa-search-dollar', color: 'bg-indigo-900/30', text: 'text-indigo-500' }
+                { name: 'Cost Management', icon: 'fa-funnel-dollar', color: 'bg-orange-900/30', text: 'text-orange-500' },
+                { name: 'Auditing & Assurance', icon: 'fa-shield-alt', color: 'bg-purple-900/30', text: 'text-purple-500' },
+                { name: 'Financial Management', icon: 'fa-money-bill-wave', color: 'bg-indigo-900/30', text: 'text-indigo-500' }
+            ],
+            'Final': [
+                { name: 'Financial Reporting', icon: 'fa-chart-pie', color: 'bg-green-900/30', text: 'text-green-500' },
+                { name: 'Adv Financial Mgmt', icon: 'fa-university', color: 'bg-blue-900/30', text: 'text-blue-500' },
+                { name: 'Adv Auditing', icon: 'fa-user-check', color: 'bg-red-900/30', text: 'text-red-500' },
+                { name: 'Direct Tax Laws', icon: 'fa-hand-holding-usd', color: 'bg-orange-900/30', text: 'text-orange-500' },
+                { name: 'Indirect Tax Laws', icon: 'fa-receipt', color: 'bg-purple-900/30', text: 'text-purple-500' },
+                { name: 'Integrated Business', icon: 'fa-project-diagram', color: 'bg-indigo-900/30', text: 'text-indigo-500' }
             ]
         };
 
@@ -132,16 +138,8 @@
             document.getElementById('displayLevel').innerText = level;
             const list = document.getElementById('subjectList');
             list.innerHTML = '';
-            
             subsData[level].forEach(s => {
-                list.innerHTML += `
-                    <div class="subject-row" onclick="showTab('aiChat')">
-                        <div class="flex items-center">
-                            <div class="sub-icon-box ${s.color} ${s.text}"><i class="fas ${s.icon}"></i></div>
-                            <span class="text-sm font-bold">${s.name}</span>
-                        </div>
-                        <i class="fas fa-chevron-right text-gray-700"></i>
-                    </div>`;
+                list.innerHTML += `<div class="subject-row" onclick="showTab('aiChat')"><div class="flex items-center"><div class="sub-icon-box ${s.color} ${s.text}"><i class="fas ${s.icon}"></i></div><span class="text-sm font-bold">${s.name}</span></div><i class="fas fa-chevron-right text-gray-700"></i></div>`;
             });
             showTab('dashboard');
         }
@@ -157,3 +155,4 @@
     </script>
 </body>
 </html>
+
