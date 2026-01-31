@@ -1,136 +1,116 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="mr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CA Partner AI - No Key Needed</title>
+    <title>CA Mentor AI - Deep Expert Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        body { background-color: #0b0f1a; color: #ffffff; font-family: 'Inter', sans-serif; }
-        .tab-content { display: none; padding-bottom: 120px; }
-        .active-tab { display: block; animation: fadeIn 0.4s ease; }
+        body { background-color: #0b1120; color: #f8fafc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .tab-content { display: none; }
+        .active-tab { display: block; animation: fadeIn 0.4s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .subject-row { background: #161b2c; border-radius: 20px; padding: 18px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border: 1px solid #2d364f; cursor: pointer; }
-        .sub-icon-box { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-right: 15px; }
-
-        /* Chat Bubbles */
-        #chatbox { height: 65vh; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding: 20px; }
-        .ai-msg { background: #1c233a; padding: 14px; border-radius: 18px 18px 18px 4px; align-self: flex-start; max-width: 85%; border: 1px solid #2d364f; font-size: 14px; line-height: 1.6; color: #e2e8f0; }
-        .user-msg { background: #3b82f6; color: white; padding: 12px 16px; border-radius: 18px 18px 4px 18px; align-self: flex-end; max-width: 80%; font-size: 14px; font-weight: 500; }
-
-        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0b0f1a; border-top: 1px solid #2d364f; display: flex; justify-content: space-around; padding: 15px; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #64748b; font-size: 11px; cursor: pointer; }
-        .nav-item.active { color: #3b82f6; }
+        #chatbox { height: 70vh; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .ai-msg { background: #1e293b; padding: 15px; border-radius: 20px 20px 20px 5px; max-width: 85%; border: 1px solid #334155; position: relative; }
+        .user-msg { background: #3b82f6; padding: 12px 18px; border-radius: 20px 20px 5px 20px; align-self: flex-end; max-width: 80%; }
+        
+        .speaker-btn { position: absolute; top: 10px; right: 10px; cursor: pointer; color: #94a3b8; transition: 0.3s; }
+        .speaker-btn:hover { color: #ffffff; }
     </style>
 </head>
 <body>
 
-    <div id="dashboard" class="tab-content active-tab p-5">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold">CA Partner AI</h1>
-            <div class="bg-blue-600/20 text-blue-400 px-3 py-1 rounded-full text-[10px] font-bold border border-blue-500/20">Active</div>
+    <div id="aiChat" class="tab-content active-tab">
+        <div class="p-4 border-b border-gray-800 bg-[#0b1120] flex items-center justify-between sticky top-0 z-50">
+            <div class="flex items-center gap-3">
+                <i class="fas fa-user-graduate text-blue-500 text-xl"></i>
+                <div>
+                    <h2 class="font-bold text-lg leading-tight">CA Mentor AI</h2>
+                    <p class="text-[10px] text-green-400">Deep Knowledge Expert</p>
+                </div>
+            </div>
+            <button onclick="window.location.reload()"><i class="fas fa-sync-alt text-gray-500"></i></button>
         </div>
 
-        <div class="grid grid-cols-3 gap-3 mb-8 text-center">
-            <div onclick="showTab('aiChat')" class="bg-blue-900/20 p-4 rounded-2xl border border-blue-500/30">
-                <i class="fas fa-robot text-blue-500 text-xl"></i>
-                <p class="text-[10px] font-bold mt-2">ASK AI</p>
-            </div>
-            <div class="bg-green-900/20 p-4 rounded-2xl border border-green-500/30">
-                <i class="fas fa-book text-green-500 text-xl"></i>
-                <p class="text-[10px] font-bold mt-2">STUDY</p>
-            </div>
-            <div class="bg-orange-900/20 p-4 rounded-2xl border border-orange-500/30">
-                <i class="fas fa-newspaper text-orange-500 text-xl"></i>
-                <p class="text-[10px] font-bold mt-2">NEWS</p>
-            </div>
-        </div>
-
-        <h2 class="text-xs font-bold text-gray-500 mb-4 uppercase tracking-widest">Select Subject</h2>
-        <div id="subjectContainer" class="space-y-3">
-            </div>
-    </div>
-
-    <div id="aiChat" class="tab-content">
-        <div class="p-5 border-b border-gray-800 flex items-center gap-4 bg-[#0b0f1a] sticky top-0">
-            <button onclick="showTab('dashboard')"><i class="fas fa-arrow-left"></i></button>
-            <div>
-                <h2 class="font-bold text-sm">CA Study Expert</h2>
-                <p class="text-[10px] text-green-500">Always Ready to Help</p>
-            </div>
-        </div>
         <div id="chatbox">
-            <div class="ai-msg">नमस्ते! मी आपला CA मार्गदर्शक आहे. तुम्हाला अकाउंटिंग, टॅक्सेशन किंवा लॉ बद्दल काय विचारायचे आहे?</div>
+            <div class="ai-msg">
+                <i class="fas fa-volume-up speaker-btn" onclick="speakText(this)"></i>
+                नमस्ते! मी CA एक्सपर्ट आहे. मी **Foundation, Intermediate, आणि Final** तिन्ही लेव्हलच्या सर्व विषयांची सविस्तर माहिती देऊ शकतो. तुमचा प्रश्न विचारा!
+            </div>
         </div>
-        <div class="fixed bottom-24 left-4 right-4 flex gap-2">
-            <input type="text" id="userInput" placeholder="प्रश्नाविरुद्ध टाइप करा..." class="flex-1 bg-slate-800 border border-gray-700 rounded-full px-5 py-3 text-sm outline-none focus:border-blue-500">
-            <button onclick="sendMessage()" class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-all"><i class="fas fa-paper-plane"></i></button>
+
+        <div class="fixed bottom-0 left-0 right-0 p-4 bg-[#0b1120] border-t border-gray-800">
+            <div class="flex gap-2">
+                <input type="text" id="userInput" placeholder="विचारा (उदा. GST Audit, AS-10, Law...)" class="flex-1 bg-slate-800 border border-slate-700 rounded-full px-5 py-3 outline-none focus:border-blue-500">
+                <button onclick="sendMessage()" class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center shadow-lg"><i class="fas fa-paper-plane"></i></button>
+            </div>
         </div>
     </div>
-
-    <nav class="nav-bar">
-        <div onclick="showTab('dashboard')" class="nav-item active"><i class="fas fa-home text-lg"></i><span>Home</span></div>
-        <div onclick="showTab('aiChat')" class="nav-item"><i class="fas fa-comment-dots text-lg"></i><span>Ask AI</span></div>
-        <div onclick="alert('Profile Loading...')" class="nav-item"><i class="fas fa-user-circle text-lg"></i><span>Profile</span></div>
-    </nav>
 
     <script>
-        const subjectList = [
-            { name: 'Accounting', icon: 'fa-calculator', color: 'bg-green-600' },
-            { name: 'Business Law', icon: 'fa-gavel', color: 'bg-orange-600' },
-            { name: 'Taxation', icon: 'fa-file-invoice-dollar', color: 'bg-red-600' },
-            { name: 'Auditing', icon: 'fa-shield-check', color: 'bg-purple-600' }
-        ];
+        // --- DEEP EXPERT DATASET ---
+        const caExpertBrain = {
+            // FOUNDATION
+            "accounting": "<b>Accounting:</b> यामध्ये Golden Rules (Personal, Real, Nominal) महत्त्वाचे आहेत. तसेच Final Accounts, Rectification of Errors आणि BRS वर प्रश्न येतात.",
+            "law": "<b>Business Law:</b> Indian Contract Act 1872 हा सर्वात महत्त्वाचा भाग आहे. Offer, Acceptance आणि Consideration च्या कायदेशीर तरतुदी नीट वाचा.",
+            "economics": "<b>Economics:</b> Demand-Supply, Price Determination आणि Business Cycles हे मुख्य टॉपिक्स आहेत.",
+            
+            // INTERMEDIATE
+            "taxation": "<b>Taxation:</b> Income Tax मध्ये ५ Heads (Salary, HP, PGBP, CG, OS) आणि GST मध्ये 'Input Tax Credit' (ITC) हे सर्वात महत्त्वाचे आहे.",
+            "audit": "<b>Auditing:</b> Audit म्हणजे पुरावे गोळा करणे. SAs (Standards on Auditing) जसे की SA 200, 500, 700 हे पाठ असणे आवश्यक आहे.",
+            "costing": "<b>Costing:</b> Marginal Costing, Standard Costing आणि Budgetary Control हे स्कोरिंग टॉपिक्स आहेत.",
+            
+            // FINAL
+            "fr": "<b>Financial Reporting:</b> यात Ind AS (Indian Accounting Standards) जसे की Ind AS 115 (Revenue) आणि 116 (Leases) वर प्रभुत्व हवे.",
+            "afm": "<b>Adv. Fin. Management:</b> Portfolio Management, Derivatives आणि Forex हे गणितीय भाग खूप महत्त्वाचे आहेत.",
+            "dt": "<b>Direct Tax:</b> International Taxation आणि Transfer Pricing हे फायनल लेव्हलला जास्त वेटेज असलेले भाग आहेत.",
+            "idt": "<b>Indirect Tax:</b> GST सोबतच Customs Act आणि FTP (Foreign Trade Policy) चा अभ्यास करावा लागतो.",
 
-        // सब्जेक्ट्स रेंडर करणे
-        const container = document.getElementById('subjectContainer');
-        subjectList.forEach(s => {
-            container.innerHTML += `
-                <div class="subject-row" onclick="startChat('${s.name}')">
-                    <div class="flex items-center"><div class="sub-icon-box ${s.color} text-white"><i class="fas ${s.icon}"></i></div><span class="font-bold">${s.name}</span></div>
-                    <i class="fas fa-chevron-right text-gray-700"></i>
-                </div>`;
-        });
-
-        // स्मार्ट ऑफलाइन रिस्पॉन्स सिस्टिम
-        const responses = {
-            "hello": "Hello! मी तुम्हाला CA च्या अभ्यासात मदत करू शकतो. कोणता विषय निवडायचा आहे?",
-            "accounting": "Accounting हा CA चा कणा आहे. तुम्हाला जर्नल एंट्रीज, लेजर किंवा बॅलन्स शीट बद्दल काही विचारायचे आहे का?",
-            "taxation": "Taxation मध्ये Direct आणि Indirect Tax असे दोन भाग असतात. GST आणि Income Tax चे अपडेट्स पाहणे गरजेचे आहे.",
-            "law": "Business Law साठी 'Case Studies' चा अभ्यास करणे खूप महत्त्वाचे आहे. तुम्ही कॉन्ट्रॅक्ट ऍक्ट वाचला का?",
-            "default": "तुमचा प्रश्न खूप छान आहे! CA होण्यासाठी कन्सेप्ट्स क्लिअर असणे खूप महत्त्वाचे आहे. मी यावर तुम्हाला सविस्तर नोट्स देऊ शकतो."
+            // GENERAL CA TOPICS
+            "articleship": "<b>Articleship:</b> ३ वर्षांची आर्टिकलशिप ही प्रॅक्टिकल नॉलेज मिळवण्यासाठी अनिवार्य आहे. ऑडिटिंग आणि टॅक्सेशनचे प्रत्यक्ष काम इथे शिकता येते.",
+            "gdp": "<b>GDP:</b> देशाच्या सीमेत उत्पादित वस्तू आणि सेवांचे मूल्य. CA म्हणून तुम्हाला याचे विश्लेषण (Analysis) करता आले पाहिजे.",
+            "gst": "<b>GST (वस्तु व सेवा कर):</b> हा १ जुलै २०१७ ला लागू झाला. 'One Nation One Tax' ही याची मुख्य संकल्पना आहे."
         };
 
+        // --- SPEECH ENGINE (उत्तर वाचून दाखवणे) ---
+        function speakText(btn) {
+            const text = btn.parentElement.innerText;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'mr-IN'; // मराठी आवाज
+            utterance.rate = 1;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // --- SEND MESSAGE LOGIC ---
         function sendMessage() {
             const input = document.getElementById('userInput');
             const chatbox = document.getElementById('chatbox');
-            if (!input.value) return;
+            let userText = input.value.trim().toLowerCase();
+            if (!userText) return;
 
-            const text = input.value.toLowerCase();
             chatbox.innerHTML += `<div class="user-msg">${input.value}</div>`;
             input.value = "";
 
-            // छोटा लोडिंग इफेक्ट
             setTimeout(() => {
-                let reply = responses.default;
-                for (let key in responses) {
-                    if (text.includes(key)) reply = responses[key];
+                let answer = "<b>क्षमस्व!</b> या विषयावर मी सध्या रिसर्च करत आहे. पण मी **Accounting, Taxation, Law, Audit किंवा Exam Tips** वर सविस्तर माहिती देऊ शकतो.";
+
+                // Smart Matching
+                for (let key in caExpertBrain) {
+                    if (userText.includes(key)) {
+                        answer = caExpertBrain[key];
+                        break;
+                    }
                 }
-                chatbox.innerHTML += `<div class="ai-msg">${reply}</div>`;
+
+                chatbox.innerHTML += `
+                    <div class="ai-msg">
+                        <i class="fas fa-volume-up speaker-btn" onclick="speakText(this)"></i>
+                        ${answer}
+                    </div>`;
                 chatbox.scrollTop = chatbox.scrollHeight;
             }, 600);
-        }
-
-        function startChat(sub) {
-            showTab('aiChat');
-            document.getElementById('chatbox').innerHTML += `<div class="ai-msg">तुम्ही ${sub} निवडला आहे. या विषयातील तुमची शंका काय आहे?</div>`;
-        }
-
-        function showTab(id) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active-tab'));
-            document.getElementById(id).classList.add('active-tab');
         }
     </script>
 </body>
