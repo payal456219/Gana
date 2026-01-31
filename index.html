@@ -1,149 +1,212 @@
-
 <!DOCTYPE html>
-<html lang="mr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CA Partner Pro - Final Stable Version</title>
+    <title>CA Partner - News Integrated</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         body { background-color: #0b0f1a; color: #ffffff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         .tab-content { display: none; padding-bottom: 120px; }
-        .active-tab { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .active-tab { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* डॅशबोर्ड मूळ रचना */
-        .top-card { background: #1c233a; border-radius: 20px; padding: 20px; text-align: center; cursor: pointer; border: 1px solid transparent; transition: 0.3s; }
-        .top-card:active { border-color: #3b82f6; transform: scale(0.95); }
+        .glass-card { background: #161b2c; border: 1px solid #2d364f; border-radius: 20px; }
+        .action-card { background: #1c233a; border-radius: 20px; padding: 15px; text-align: center; border: 1px solid #2d364f; cursor: pointer; }
         
-        .level-btn { padding: 8px 18px; border-radius: 20px; font-size: 11px; font-weight: bold; border: 1px solid #3b82f6; cursor: pointer; transition: 0.3s; }
-        .level-btn.active { background: #3b82f6; color: white; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); }
-        
-        .subject-card { background: #161b2c; border: 1px solid #2d364f; border-radius: 24px; padding: 20px; display: flex; align-items: center; margin-bottom: 15px; cursor: pointer; }
-        .icon-box { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-right: 18px; }
-        
-        /* न्यूज कंटेंट स्टाईल */
+        .subject-row { background: #161b2c; border-radius: 20px; padding: 18px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border: 1px solid #2d364f; transition: 0.3s; cursor: pointer; }
+        .sub-icon-box { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-right: 15px; }
+
+        /* News Styles */
+        .news-menu-card { background: #1c233a; padding: 20px; border-radius: 20px; margin-bottom: 15px; border-left: 5px solid #3b82f6; display: flex; align-items: center; gap: 15px; cursor: pointer; }
         .content-box { background: #1c233a; padding: 18px; border-radius: 18px; margin-bottom: 15px; border-left: 5px solid #3b82f6; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; background: #161b2c; border-radius: 12px; overflow: hidden; }
         th, td { border: 1px solid #2d364f; padding: 14px; text-align: left; font-size: 12px; }
         th { background: #3b82f6; color: white; }
 
-        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0b0f1a; border-top: 1px solid #2d364f; display: flex; justify-content: space-around; padding: 15px; z-index: 1000; }
+        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0b0f1a; border-top: 1px solid #2d364f; display: flex; justify-content: space-around; padding: 15px; z-index: 100; }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #64748b; font-size: 11px; cursor: pointer; }
         .nav-item.active { color: #3b82f6; }
     </style>
 </head>
 <body>
 
-    <div id="home" class="tab-content active-tab p-5">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-blue-500">CA Partner AI</h1>
-            <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center border-2 border-blue-400">
-                <i class="fas fa-user text-white"></i>
+    <div id="welcomeScreen" class="tab-content active-tab p-6">
+        <div class="text-center mb-10 mt-10">
+            <div class="w-20 h-20 bg-blue-600 rounded-3xl mx-auto mb-5 flex items-center justify-center shadow-xl">
+                <i class="fa-solid fa-user-graduate text-3xl text-white"></i>
             </div>
+            <h1 class="text-3xl font-bold">CA Partner</h1>
+            <p class="text-gray-400 mt-2">तुमची लेव्हल निवडा</p>
         </div>
         
-        <div class="flex gap-2 mb-8">
-            <div class="level-btn active" onclick="selectLevel(this)">Foundation</div>
-            <div class="level-btn" onclick="selectLevel(this)">Intermediate</div>
-            <div class="level-btn" onclick="selectLevel(this)">Final</div>
+        <div onclick="openDashboard('Foundation')" class="subject-row">
+            <div class="flex items-center"><div class="sub-icon-box bg-emerald-500 text-white"><i class="fa-solid fa-book"></i></div><span class="font-bold">Foundation</span></div>
+            <i class="fa-solid fa-chevron-right text-gray-600"></i>
+        </div>
+        <div onclick="openDashboard('Intermediate')" class="subject-row">
+            <div class="flex items-center"><div class="sub-icon-box bg-blue-500 text-white"><i class="fa-solid fa-layer-group"></i></div><span class="font-bold">Intermediate</span></div>
+            <i class="fa-solid fa-chevron-right text-gray-600"></i>
+        </div>
+        <div onclick="openDashboard('Final')" class="subject-row">
+            <div class="flex items-center"><div class="sub-icon-box bg-rose-500 text-white"><i class="fa-solid fa-trophy"></i></div><span class="font-bold">Final</span></div>
+            <i class="fa-solid fa-chevron-right text-gray-600"></i>
+        </div>
+    </div>
+
+    <div id="dashboard" class="tab-content p-5">
+        <div class="flex justify-between items-center mb-8">
+            <div><h1 class="text-xl font-bold">CA Mentor AI</h1></div>
+            <div class="bg-blue-600 text-white px-3 py-1 rounded-full text-[10px] font-bold" id="displayLevel">Level</div>
         </div>
 
-        <div class="grid grid-cols-3 gap-4 mb-10">
-            <div onclick="showTab('newsMenu')" class="top-card"><i class="fas fa-newspaper text-orange-500 mb-2 text-xl"></i><p class="text-[10px] font-bold">NEWS</p></div>
-            <div class="top-card"><i class="fas fa-file-alt text-green-500 mb-2 text-xl"></i><p class="text-[10px] font-bold">STUDY</p></div>
-            <div class="top-card"><i class="fas fa-question-circle text-blue-500 mb-2 text-xl"></i><p class="text-[10px] font-bold">DOUBTS</p></div>
+        <div class="grid grid-cols-3 gap-3 mb-8">
+            <div onclick="showTab('newsMenu')" class="action-card"><i class="fa-solid fa-newspaper text-orange-400"></i><p class="text-[8px] mt-2 uppercase">News</p></div>
+            <div class="action-card"><i class="fa-solid fa-file-lines text-emerald-400"></i><p class="text-[8px] mt-2 uppercase">Study</p></div>
+            <div class="action-card"><i class="fa-solid fa-circle-question text-blue-400"></i><p class="text-[8px] mt-2 uppercase">Doubts</p></div>
         </div>
 
-        <p class="text-[10px] font-bold text-gray-500 mb-5 uppercase tracking-widest">Your Subjects</p>
-        
-        <div class="subject-card"><div class="icon-box bg-green-600"><i class="fas fa-calculator"></i></div><span class="flex-1 font-bold">Accounting</span><i class="fas fa-chevron-right text-gray-700"></i></div>
-        <div class="subject-card"><div class="icon-box bg-orange-600"><i class="fas fa-gavel"></i></div><span class="flex-1 font-bold">Business Law</span><i class="fas fa-chevron-right text-gray-700"></i></div>
-        <div class="subject-card"><div class="icon-box bg-blue-600"><i class="fas fa-chart-line"></i></div><span class="flex-1 font-bold">Quant. Aptitude</span><i class="fas fa-chevron-right text-gray-700"></i></div>
-        <div class="subject-card"><div class="icon-box bg-purple-600"><i class="fas fa-coins"></i></div><span class="flex-1 font-bold">Economics</span><i class="fas fa-chevron-right text-gray-700"></i></div>
+        <h2 class="text-[10px] font-bold text-gray-500 mb-4 uppercase tracking-widest">Your Subjects</h2>
+        <div id="subjectList" class="space-y-4 mb-8"></div>
+
+        <div class="glass-card p-4 flex items-center justify-between border-l-4 border-yellow-500">
+            <div class="flex items-center">
+                <i class="fa-solid fa-briefcase text-yellow-500 mr-4 text-xl"></i>
+                <div><p class="font-bold text-xs">Job Opportunities</p><p class="text-[9px] text-gray-400">Explore CA Careers</p></div>
+            </div>
+            <i class="fa-solid fa-arrow-right text-gray-600"></i>
+        </div>
     </div>
 
     <div id="newsMenu" class="tab-content p-5">
-        <div class="flex items-center gap-4 mb-8"><button onclick="showTab('home')"><i class="fas fa-arrow-left text-xl"></i></button><h1 class="text-xl font-bold">News Center</h1></div>
+        <div class="flex items-center gap-4 mb-8"><button onclick="showTab('dashboard')"><i class="fa-solid fa-arrow-left text-xl"></i></button><h1 class="text-xl font-bold">News Center</h1></div>
         
-        <div onclick="window.open('https://www.google.com/search?q=ICAI+Results', '_blank')" class="p-5 bg-[#1c233a] rounded-2xl mb-4 flex items-center gap-4 border-l-4 border-rose-500">
-            <i class="fas fa-camera text-rose-500 text-2xl"></i><span class="font-bold">Results (Scan with Lens)</span>
+        <div onclick="window.open('https://www.google.com/search?q=ICAI+Results', '_blank')" class="news-menu-card border-rose-500">
+            <i class="fa-solid fa-camera text-rose-500 text-2xl"></i><span class="font-bold">Results (Scan with Lens)</span>
         </div>
-        <div onclick="showTab('liveUpdates')" class="p-5 bg-[#1c233a] rounded-2xl mb-4 flex items-center gap-4 border-l-4 border-blue-500">
-            <i class="fas fa-broadcast-tower text-blue-500 text-2xl"></i><span class="font-bold">20+ Live Daily Updates</span>
+        <div onclick="showTab('liveUpdates')" class="news-menu-card border-blue-500">
+            <i class="fa-solid fa-broadcast-tower text-blue-500 text-2xl"></i><span class="font-bold">20+ Live Daily Updates</span>
         </div>
-        <div onclick="showTab('timetable')" class="p-5 bg-[#1c233a] rounded-2xl mb-4 flex items-center gap-4 border-l-4 border-amber-500">
-            <i class="fas fa-calendar-alt text-amber-500 text-2xl"></i><span class="font-bold">Exam Time Table</span>
+        <div onclick="showTab('syllabusChange')" class="news-menu-card border-emerald-500">
+            <i class="fa-solid fa-book-open text-emerald-500 text-2xl"></i><span class="font-bold">Syllabus Change News</span>
+        </div>
+        <div onclick="showTab('timetable')" class="news-menu-card border-amber-500">
+            <i class="fa-solid fa-calendar-days text-amber-500 text-2xl"></i><span class="font-bold">Exam Time Table</span>
         </div>
     </div>
 
     <div id="liveUpdates" class="tab-content p-5">
-        <div class="flex items-center gap-4 mb-6"><button onclick="showTab('newsMenu')"><i class="fas fa-arrow-left text-xl"></i></button><h1 class="text-xl font-bold">Daily Updates</h1></div>
+        <div class="flex items-center gap-4 mb-6"><button onclick="showTab('newsMenu')"><i class="fa-solid fa-arrow-left text-xl"></i></button><h1 class="text-xl font-bold">Daily Updates</h1></div>
         <div id="updatesList"></div>
     </div>
 
+    <div id="syllabusChange" class="tab-content p-5">
+        <div class="flex items-center gap-4 mb-6"><button onclick="showTab('newsMenu')"><i class="fa-solid fa-arrow-left text-xl"></i></button><h1 class="text-xl font-bold">Syllabus Updates</h1></div>
+        <div class="content-box">
+            <p class="text-sm"><b>नवीन बदल २०२६:</b> ICAI ने टॅक्सेशन आणि ऑडिटिंगच्या अभ्यासक्रमात डिजिटल कलमांचा समावेश केला आहे. नवीन स्टडी मटेरिअल आता उपलब्ध आहे.</p>
+        </div>
+    </div>
+
     <div id="timetable" class="tab-content p-5">
-        <div class="flex items-center gap-4 mb-6"><button onclick="showTab('newsMenu')"><i class="fas fa-arrow-left text-xl"></i></button><h1 class="text-xl font-bold">Exam Schedule</h1></div>
-        <div class="overflow-x-auto rounded-xl shadow-lg">
+        <div class="flex items-center gap-4 mb-6"><button onclick="showTab('newsMenu')"><i class="fa-solid fa-arrow-left text-xl"></i></button><h1 class="text-xl font-bold">Time Table</h1></div>
+        <div class="overflow-x-auto rounded-xl">
             <table>
-                <thead><tr><th>दिनांक</th><th>विषय (Subject)</th><th>वेळ</th></tr></thead>
+                <thead><tr><th>दिनांक</th><th>विषय</th><th>वेळ</th></tr></thead>
                 <tbody>
                     <tr><td>२५ मे २०२६</td><td>Accounting</td><td>२-५ PM</td></tr>
                     <tr><td>२७ मे २०२६</td><td>Business Law</td><td>२-५ PM</td></tr>
                     <tr><td>२९ मे २०२६</td><td>Maths & Stats</td><td>२-४ PM</td></tr>
-                    <tr><td>३१ मे २०२६</td><td>Economics</td><td>२-४ PM</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
 
+    <div id="profile" class="tab-content p-6">
+        <div class="text-center mt-10 mb-10">
+            <div class="w-20 h-20 bg-slate-800 rounded-full mx-auto mb-4 flex items-center justify-center border border-blue-500">
+                <i class="fa-solid fa-user text-3xl text-blue-500"></i>
+            </div>
+            <h2 class="text-xl font-bold">Settings</h2>
+        </div>
+        <div class="space-y-3">
+            <a href="https://wa.me/917719081975" class="subject-row">
+                <div class="flex items-center"><i class="fa-brands fa-whatsapp text-green-500 mr-4 text-2xl"></i><span>Chat with Admin</span></div>
+            </a>
+            <div onclick="showTab('welcomeScreen')" class="subject-row text-red-500">
+                <div class="flex items-center"><i class="fa-solid fa-right-from-bracket mr-4"></i><span>Change Level</span></div>
+            </div>
+        </div>
+    </div>
+
     <nav class="nav-bar">
-        <div onclick="showTab('home')" class="nav-item active"><i class="fas fa-home text-lg"></i><span>Home</span></div>
-        <div onclick="showTab('newsMenu')" class="nav-item"><i class="fas fa-newspaper text-lg"></i><span>News</span></div>
-        <div class="nav-item"><i class="fas fa-robot text-lg"></i><span>Ask AI</span></div>
-        <div class="nav-item"><i class="fas fa-user-circle text-lg"></i><span>Profile</span></div>
+        <div onclick="showTab('dashboard')" class="nav-item active"><i class="fa-solid fa-house text-xl mb-1"></i><span>Home</span></div>
+        <div onclick="alert('AI Loading...')" class="nav-item"><i class="fa-solid fa-robot text-xl mb-1"></i><span>Ask AI</span></div>
+        <div onclick="showTab('profile')" class="nav-item"><i class="fa-solid fa-gear text-xl mb-1"></i><span>Profile</span></div>
     </nav>
 
     <script>
+        const subsData = {
+            'Foundation': [
+                { name: 'Accounting', icon: 'fa-calculator', color: 'bg-green-600' },
+                { name: 'Business Law', icon: 'fa-gavel', color: 'bg-orange-600' },
+                { name: 'Quant. Aptitude', icon: 'fa-chart-line', color: 'bg-blue-600' },
+                { name: 'Economics', icon: 'fa-coins', color: 'bg-purple-600' }
+            ],
+            'Intermediate': [
+                { name: 'Taxation', icon: 'fa-file-invoice-dollar', color: 'bg-red-600' },
+                { name: 'Auditing', icon: 'fa-shield', color: 'bg-indigo-600' },
+                { name: 'Cost Management', icon: 'fa-coins', color: 'bg-yellow-600' }
+            ],
+            'Final': [
+                { name: 'Fin Reporting', icon: 'fa-chart-pie', color: 'bg-emerald-600' },
+                { name: 'Adv Fin Mgmt', icon: 'fa-university', color: 'bg-blue-600' }
+            ]
+        };
+
+        const updatesData = [
+            "ICAI ने नवीन शैक्षणिक वर्षासाठी नोंदणी प्रक्रिया सुरू केली आहे.",
+            "GST रिटर्नच्या नियमात मोठे बदल झाले आहेत.",
+            "CA फाउंडेशन परीक्षेचा निकाल फेब्रुवारीत अपेक्षित आहे.",
+            "आयकर विभागाने नवीन ई-वेरिफिकेशन प्रणाली सुरू केली.",
+            "कंपनी कायद्यात २०२६ चे नवीन दुरुस्ती विधेयक मांडले.",
+            "डिजिटल सिग्नेचर वापरताना आधार ऑथेंटिकेशन बंधनकारक.",
+            "बँकिंग ऑडिटसाठी खास ट्रेनिंग प्रोग्रामचे आयोजन.",
+            "कॉर्पोरेट गव्हर्नन्समध्ये नवीन आचारसंहिता लागू.",
+            "स्टार्टअप्ससाठी टॅक्स सवलतीचा कालावधी वाढवला.",
+            "SEBI ने म्युच्युअल फंड ऑडिटमध्ये नवीन बदल सुचवले."
+            // असे २० पूर्ण करण्यासाठी तुम्ही अजून वाढवू शकता
+        ];
+
+        function openDashboard(level) {
+            document.getElementById('displayLevel').innerText = level;
+            const list = document.getElementById('subjectList');
+            list.innerHTML = '';
+            subsData[level].forEach(s => {
+                list.innerHTML += `
+                    <div class="subject-row">
+                        <div class="flex items-center">
+                            <div class="sub-icon-box ${s.color} text-white"><i class="fa-solid ${s.icon}"></i></div>
+                            <span class="text-sm font-bold">${s.name}</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-gray-700"></i>
+                    </div>`;
+            });
+            showTab('dashboard');
+        }
+
         function showTab(id) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active-tab'));
             document.getElementById(id).classList.add('active-tab');
-            // नेव्हिगेशन आयकॉन अपडेट
+            
+            // नेव्हिगेशन बारमधील ऍक्टिव्ह स्टेट बदलणे
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            if(id === 'home') document.querySelectorAll('.nav-item')[0].classList.add('active');
-            if(id === 'newsMenu' || id === 'liveUpdates' || id === 'timetable') document.querySelectorAll('.nav-item')[1].classList.add('active');
+            if(id === 'dashboard') document.querySelectorAll('.nav-item')[0].classList.add('active');
+            if(id === 'profile') document.querySelectorAll('.nav-item')[2].classList.add('active');
         }
 
-        function selectLevel(btn) {
-            document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        }
-
-        // २० वेगवेगळ्या अपडेट्स
-        const updatesData = [
-            "ICAI ने नवीन शैक्षणिक वर्षासाठी नोंदणी प्रक्रिया सुरू केली आहे.",
-            "GST रिटर्नच्या नियमात मोठे बदल, आता नवीन पोर्टल वापरावे लागेल.",
-            "ऑडिट रिपोर्टमध्ये पारदर्शकता आणण्यासाठी नवीन मार्गदर्शक तत्वे.",
-            "CA फाउंडेशन परीक्षेचा निकाल फेब्रुवारीच्या पहिल्या आठवड्यात अपेक्षित.",
-            "आयकर विभागाने नवीन 'ई-वेरिफिकेशन' प्रणाली सुरू केली आहे.",
-            "कंपनी कायद्यात २०२६ चे नवीन दुरुस्ती विधेयक मांडले.",
-            "डिजिटल सिग्नेचर वापरताना आता आधार ऑथेंटिकेशन बंधनकारक.",
-            "बँकिंग ऑडिटसाठी खास ट्रेनिंग प्रोग्रामचे आयोजन.",
-            "कॉर्पोरेट गव्हर्नन्समध्ये नवीन आचारसंहिता लागू.",
-            "FDI नियमावली अधिक सोपी करण्यात आली आहे.",
-            "स्टार्टअप्ससाठी टॅक्स सवलतीचा कालावधी वाढवला.",
-            "म्युच्युअल फंड ऑडिटमध्ये SEBI ने नवीन बदल सुचवले.",
-            "शेअर मार्केट व्यवहारांवर नवीन स्टॅम्प ड्युटी लागू.",
-            "पुण्यातील ICAI भवन येथे करिअर समुपदेशन केंद्र सुरू.",
-            "ऑनलाइन परीक्षेसाठी नवीन सॉफ्टवेअरची चाचणी यशस्वी.",
-            "CA इंटरच्या विद्यार्थ्यांसाठी आर्टिकलशिपचे नियम बदलले.",
-            "परदेशी शिक्षण घेणाऱ्या विद्यार्थ्यांसाठी स्कॉलरशिप जाहीर.",
-            "IBC कोडमध्ये महत्त्वाचे कायदेशीर बदल करण्यात आले.",
-            "आंतरराष्ट्रीय कर प्रणालीवर विशेष चर्चासत्र आयोजित.",
-            "सर्व मार्कशीट आता ई-लॉकरमध्ये उपलब्ध होणार."
-        ];
-
+        // अपडेट्सची यादी भरणे
         const list = document.getElementById('updatesList');
         updatesData.forEach((text, i) => {
             list.innerHTML += `
@@ -156,3 +219,5 @@
 </body>
 </html>
 
+
+       
