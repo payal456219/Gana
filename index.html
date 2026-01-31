@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CA Partner - All Subjects</title>
+    <title>CA Partner - Iconic Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/dist/css/all.min.css">
     <style>
@@ -12,125 +12,106 @@
         .active-tab { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .glass-card { background: #161b2c; border: 1px solid #2d364f; border-radius: 20px; }
-        .action-card { background: #1c233a; border-radius: 18px; padding: 15px; text-align: center; border: 1px solid #2d364f; cursor: pointer; }
-        
-        /* Subject Cards */
-        .subject-row { background: #161b2c; border-radius: 18px; padding: 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border: 1px solid #2d364f; cursor: pointer; }
-        .sub-icon-box { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 15px; }
+        /* Icon Boxes */
+        .sub-icon-box { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 20px; }
+        .subject-row { background: #161b2c; border-radius: 20px; padding: 18px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border: 1px solid #2d364f; transition: 0.3s; }
+        .subject-row:active { transform: scale(0.97); background: #1c233a; }
 
-        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0b0f1a; border-top: 1px solid #2d364f; display: flex; justify-content: space-around; padding: 12px; z-index: 100; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #64748b; font-size: 10px; cursor: pointer; }
+        /* Quick Action Icons */
+        .action-card { background: #1c233a; border-radius: 20px; padding: 15px; text-align: center; border: 1px solid #2d364f; cursor: pointer; }
+        .action-card i { font-size: 24px; margin-bottom: 8px; display: block; }
+
+        /* Bottom Nav Logos */
+        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0b0f1a; border-top: 1px solid #2d364f; display: flex; justify-content: space-around; padding: 15px; z-index: 100; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #64748b; font-size: 11px; }
         .nav-item.active { color: #3b82f6; }
-
-        .profile-option { background: #161b2c; padding: 15px; border-radius: 15px; display: flex; align-items: center; gap: 15px; margin-bottom: 10px; border: 1px solid #2d364f; width: 100%; text-align: left; }
     </style>
 </head>
 <body>
 
     <div id="welcomeScreen" class="tab-content active-tab p-6">
-        <div class="glass-card p-10 text-center mb-10 mt-5">
-            <div class="w-20 h-20 bg-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center shadow-2xl">
-                <i class="fas fa-user-graduate text-3xl"></i>
+        <div class="text-center mb-10 mt-10">
+            <div class="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-3xl mx-auto mb-5 flex items-center justify-center shadow-2xl rotate-3">
+                <i class="fas fa-graduation-cap text-4xl text-white"></i>
             </div>
-            <h1 class="text-2xl font-bold">Welcome back!</h1>
-            <p class="text-gray-400 text-sm mt-2">Select Level to Continue</p>
+            <h1 class="text-3xl font-bold tracking-tight">CA Partner</h1>
+            <p class="text-gray-400 mt-2">तुमचे भविष्य, आमची जबाबदारी</p>
         </div>
         
-        <div onclick="openDashboard('Foundation')" class="subject-row" style="border-left: 5px solid #10b981;">
-            <div class="flex items-center"><div class="sub-icon-box bg-green-900/30 text-green-500"><i class="fas fa-seedling"></i></div><span class="font-bold">Foundation</span></div>
+        <div onclick="openDashboard('Foundation')" class="subject-row">
+            <div class="flex items-center"><div class="sub-icon-box bg-emerald-500/20 text-emerald-500"><i class="fas fa-seedling"></i></div><span class="font-bold">Foundation</span></div>
             <i class="fas fa-chevron-right text-gray-600"></i>
         </div>
 
-        <div onclick="openDashboard('Intermediate')" class="subject-row" style="border-left: 5px solid #3b82f6;">
-            <div class="flex items-center"><div class="sub-icon-box bg-blue-900/30 text-blue-500"><i class="fas fa-layer-group"></i></div><span class="font-bold">Intermediate</span></div>
+        <div onclick="openDashboard('Intermediate')" class="subject-row">
+            <div class="flex items-center"><div class="sub-icon-box bg-blue-500/20 text-blue-500"><i class="fas fa-layer-group"></i></div><span class="font-bold">Intermediate</span></div>
             <i class="fas fa-chevron-right text-gray-600"></i>
         </div>
 
-        <div onclick="openDashboard('Final')" class="subject-row" style="border-left: 5px solid #f43f5e;">
-            <div class="flex items-center"><div class="sub-icon-box bg-red-900/30 text-red-500"><i class="fas fa-trophy"></i></div><span class="font-bold">Final</span></div>
+        <div onclick="openDashboard('Final')" class="subject-row">
+            <div class="flex items-center"><div class="sub-icon-box bg-rose-500/20 text-rose-500"><i class="fas fa-trophy"></i></div><span class="font-bold">Final</span></div>
             <i class="fas fa-chevron-right text-gray-600"></i>
         </div>
     </div>
 
     <div id="dashboard" class="tab-content p-5">
-        <div class="flex justify-between items-center mb-6">
-            <div><p class="text-gray-400 text-xs uppercase tracking-widest">Dashboard</p><h1 class="text-xl font-bold">CA Mentor AI</h1></div>
-            <div class="bg-blue-600/20 text-blue-400 px-3 py-1 rounded-full text-[10px] font-bold border border-blue-500/30" id="displayLevel">Level</div>
+        <div class="flex justify-between items-center mb-8 mt-2">
+            <div><h1 class="text-2xl font-bold">CA Mentor AI</h1><p class="text-gray-500 text-xs">हवे ते विचारा, कधीही!</p></div>
+            <div class="bg-blue-600/10 text-blue-400 px-4 py-1.5 rounded-full text-xs font-bold border border-blue-500/20" id="displayLevel">Level</div>
         </div>
 
-        <div class="grid grid-cols-3 gap-3 mb-8">
-            <div onclick="showTab('aiChat')" class="action-card"><i class="fas fa-comment-dots text-blue-500 mb-2 text-xl"></i><p class="text-[10px] font-bold">Ask AI</p></div>
-            <div onclick="alert('Materials Loading...')" class="action-card"><i class="fas fa-book text-green-500 mb-2 text-xl"></i><p class="text-[10px] font-bold">Practice</p></div>
-            <div onclick="alert('News Loading...')" class="action-card"><i class="fas fa-newspaper text-orange-500 mb-2 text-xl"></i><p class="text-[10px] font-bold">News</p></div>
+        <div class="grid grid-cols-3 gap-4 mb-10">
+            <div onclick="showTab('aiChat')" class="action-card"><i class="fas fa-robot text-blue-500"></i><p class="font-bold text-[11px]">Ask AI</p></div>
+            <div onclick="alert('Materials Loading...')" class="action-card"><i class="fas fa-file-pdf text-emerald-500"></i><p class="font-bold text-[11px]">Practice</p></div>
+            <div onclick="alert('News Loading...')" class="action-card"><i class="fas fa-bullhorn text-orange-500"></i><p class="font-bold text-[11px]">Updates</p></div>
         </div>
 
-        <h2 class="text-[10px] font-bold text-gray-500 mb-4 uppercase tracking-widest">Your Subjects</h2>
-        <div id="subjectList" class="space-y-4 mb-8"></div>
-
-        <h2 class="text-[10px] font-bold text-gray-500 mb-4 uppercase tracking-widest">Career & Jobs</h2>
-        <div class="glass-card p-5 flex items-center justify-between border-l-4 border-yellow-500">
-            <div><p class="font-bold text-xs">Post-CA Opportunities</p><p class="text-[9px] text-gray-400">Apply for Top Firms</p></div>
-            <button class="bg-yellow-600 text-[9px] px-3 py-1 rounded-lg">VIEW ALL</button>
-        </div>
+        <h2 class="text-xs font-bold text-gray-500 mb-5 uppercase tracking-widest">Subjects List</h2>
+        <div id="subjectList" class="space-y-4"></div>
     </div>
 
-    <div id="profile" class="tab-content p-5">
-        <div class="text-center mt-10 mb-10">
-            <div class="w-20 h-20 bg-slate-800 rounded-full mx-auto mb-3 flex items-center justify-center border-2 border-blue-500"><i class="fas fa-user text-2xl"></i></div>
-            <h2 class="font-bold text-xl">CA Student</h2>
+    <div id="profile" class="tab-content p-6 text-center">
+        <div class="mt-10 mb-10">
+            <div class="w-20 h-20 bg-slate-800 rounded-full mx-auto mb-4 flex items-center justify-center border-2 border-blue-500 shadow-xl"><i class="fas fa-user-tie text-2xl text-blue-400"></i></div>
+            <h2 class="text-xl font-bold">Student Settings</h2>
         </div>
-        <div class="space-y-3">
-            <button class="profile-option"><i class="fas fa-cog"></i><span>Settings</span></button>
-            <a href="https://wa.me/917719081975?text=Hi, Admin!" class="profile-option"><i class="fab fa-whatsapp text-green-500"></i><span>Chat with Admin (7719081975)</span></a>
-            <button onclick="showTab('welcomeScreen')" class="profile-option text-red-400 mt-10"><i class="fas fa-sign-out-alt"></i><span>Change Level / Logout</span></button>
-        </div>
-    </div>
-
-    <div id="aiChat" class="tab-content">
-        <div class="p-5 border-b border-gray-800 flex items-center gap-4">
-            <button onclick="showTab('dashboard')"><i class="fas fa-arrow-left"></i></button>
-            <h2 class="font-bold">AI Assistant</h2>
-        </div>
-        <div id="chatbox" class="h-[65vh] overflow-y-auto p-5 space-y-4">
-            <div class="bg-slate-800 p-4 rounded-2xl border border-gray-700 text-sm">Hello! I'm ready to help with your CA preparation.</div>
-        </div>
-        <div class="fixed bottom-24 left-5 right-5 flex gap-2">
-            <input type="text" id="aiInput" placeholder="Ask anything..." class="flex-1 bg-slate-800 border border-gray-700 rounded-full px-5 py-3 text-sm outline-none">
-            <button class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center"><i class="fas fa-paper-plane"></i></button>
+        <div class="space-y-4 text-left">
+            <div class="subject-row"><div class="flex items-center"><i class="fas fa-cog mr-4 text-gray-400"></i><span>App Settings</span></div></div>
+            <a href="https://wa.me/917719081975" class="subject-row"><div class="flex items-center"><i class="fab fa-whatsapp mr-4 text-green-500 text-xl"></i><span>Chat with Admin</span></div></a>
+            <div onclick="showTab('welcomeScreen')" class="subject-row text-red-500"><div class="flex items-center"><i class="fas fa-sign-out-alt mr-4"></i><span>Change Level</span></div></div>
         </div>
     </div>
 
     <nav class="nav-bar">
-        <div onclick="showTab('dashboard')" class="nav-item active"><i class="fas fa-home text-lg"></i><span>Home</span></div>
-        <div onclick="showTab('aiChat')" class="nav-item"><i class="fas fa-robot text-lg"></i><span>Ask AI</span></div>
-        <div onclick="alert('Videos Coming Soon!')" class="nav-item"><i class="fas fa-play-circle text-lg"></i><span>Videos</span></div>
-        <div onclick="showTab('profile')" class="nav-item"><i class="fas fa-user-cog text-lg"></i><span>Profile</span></div>
+        <div onclick="showTab('dashboard')" class="nav-item active"><i class="fas fa-th-large text-xl mb-1"></i><span>Home</span></div>
+        <div onclick="showTab('aiChat')" class="nav-item"><i class="fas fa-comment-alt text-xl mb-1"></i><span>Chat</span></div>
+        <div onclick="alert('Coming soon!')" class="nav-item"><i class="fas fa-video text-xl mb-1"></i><span>Videos</span></div>
+        <div onclick="showTab('profile')" class="nav-item"><i class="fas fa-user-circle text-xl mb-1"></i><span>Account</span></div>
     </nav>
 
     <script>
         const subsData = {
             'Foundation': [
-                { name: 'Accounting', icon: 'fa-calculator', color: 'bg-green-900/30', text: 'text-green-500' },
-                { name: 'Quantitative Aptitude', icon: 'fa-chart-line', color: 'bg-blue-900/30', text: 'text-blue-500' },
-                { name: 'Business Law', icon: 'fa-gavel', color: 'bg-orange-900/30', text: 'text-orange-500' },
-                { name: 'Business Economics', icon: 'fa-coins', color: 'bg-purple-900/30', text: 'text-purple-500' }
+                { name: 'Accounting', icon: 'fa-calculator', color: 'bg-emerald-500/10 text-emerald-500' },
+                { name: 'Business Law', icon: 'fa-gavel', color: 'bg-orange-500/10 text-orange-500' },
+                { name: 'Quant. Aptitude', icon: 'fa-chart-line', color: 'bg-blue-500/10 text-blue-500' },
+                { name: 'Economics', icon: 'fa-coins', color: 'bg-purple-500/10 text-purple-500' }
             ],
             'Intermediate': [
-                { name: 'Advanced Accounting', icon: 'fa-book-reader', color: 'bg-green-900/30', text: 'text-green-500' },
-                { name: 'Corporate Law', icon: 'fa-balance-scale', color: 'bg-blue-900/30', text: 'text-blue-500' },
-                { name: 'Taxation', icon: 'fa-file-invoice-dollar', color: 'bg-red-900/30', text: 'text-red-500' },
-                { name: 'Cost Management', icon: 'fa-funnel-dollar', color: 'bg-orange-900/30', text: 'text-orange-500' },
-                { name: 'Auditing & Assurance', icon: 'fa-shield-alt', color: 'bg-purple-900/30', text: 'text-purple-500' },
-                { name: 'Financial Management', icon: 'fa-money-bill-wave', color: 'bg-indigo-900/30', text: 'text-indigo-500' }
+                { name: 'Taxation', icon: 'fa-file-invoice-dollar', color: 'bg-red-500/10 text-red-500' },
+                { name: 'Auditing', icon: 'fa-search-dollar', color: 'bg-indigo-500/10 text-indigo-500' },
+                { name: 'Costing', icon: 'fa-funnel-dollar', color: 'bg-yellow-500/10 text-yellow-500' },
+                { name: 'Adv Accounting', icon: 'fa-book-open', color: 'bg-green-500/10 text-green-500' },
+                { name: 'Corporate Law', icon: 'fa-balance-scale', color: 'bg-blue-500/10 text-blue-500' },
+                { name: 'Fin. Management', icon: 'fa-money-check-alt', color: 'bg-cyan-500/10 text-cyan-500' }
             ],
             'Final': [
-                { name: 'Financial Reporting', icon: 'fa-chart-pie', color: 'bg-green-900/30', text: 'text-green-500' },
-                { name: 'Adv Financial Mgmt', icon: 'fa-university', color: 'bg-blue-900/30', text: 'text-blue-500' },
-                { name: 'Adv Auditing', icon: 'fa-user-check', color: 'bg-red-900/30', text: 'text-red-500' },
-                { name: 'Direct Tax Laws', icon: 'fa-hand-holding-usd', color: 'bg-orange-900/30', text: 'text-orange-500' },
-                { name: 'Indirect Tax Laws', icon: 'fa-receipt', color: 'bg-purple-900/30', text: 'text-purple-500' },
-                { name: 'Integrated Business', icon: 'fa-project-diagram', color: 'bg-indigo-900/30', text: 'text-indigo-500' }
+                { name: 'Fin. Reporting', icon: 'fa-chart-pie', color: 'bg-green-500/10 text-green-500' },
+                { name: 'Adv Fin Mgmt', icon: 'fa-landmark', color: 'bg-blue-500/10 text-blue-500' },
+                { name: 'Adv Auditing', icon: 'fa-user-shield', color: 'bg-red-500/10 text-red-500' },
+                { name: 'Direct Tax', icon: 'fa-hand-holding-usd', color: 'bg-orange-500/10 text-orange-500' },
+                { name: 'Indirect Tax', icon: 'fa-receipt', color: 'bg-purple-500/10 text-purple-500' },
+                { name: 'Multi Case Study', icon: 'fa-project-diagram', color: 'bg-indigo-500/10 text-indigo-500' }
             ]
         };
 
@@ -139,7 +120,14 @@
             const list = document.getElementById('subjectList');
             list.innerHTML = '';
             subsData[level].forEach(s => {
-                list.innerHTML += `<div class="subject-row" onclick="showTab('aiChat')"><div class="flex items-center"><div class="sub-icon-box ${s.color} ${s.text}"><i class="fas ${s.icon}"></i></div><span class="text-sm font-bold">${s.name}</span></div><i class="fas fa-chevron-right text-gray-700"></i></div>`;
+                list.innerHTML += `
+                    <div class="subject-row" onclick="alert('AI Loading for ${s.name}')">
+                        <div class="flex items-center">
+                            <div class="sub-icon-box ${s.color}"><i class="fas ${s.icon}"></i></div>
+                            <span class="text-sm font-bold">${s.name}</span>
+                        </div>
+                        <i class="fas fa-chevron-right text-gray-700"></i>
+                    </div>`;
             });
             showTab('dashboard');
         }
@@ -149,10 +137,9 @@
             document.getElementById(id).classList.add('active-tab');
             document.querySelectorAll('.nav-item').forEach((item, idx) => {
                 item.classList.remove('active');
-                if((id==='dashboard' && idx===0) || (id==='aiChat' && idx===1) || (id==='profile' && idx===3)) item.classList.add('active');
+                if((id==='dashboard' && idx===0) || (id==='profile' && idx===3)) item.classList.add('active');
             });
         }
     </script>
 </body>
 </html>
-
