@@ -1,107 +1,158 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CA AI Partner</title>
+    <title>CA Mentor AI - Premium</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/dist/css/all.min.css">
     <style>
-        body { background-color: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); }
-        .tab-content { display: none; padding-bottom: 80px; }
-        .active-tab { display: block; }
+        body { background-color: #0b0f1a; color: #ffffff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .tab-content { display: none; padding-bottom: 100px; }
+        .active-tab { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .glass-card { background: #161b2c; border: 1px solid #2d364f; border-radius: 20px; }
         
-        /* Chat UI Design */
-        #chatbox { height: 65vh; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .user-msg { background: #3b82f6; align-self: flex-end; border-radius: 15px 15px 0 15px; padding: 10px 15px; max-width: 80%; }
-        .ai-msg { background: #1e293b; align-self: flex-start; border-radius: 15px 15px 15px 0; padding: 12px 15px; max-width: 85%; border: 1px solid #334155; position: relative; }
-        .speaker-btn { font-size: 12px; color: #94a3b8; margin-top: 5px; cursor: pointer; display: block; }
+        /* Quick Action Buttons (3 Buttons as per your request) */
+        .action-card { background: #1c233a; border-radius: 18px; padding: 15px; text-align: center; border: 1px solid #2d364f; cursor: pointer; }
+        
+        /* Subject List Cards (Large style like your photo) */
+        .subject-row { background: #161b2c; border-radius: 18px; padding: 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border: 1px solid #2d364f; cursor: pointer; }
+        .sub-icon-box { width: 45px; height: 45px; border-radius: 12px; display: flex; items-center; justify-content: center; margin-right: 15px; }
+
+        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0b0f1a; border-top: 1px solid #2d364f; display: flex; justify-content: space-around; padding: 12px; z-index: 100; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #64748b; font-size: 10px; cursor: pointer; }
+        .nav-item.active { color: #3b82f6; }
+
+        .profile-option { background: #161b2c; padding: 15px; border-radius: 15px; display: flex; align-items: center; gap: 15px; margin-bottom: 10px; border: 1px solid #2d364f; width: 100%; text-align: left; }
     </style>
 </head>
 <body>
 
-    <header class="p-4 glass sticky top-0 z-50 flex justify-between items-center border-b border-gray-800">
-        <div class="flex items-center gap-2">
-            <img src="https://i.postimg.cc/YqJMPdbb/1769782227060.png" class="w-10 h-10 rounded-full border border-purple-500">
-            <div>
-                <h1 class="font-bold text-sm">AI Study Assistant</h1>
-                <p class="text-[10px] text-green-400">Foundation Level • Online</p>
+    <div id="welcomeScreen" class="tab-content active-tab p-6">
+        <div class="glass-card p-10 text-center mb-10 mt-5">
+            <div class="w-20 h-20 bg-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center shadow-2xl">
+                <i class="fas fa-user-graduate text-3xl"></i>
             </div>
+            <h1 class="text-2xl font-bold">Welcome back!</h1>
+            <p class="text-gray-400 text-sm mt-2">Select Level to Continue</p>
         </div>
-        <i class="fas fa-ellipsis-v text-gray-400"></i>
-    </header>
-
-    <main class="p-4">
-        <div id="ai" class="tab-content active-tab">
-            <div id="chatbox" class="p-2">
-                <div class="ai-msg">
-                    Hello! I'm your CA Mentor AI assistant. Ask me anything about Accounting, Taxation, or Law!
-                    <span class="speaker-btn" onclick="speakText(this.parentElement.innerText)"><i class="fas fa-volume-up mr-1"></i> Listen</span>
-                </div>
-            </div>
-
-            <div class="fixed bottom-20 left-0 right-0 p-3 bg-slate-900 border-t border-gray-800 flex items-center gap-2">
-                <div class="flex-1 bg-gray-800 rounded-full px-4 py-2 flex items-center border border-gray-700">
-                    <input type="text" id="aiInput" placeholder="Ask me anything about CA..." class="bg-transparent w-full outline-none text-sm py-1">
-                </div>
-                <button onclick="askAI()" class="bg-blue-600 w-12 h-12 rounded-full flex items-center justify-center shadow-lg active:scale-95 transition">
-                    <i class="fas fa-paper-plane text-white text-lg"></i>
-                </button>
-            </div>
+        <div onclick="openDashboard('Foundation')" class="subject-row" style="border-left: 5px solid #10b981;">
+            <div class="flex items-center"><div class="sub-icon-box bg-green-900/30 text-green-500"><i class="fas fa-book"></i></div><span class="font-bold">Foundation</span></div>
+            <i class="fas fa-chevron-right text-gray-600"></i>
         </div>
-    </main>
+        <div onclick="openDashboard('Intermediate')" class="subject-row" style="border-left: 5px solid #3b82f6;">
+            <div class="flex items-center"><div class="sub-icon-box bg-blue-900/30 text-blue-500"><i class="fas fa-layer-group"></i></div><span class="font-bold">Intermediate</span></div>
+            <i class="fas fa-chevron-right text-gray-600"></i>
+        </div>
+    </div>
 
-    <nav class="fixed bottom-0 left-0 right-0 glass p-3 flex justify-around border-t border-gray-800">
-        <button onclick="showTab('ai')" class="flex flex-col items-center text-blue-500"><i class="fas fa-robot text-xl"></i><span class="text-[10px] mt-1">Chat AI</span></button>
-        <button onclick="alert('Coming soon!')" class="flex flex-col items-center text-gray-400"><i class="fas fa-book-open text-xl"></i><span class="text-[10px] mt-1">Subjects</span></button>
-        <button onclick="alert('Support: 7719081975')" class="flex flex-col items-center text-gray-400"><i class="fas fa-headset text-xl"></i><span class="text-[10px] mt-1">Support</span></button>
+    <div id="dashboard" class="tab-content p-5">
+        <div class="flex justify-between items-center mb-6">
+            <div><p class="text-gray-400 text-xs uppercase tracking-widest">Welcome back!</p><h1 class="text-xl font-bold">CA Mentor AI</h1></div>
+            <div class="bg-blue-600/20 text-blue-400 px-3 py-1 rounded-full text-[10px] font-bold border border-blue-500/30" id="displayLevel">Level</div>
+        </div>
+
+        <h2 class="text-[10px] font-bold text-gray-500 mb-4 uppercase tracking-widest">Quick Actions</h2>
+        <div class="grid grid-cols-3 gap-3 mb-8">
+            <div onclick="showTab('aiChat')" class="action-card"><i class="fas fa-comment-dots text-blue-500 mb-2 text-xl"></i><p class="text-[10px] font-bold">Ask AI</p></div>
+            <div onclick="alert('Loading Materials...')" class="action-card"><i class="fas fa-book text-green-500 mb-2 text-xl"></i><p class="text-[10px] font-bold">Practice</p></div>
+            <div onclick="alert('Latest News...')" class="action-card"><i class="fas fa-newspaper text-orange-500 mb-2 text-xl"></i><p class="text-[10px] font-bold">News</p></div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3 mb-8 text-center">
+            <div class="glass-card p-3"><p class="text-orange-400 font-bold">10</p><p class="text-[8px] text-gray-500 uppercase">Latest News</p></div>
+            <div class="glass-card p-3"><p class="text-green-400 font-bold">4</p><p class="text-[8px] text-gray-500 uppercase">Study Topics</p></div>
+            <div class="glass-card p-3"><p class="text-blue-400 font-bold">3</p><p class="text-[8px] text-gray-500 uppercase">Questions</p></div>
+        </div>
+
+        <h2 class="text-[10px] font-bold text-gray-500 mb-4 uppercase tracking-widest">Subjects</h2>
+        <div id="subjectList" class="space-y-4 mb-8">
+            </div>
+
+        <h2 class="text-[10px] font-bold text-gray-500 mb-4 uppercase tracking-widest">Career & Jobs</h2>
+        <div class="glass-card p-5 flex items-center justify-between border-l-4 border-yellow-500">
+            <div><p class="font-bold text-xs">Post-CA Job Opportunities</p><p class="text-[9px] text-gray-400">Apply for Top Firms</p></div>
+            <button class="bg-yellow-600 text-[9px] px-3 py-1 rounded-lg">VIEW ALL</button>
+        </div>
+    </div>
+
+    <div id="profile" class="tab-content p-5">
+        <div class="text-center mt-10 mb-10">
+            <div class="w-20 h-20 bg-slate-800 rounded-full mx-auto mb-3 flex items-center justify-center border-2 border-blue-500"><i class="fas fa-user text-2xl"></i></div>
+            <h2 class="font-bold text-xl">CA Student Profile</h2>
+        </div>
+        <div class="space-y-3">
+            <button class="profile-option"><i class="fas fa-cog text-gray-400"></i><span>Settings</span></button>
+            <button class="profile-option"><i class="fas fa-bullhorn text-gray-400"></i><span>Send Feedback</span></button>
+            <a href="https://wa.me/917719081975?text=Hi, I need help with CA Partner App" class="profile-option">
+                <i class="fab fa-whatsapp text-green-500 text-xl"></i>
+                <div><p class="font-bold text-sm">Chat with Admin</p><p class="text-[10px] text-gray-500">No calls, WhatsApp only</p></div>
+            </a>
+            <button onclick="showTab('welcomeScreen')" class="profile-option text-red-400 mt-10"><i class="fas fa-sign-out-alt"></i><span>Change Level / Logout</span></button>
+        </div>
+    </div>
+
+    <div id="aiChat" class="tab-content">
+        <div class="p-5 border-b border-gray-800 flex items-center gap-4">
+            <button onclick="showTab('dashboard')"><i class="fas fa-arrow-left"></i></button>
+            <h2 class="font-bold">AI Study Assistant</h2>
+        </div>
+        <div id="chatbox" class="h-[65vh] overflow-y-auto p-5 space-y-4 text-sm">
+            <div class="bg-slate-800 p-4 rounded-2xl border border-gray-700">Hello! Ask me any CA doubt.</div>
+        </div>
+        <div class="fixed bottom-24 left-5 right-5 flex gap-2">
+            <input type="text" id="aiInput" placeholder="Ask anything about CA..." class="flex-1 bg-slate-800 border border-gray-700 rounded-full px-5 py-3 text-sm outline-none">
+            <button class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <nav class="nav-bar">
+        <div onclick="showTab('dashboard')" class="nav-item active"><i class="fas fa-home text-lg"></i><span>Home</span></div>
+        <div onclick="showTab('aiChat')" class="nav-item"><i class="fas fa-robot text-lg"></i><span>Ask AI</span></div>
+        <div onclick="alert('Videos Coming Soon!')" class="nav-item"><i class="fas fa-play-circle text-lg"></i><span>Videos</span></div>
+        <div onclick="showTab('profile')" class="nav-item"><i class="fas fa-user-cog text-lg"></i><span>Profile</span></div>
     </nav>
 
     <script>
-        function askAI() {
-            const input = document.getElementById('aiInput');
-            const chatbox = document.getElementById('chatbox');
-            if (!input.value.trim()) return;
+        const subsData = {
+            'Foundation': [
+                { name: 'Accounting', icon: 'fa-calculator', color: 'bg-green-900/30', text: 'text-green-500' },
+                { name: 'Quantitative Aptitude', icon: 'fa-chart-line', color: 'bg-orange-900/30', text: 'text-orange-500' },
+                { name: 'Business Studies', icon: 'fa-briefcase', color: 'bg-blue-900/30', text: 'text-blue-500' }
+            ],
+            'Intermediate': [
+                { name: 'Taxation', icon: 'fa-file-invoice-dollar', color: 'bg-red-900/30', text: 'text-red-500' },
+                { name: 'Auditing', icon: 'fa-search-dollar', color: 'bg-indigo-900/30', text: 'text-indigo-500' }
+            ]
+        };
 
-            // User Message
-            const userDiv = document.createElement('div');
-            userDiv.className = 'user-msg';
-            userDiv.innerText = input.value;
-            chatbox.appendChild(userDiv);
-
-            const userText = input.value;
-            input.value = '';
-            chatbox.scrollTop = chatbox.scrollHeight;
-
-            // AI Thinking & Response
-            setTimeout(() => {
-                const aiDiv = document.createElement('div');
-                aiDiv.className = 'ai-msg';
-                const response = "I am processing your query about '" + userText + "'. Based on the CA Foundation curriculum, this topic is vital for your exams. Would you like a detailed explanation?";
-                
-                aiDiv.innerHTML = `
-                    ${response}
-                    <span class="speaker-btn" onclick="speakText('${response}')"><i class="fas fa-volume-up mr-1"></i> Listen</span>
-                `;
-                
-                chatbox.appendChild(aiDiv);
-                chatbox.scrollTop = chatbox.scrollHeight;
-            }, 1000);
+        function openDashboard(level) {
+            document.getElementById('displayLevel').innerText = level;
+            const list = document.getElementById('subjectList');
+            list.innerHTML = '';
+            
+            subsData[level].forEach(s => {
+                list.innerHTML += `
+                    <div class="subject-row" onclick="showTab('aiChat')">
+                        <div class="flex items-center">
+                            <div class="sub-icon-box ${s.color} ${s.text}"><i class="fas ${s.icon}"></i></div>
+                            <span class="text-sm font-bold">${s.name}</span>
+                        </div>
+                        <i class="fas fa-chevron-right text-gray-700"></i>
+                    </div>`;
+            });
+            showTab('dashboard');
         }
 
-        function speakText(text) {
-            // Text to Speech Function
-            window.speechSynthesis.cancel(); // Stop any previous speaking
-            const speech = new SpeechSynthesisUtterance(text);
-            speech.lang = 'en-US';
-            speech.rate = 1.0;
-            window.speechSynthesis.speak(speech);
-        }
-
-        function showTab(tabId) {
-            // Function to switch tabs if needed
+        function showTab(id) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active-tab'));
+            document.getElementById(id).classList.add('active-tab');
+            document.querySelectorAll('.nav-item').forEach((item, idx) => {
+                item.classList.remove('active');
+                if((id==='dashboard' && idx===0) || (id==='aiChat' && idx===1) || (id==='profile' && idx===3)) item.classList.add('active');
+            });
         }
     </script>
 </body>
