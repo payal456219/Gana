@@ -1,144 +1,158 @@
-
-       <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CA Partner - Nav Fixed</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CA Partner Final Fix</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        body { background-color: #0b0f1a; color: #ffffff; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
-        
-        /* स्क्रीन बदलण्यासाठीचा कोड */
-        .tab-content { display: none; min-height: 100vh; padding-bottom: 100px; }
-        .active-tab { display: block; animation: fadeIn 0.4s ease; }
+        /* पायाभूत रचना */
+        body { 
+            background-color: #0b0f1a; 
+            color: #ffffff; 
+            font-family: 'Inter', sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            height: 100vh;
+            overflow: hidden; /* बॉडी स्क्रोल होणार नाही, फक्त कंटेंट होईल */
+        }
+
+        /* कंटेंट स्क्रोलिंग साठी */
+        .main-container {
+            height: calc(100vh - 70px); /* नेव्हिगेशन बार सोडून उरलेली जागा */
+            overflow-y: auto;
+            padding-bottom: 20px;
+        }
+
+        .tab-content { display: none; }
+        .active-tab { display: block; animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* कार्ड्सचे डिझाइन */
-        .subject-row { background: #161b2c; border-radius: 20px; padding: 18px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border: 1px solid #2d364f; cursor: pointer; }
-        .sub-icon-box { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-right: 15px; }
-        .action-card { background: #1c233a; border-radius: 20px; padding: 15px; text-align: center; border: 1px solid #2d364f; cursor: pointer; }
-        .content-box { background: #1c233a; padding: 18px; border-radius: 18px; margin-bottom: 15px; border-left: 5px solid #3b82f6; }
+        /* कार्ड डिझाइन */
+        .subject-row { background: #161b2c; border-radius: 20px; padding: 18px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border: 1px solid #2d364f; }
+        .sub-icon-box { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-right: 15px; }
+        .action-card { background: #1c233a; border-radius: 20px; padding: 15px; text-align: center; border: 1px solid #2d364f; }
 
-        /* 🟢 नेव्हिगेशन बार - हा आता नक्की दिसेल */
-        .nav-bar { 
-            position: fixed; 
-            bottom: 0; 
-            left: 0; 
-            right: 0; 
-            background: #0b1426; 
-            border-top: 1px solid #2d364f; 
-            display: flex; 
-            justify-content: space-around; 
-            padding: 12px 0; 
-            z-index: 9999; /* सर्वांच्या वर दिसण्यासाठी */
+        /* 🟢 फिक्स्ड नेव्हिगेशन बार (सर्वात महत्त्वाचा) */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
             height: 70px;
+            background: #0b1426;
+            border-top: 2px solid #1e293b;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 99999; /* सर्वात वर */
         }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #64748b; font-size: 10px; cursor: pointer; width: 33%; }
-        .nav-item.active { color: #3b82f6; }
-        .nav-item i { font-size: 20px; margin-bottom: 4px; }
 
-        table { width: 100%; border-collapse: collapse; background: #161b2c; border-radius: 12px; overflow: hidden; }
-        th, td { border: 1px solid #2d364f; padding: 12px; text-align: left; font-size: 11px; }
-        th { background: #3b82f6; }
+        .nav-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 11px;
+            transition: 0.3s;
+            width: 33%;
+        }
+
+        .nav-link.active { color: #3b82f6; }
+        .nav-link i { font-size: 22px; margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
-    <div id="welcomeScreen" class="tab-content active-tab p-6">
-        <div class="text-center mb-10 mt-10">
-            <div class="w-20 h-20 bg-blue-600 rounded-3xl mx-auto mb-5 flex items-center justify-center shadow-xl">
-                <i class="fa-solid fa-user-graduate text-3xl text-white"></i>
+    <div class="main-container">
+        <div id="welcomeScreen" class="tab-content active-tab p-6">
+            <div class="text-center mb-10 mt-10">
+                <div class="w-20 h-20 bg-blue-600 rounded-3xl mx-auto mb-5 flex items-center justify-center shadow-xl">
+                    <i class="fa-solid fa-user-graduate text-3xl text-white"></i>
+                </div>
+                <h1 class="text-3xl font-bold">CA Partner</h1>
+                <p class="text-gray-400 mt-2">तुमची लेव्हल निवडा</p>
             </div>
-            <h1 class="text-3xl font-bold">CA Partner</h1>
-            <p class="text-gray-400 mt-2">तुमची लेव्हल निवडा</p>
-        </div>
-        <div onclick="openDashboard('Foundation')" class="subject-row">
-            <div class="flex items-center"><div class="sub-icon-box bg-emerald-500 text-white"><i class="fa-solid fa-book"></i></div><span class="font-bold">Foundation</span></div>
-            <i class="fa-solid fa-chevron-right text-gray-600"></i>
-        </div>
-        <div onclick="openDashboard('Intermediate')" class="subject-row">
-            <div class="flex items-center"><div class="sub-icon-box bg-blue-500 text-white"><i class="fa-solid fa-layer-group"></i></div><span class="font-bold">Intermediate</span></div>
-            <i class="fa-solid fa-chevron-right text-gray-600"></i>
-        </div>
-        <div onclick="openDashboard('Final')" class="subject-row">
-            <div class="flex items-center"><div class="sub-icon-box bg-rose-500 text-white"><i class="fa-solid fa-trophy"></i></div><span class="font-bold">Final</span></div>
-            <i class="fa-solid fa-chevron-right text-gray-600"></i>
-        </div>
-    </div>
-
-    <div id="dashboard" class="tab-content p-5">
-        <div class="flex justify-between items-center mb-8">
-            <h1 class="text-xl font-bold text-blue-500">CA Mentor AI</h1>
-            <div class="bg-blue-600 text-white px-3 py-1 rounded-full text-[10px] font-bold" id="displayLevel">Level</div>
-        </div>
-        <div class="grid grid-cols-3 gap-3 mb-8">
-            <div onclick="showTab('newsMenu')" class="action-card"><i class="fa-solid fa-newspaper text-orange-400"></i><p class="text-[8px] mt-2 uppercase">News</p></div>
-            <div class="action-card"><i class="fa-solid fa-file-lines text-emerald-400"></i><p class="text-[8px] mt-2 uppercase">Study</p></div>
-            <div class="action-card"><i class="fa-solid fa-circle-question text-blue-400"></i><p class="text-[8px] mt-2 uppercase">Doubts</p></div>
-        </div>
-        <h2 class="text-[10px] font-bold text-gray-500 mb-4 uppercase tracking-widest">Your Subjects</h2>
-        <div id="subjectList" class="space-y-4"></div>
-    </div>
-
-    <div id="newsMenu" class="tab-content p-5">
-        <div class="flex items-center gap-4 mb-8"><button onclick="showTab('dashboard')"><i class="fa-solid fa-arrow-left text-xl"></i></button><h1 class="text-xl font-bold">News Center</h1></div>
-        <div onclick="window.open('https://www.google.com/search?q=ICAI+Results', '_blank')" class="subject-row border-l-4 border-rose-500">
-            <div class="flex items-center"><i class="fa-solid fa-camera text-rose-500 mr-4 text-xl"></i><span class="font-bold">Results (Lens)</span></div>
-        </div>
-        <div onclick="showTab('liveUpdates')" class="subject-row border-l-4 border-blue-500">
-            <div class="flex items-center"><i class="fa-solid fa-broadcast-tower text-blue-500 mr-4 text-xl"></i><span class="font-bold">20+ Live Updates</span></div>
-        </div>
-        <div onclick="showTab('timetable')" class="subject-row border-l-4 border-amber-500">
-            <div class="flex items-center"><i class="fa-solid fa-calendar-days text-amber-500 mr-4 text-xl"></i><span class="font-bold">Time Table</span></div>
-        </div>
-    </div>
-
-    <div id="liveUpdates" class="tab-content p-5">
-        <div class="flex items-center gap-4 mb-6"><button onclick="showTab('newsMenu')"><i class="fa-solid fa-arrow-left text-xl"></i></button><h1 class="text-xl font-bold">Daily Updates</h1></div>
-        <div id="updatesList"></div>
-    </div>
-
-    <div id="timetable" class="tab-content p-5">
-        <div class="flex items-center gap-4 mb-6"><button onclick="showTab('newsMenu')"><i class="fa-solid fa-arrow-left text-xl"></i></button><h1 class="text-xl font-bold">Time Table</h1></div>
-        <table>
-            <thead><tr><th>दिनांक</th><th>विषय</th><th>वेळ</th></tr></thead>
-            <tbody><tr><td>२५ मे २०२६</td><td>Accounting</td><td>२-५ PM</td></tr></tbody>
-        </table>
-    </div>
-
-    <div id="profile" class="tab-content p-6">
-        <div class="text-center mt-10 mb-10">
-            <div class="w-20 h-20 bg-slate-800 rounded-full mx-auto mb-4 flex items-center justify-center border border-blue-500">
-                <i class="fa-solid fa-user text-3xl text-blue-500"></i>
+            <div onclick="openDashboard('Foundation')" class="subject-row">
+                <div class="flex items-center"><div class="sub-icon-box bg-emerald-500 text-white"><i class="fa-solid fa-book"></i></div><span class="font-bold">Foundation</span></div>
+                <i class="fa-solid fa-chevron-right text-gray-600"></i>
             </div>
-            <h2 class="text-xl font-bold">Settings</h2>
-        </div>
-        <div class="space-y-3">
-            <a href="https://wa.me/917719081975" class="subject-row">
-                <div class="flex items-center"><i class="fa-brands fa-whatsapp text-green-500 mr-4 text-2xl"></i><span>Chat with Admin</span></div>
-            </a>
-            <div onclick="showTab('welcomeScreen')" class="subject-row text-red-500">
-                <div class="flex items-center"><i class="fa-solid fa-right-from-bracket mr-4"></i><span>Change Level</span></div>
+            <div onclick="openDashboard('Intermediate')" class="subject-row">
+                <div class="flex items-center"><div class="sub-icon-box bg-blue-500 text-white"><i class="fa-solid fa-layer-group"></i></div><span class="font-bold">Intermediate</span></div>
+                <i class="fa-solid fa-chevron-right text-gray-600"></i>
             </div>
-            <div onclick="alert('फीडबॅक पाठवल्याबद्दल धन्यवाद!')" class="subject-row text-blue-400">
-                <div class="flex items-center"><i class="fa-solid fa-comment-dots mr-4"></i><span>Send Feedback</span></div>
+            <div onclick="openDashboard('Final')" class="subject-row">
+                <div class="flex items-center"><div class="sub-icon-box bg-rose-500 text-white"><i class="fa-solid fa-trophy"></i></div><span class="font-bold">Final</span></div>
+                <i class="fa-solid fa-chevron-right text-gray-600"></i>
+            </div>
+        </div>
+
+        <div id="dashboard" class="tab-content p-5">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-xl font-bold text-blue-500">CA Mentor AI</h1>
+                <div class="bg-blue-600 text-white px-3 py-1 rounded-full text-[10px] font-bold" id="displayLevel">Level</div>
+            </div>
+            <div class="grid grid-cols-3 gap-3 mb-8">
+                <div onclick="showTab('newsMenu')" class="action-card"><i class="fa-solid fa-newspaper text-orange-400"></i><p class="text-[8px] mt-2 uppercase">News</p></div>
+                <div class="action-card"><i class="fa-solid fa-file-lines text-emerald-400"></i><p class="text-[8px] mt-2 uppercase">Study</p></div>
+                <div class="action-card"><i class="fa-solid fa-circle-question text-blue-400"></i><p class="text-[8px] mt-2 uppercase">Doubts</p></div>
+            </div>
+            <h2 class="text-[10px] font-bold text-gray-500 mb-4 uppercase tracking-widest">Your Subjects</h2>
+            <div id="subjectList" class="space-y-4"></div>
+        </div>
+
+        <div id="newsMenu" class="tab-content p-5">
+            <div class="flex items-center gap-4 mb-8"><button onclick="showTab('dashboard')"><i class="fa-solid fa-arrow-left text-xl"></i></button><h1 class="text-xl font-bold">News Center</h1></div>
+            <div onclick="window.open('https://www.google.com/search?q=ICAI+Results', '_blank')" class="subject-row border-l-4 border-rose-500">
+                <div class="flex items-center"><i class="fa-solid fa-camera text-rose-500 mr-4 text-xl"></i><span class="font-bold">Results (Lens)</span></div>
+            </div>
+            <div onclick="showTab('liveUpdates')" class="subject-row border-l-4 border-blue-500">
+                <div class="flex items-center"><i class="fa-solid fa-broadcast-tower text-blue-500 mr-4 text-xl"></i><span class="font-bold">20+ Live Updates</span></div>
+            </div>
+        </div>
+
+        <div id="liveUpdates" class="tab-content p-5">
+            <div class="flex items-center gap-4 mb-6"><button onclick="showTab('newsMenu')"><i class="fa-solid fa-arrow-left text-xl"></i></button><h1 class="text-xl font-bold">Daily Updates</h1></div>
+            <div id="updatesList"></div>
+        </div>
+
+        <div id="profile" class="tab-content p-6 text-center">
+            <div class="mt-10 mb-10">
+                <div class="w-20 h-20 bg-slate-800 rounded-full mx-auto mb-4 flex items-center justify-center border border-blue-500">
+                    <i class="fa-solid fa-user text-3xl text-blue-500"></i>
+                </div>
+                <h2 class="text-xl font-bold">Settings</h2>
+            </div>
+            <div class="space-y-3">
+                <a href="https://wa.me/917719081975" class="subject-row text-white no-underline">
+                    <div class="flex items-center"><i class="fa-brands fa-whatsapp text-green-500 mr-4 text-2xl"></i><span>Chat with Admin</span></div>
+                </a>
+                <div onclick="showTab('welcomeScreen')" class="subject-row text-red-500">
+                    <div class="flex items-center"><i class="fa-solid fa-right-from-bracket mr-4"></i><span>Change Level</span></div>
+                </div>
+                <div onclick="alert('फीडबॅक पाठवला!')" class="subject-row text-blue-400">
+                    <div class="flex items-center"><i class="fa-solid fa-comment-dots mr-4"></i><span>Send Feedback</span></div>
+                </div>
             </div>
         </div>
     </div>
 
-    <nav class="nav-bar">
-        <div onclick="showTab('dashboard')" class="nav-item active" id="nav-home">
-            <i class="fa-solid fa-house"></i><span>Home</span>
+    <div class="bottom-nav">
+        <div onclick="showTab('dashboard')" class="nav-link active" id="btn-home">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
         </div>
-        <div onclick="alert('AI Loading...')" class="nav-item">
-            <i class="fa-solid fa-robot"></i><span>Ask AI</span>
+        <div onclick="alert('AI Coming Soon!')" class="nav-link">
+            <i class="fa-solid fa-robot"></i>
+            <span>Ask AI</span>
         </div>
-        <div onclick="showTab('profile')" class="nav-item" id="nav-profile">
-            <i class="fa-solid fa-gear"></i><span>Profile</span>
+        <div onclick="showTab('profile')" class="nav-link" id="btn-profile">
+            <i class="fa-solid fa-gear"></i>
+            <span>Profile</span>
         </div>
-    </nav>
+    </div>
 
     <script>
         const subsData = {
@@ -167,24 +181,21 @@
         }
 
         function showTab(id) {
-            // सर्व टॅब्स लपवा
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active-tab'));
-            // निवडलेली टॅब दाखवा
-            const selectedTab = document.getElementById(id);
-            if(selectedTab) selectedTab.classList.add('active-tab');
+            const target = document.getElementById(id);
+            if(target) target.classList.add('active-tab');
 
-            // नेव्हिगेशन आयकॉन कलर बदला
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            if(id === 'dashboard') document.getElementById('nav-home').classList.add('active');
-            if(id === 'profile') document.getElementById('nav-profile').classList.add('active');
+            // आयकॉन कलर मॅनेजमेंट
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            if(id === 'dashboard') document.getElementById('btn-home').classList.add('active');
+            if(id === 'profile') document.getElementById('btn-profile').classList.add('active');
         }
 
-        // २० अपडेट्स
+        // अपडेट्स लोड करणे
         const list = document.getElementById('updatesList');
         for(let i=1; i<=20; i++) {
-            list.innerHTML += `<div class="content-box"><p class="text-xs text-blue-400 font-bold mb-1">Update #${i}</p><p class="text-sm">ICAI कडून प्राप्त झालेली नवीन अपडेट क्रमांक ${i} वाचा...</p></div>`;
+            list.innerHTML += `<div class="bg-[#1c233a] p-4 rounded-xl mb-3 border-l-4 border-blue-500"><p class="text-xs text-blue-400 mb-1">Update #${i}</p><p class="text-sm">नवीन माहिती येथे दिसेल...</p></div>`;
         }
     </script>
 </body>
 </html>
-     
