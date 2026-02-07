@@ -1,34 +1,47 @@
-<!DOCTYPE html>
+
+       <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CA Partner - News Integrated</title>
+    <title>CA Partner - Nav Fixed</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
-        body { background-color: #0b0f1a; color: #ffffff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        .tab-content { display: none; padding-bottom: 120px; }
+        body { background-color: #0b0f1a; color: #ffffff; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
+        
+        /* स्क्रीन बदलण्यासाठीचा कोड */
+        .tab-content { display: none; min-height: 100vh; padding-bottom: 100px; }
         .active-tab { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .glass-card { background: #161b2c; border: 1px solid #2d364f; border-radius: 20px; }
-        .action-card { background: #1c233a; border-radius: 20px; padding: 15px; text-align: center; border: 1px solid #2d364f; cursor: pointer; }
-        
-        .subject-row { background: #161b2c; border-radius: 20px; padding: 18px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border: 1px solid #2d364f; transition: 0.3s; cursor: pointer; }
+        /* कार्ड्सचे डिझाइन */
+        .subject-row { background: #161b2c; border-radius: 20px; padding: 18px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border: 1px solid #2d364f; cursor: pointer; }
         .sub-icon-box { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-right: 15px; }
-
-        /* News Styles */
-        .news-menu-card { background: #1c233a; padding: 20px; border-radius: 20px; margin-bottom: 15px; border-left: 5px solid #3b82f6; display: flex; align-items: center; gap: 15px; cursor: pointer; }
+        .action-card { background: #1c233a; border-radius: 20px; padding: 15px; text-align: center; border: 1px solid #2d364f; cursor: pointer; }
         .content-box { background: #1c233a; padding: 18px; border-radius: 18px; margin-bottom: 15px; border-left: 5px solid #3b82f6; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; background: #161b2c; border-radius: 12px; overflow: hidden; }
-        th, td { border: 1px solid #2d364f; padding: 14px; text-align: left; font-size: 12px; }
-        th { background: #3b82f6; color: white; }
 
-        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0b0f1a; border-top: 1px solid #2d364f; display: flex; justify-content: space-around; padding: 15px; z-index: 100; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #64748b; font-size: 11px; cursor: pointer; }
+        /* 🟢 नेव्हिगेशन बार - हा आता नक्की दिसेल */
+        .nav-bar { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            right: 0; 
+            background: #0b1426; 
+            border-top: 1px solid #2d364f; 
+            display: flex; 
+            justify-content: space-around; 
+            padding: 12px 0; 
+            z-index: 9999; /* सर्वांच्या वर दिसण्यासाठी */
+            height: 70px;
+        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #64748b; font-size: 10px; cursor: pointer; width: 33%; }
         .nav-item.active { color: #3b82f6; }
+        .nav-item i { font-size: 20px; margin-bottom: 4px; }
+
+        table { width: 100%; border-collapse: collapse; background: #161b2c; border-radius: 12px; overflow: hidden; }
+        th, td { border: 1px solid #2d364f; padding: 12px; text-align: left; font-size: 11px; }
+        th { background: #3b82f6; }
     </style>
 </head>
 <body>
@@ -41,7 +54,6 @@
             <h1 class="text-3xl font-bold">CA Partner</h1>
             <p class="text-gray-400 mt-2">तुमची लेव्हल निवडा</p>
         </div>
-        
         <div onclick="openDashboard('Foundation')" class="subject-row">
             <div class="flex items-center"><div class="sub-icon-box bg-emerald-500 text-white"><i class="fa-solid fa-book"></i></div><span class="font-bold">Foundation</span></div>
             <i class="fa-solid fa-chevron-right text-gray-600"></i>
@@ -58,42 +70,28 @@
 
     <div id="dashboard" class="tab-content p-5">
         <div class="flex justify-between items-center mb-8">
-            <div><h1 class="text-xl font-bold">CA Mentor AI</h1></div>
+            <h1 class="text-xl font-bold text-blue-500">CA Mentor AI</h1>
             <div class="bg-blue-600 text-white px-3 py-1 rounded-full text-[10px] font-bold" id="displayLevel">Level</div>
         </div>
-
         <div class="grid grid-cols-3 gap-3 mb-8">
             <div onclick="showTab('newsMenu')" class="action-card"><i class="fa-solid fa-newspaper text-orange-400"></i><p class="text-[8px] mt-2 uppercase">News</p></div>
             <div class="action-card"><i class="fa-solid fa-file-lines text-emerald-400"></i><p class="text-[8px] mt-2 uppercase">Study</p></div>
             <div class="action-card"><i class="fa-solid fa-circle-question text-blue-400"></i><p class="text-[8px] mt-2 uppercase">Doubts</p></div>
         </div>
-
         <h2 class="text-[10px] font-bold text-gray-500 mb-4 uppercase tracking-widest">Your Subjects</h2>
-        <div id="subjectList" class="space-y-4 mb-8"></div>
-
-        <div class="glass-card p-4 flex items-center justify-between border-l-4 border-yellow-500">
-            <div class="flex items-center">
-                <i class="fa-solid fa-briefcase text-yellow-500 mr-4 text-xl"></i>
-                <div><p class="font-bold text-xs">Job Opportunities</p><p class="text-[9px] text-gray-400">Explore CA Careers</p></div>
-            </div>
-            <i class="fa-solid fa-arrow-right text-gray-600"></i>
-        </div>
+        <div id="subjectList" class="space-y-4"></div>
     </div>
 
     <div id="newsMenu" class="tab-content p-5">
         <div class="flex items-center gap-4 mb-8"><button onclick="showTab('dashboard')"><i class="fa-solid fa-arrow-left text-xl"></i></button><h1 class="text-xl font-bold">News Center</h1></div>
-        
-        <div onclick="window.open('https://www.google.com/search?q=ICAI+Results', '_blank')" class="news-menu-card border-rose-500">
-            <i class="fa-solid fa-camera text-rose-500 text-2xl"></i><span class="font-bold">Results (Scan with Lens)</span>
+        <div onclick="window.open('https://www.google.com/search?q=ICAI+Results', '_blank')" class="subject-row border-l-4 border-rose-500">
+            <div class="flex items-center"><i class="fa-solid fa-camera text-rose-500 mr-4 text-xl"></i><span class="font-bold">Results (Lens)</span></div>
         </div>
-        <div onclick="showTab('liveUpdates')" class="news-menu-card border-blue-500">
-            <i class="fa-solid fa-broadcast-tower text-blue-500 text-2xl"></i><span class="font-bold">20+ Live Daily Updates</span>
+        <div onclick="showTab('liveUpdates')" class="subject-row border-l-4 border-blue-500">
+            <div class="flex items-center"><i class="fa-solid fa-broadcast-tower text-blue-500 mr-4 text-xl"></i><span class="font-bold">20+ Live Updates</span></div>
         </div>
-        <div onclick="showTab('syllabusChange')" class="news-menu-card border-emerald-500">
-            <i class="fa-solid fa-book-open text-emerald-500 text-2xl"></i><span class="font-bold">Syllabus Change News</span>
-        </div>
-        <div onclick="showTab('timetable')" class="news-menu-card border-amber-500">
-            <i class="fa-solid fa-calendar-days text-amber-500 text-2xl"></i><span class="font-bold">Exam Time Table</span>
+        <div onclick="showTab('timetable')" class="subject-row border-l-4 border-amber-500">
+            <div class="flex items-center"><i class="fa-solid fa-calendar-days text-amber-500 mr-4 text-xl"></i><span class="font-bold">Time Table</span></div>
         </div>
     </div>
 
@@ -102,25 +100,12 @@
         <div id="updatesList"></div>
     </div>
 
-    <div id="syllabusChange" class="tab-content p-5">
-        <div class="flex items-center gap-4 mb-6"><button onclick="showTab('newsMenu')"><i class="fa-solid fa-arrow-left text-xl"></i></button><h1 class="text-xl font-bold">Syllabus Updates</h1></div>
-        <div class="content-box">
-            <p class="text-sm"><b>नवीन बदल २०२६:</b> ICAI ने टॅक्सेशन आणि ऑडिटिंगच्या अभ्यासक्रमात डिजिटल कलमांचा समावेश केला आहे. नवीन स्टडी मटेरिअल आता उपलब्ध आहे.</p>
-        </div>
-    </div>
-
     <div id="timetable" class="tab-content p-5">
         <div class="flex items-center gap-4 mb-6"><button onclick="showTab('newsMenu')"><i class="fa-solid fa-arrow-left text-xl"></i></button><h1 class="text-xl font-bold">Time Table</h1></div>
-        <div class="overflow-x-auto rounded-xl">
-            <table>
-                <thead><tr><th>दिनांक</th><th>विषय</th><th>वेळ</th></tr></thead>
-                <tbody>
-                    <tr><td>२५ मे २०२६</td><td>Accounting</td><td>२-५ PM</td></tr>
-                    <tr><td>२७ मे २०२६</td><td>Business Law</td><td>२-५ PM</td></tr>
-                    <tr><td>२९ मे २०२६</td><td>Maths & Stats</td><td>२-४ PM</td></tr>
-                </tbody>
-            </table>
-        </div>
+        <table>
+            <thead><tr><th>दिनांक</th><th>विषय</th><th>वेळ</th></tr></thead>
+            <tbody><tr><td>२५ मे २०२६</td><td>Accounting</td><td>२-५ PM</td></tr></tbody>
+        </table>
     </div>
 
     <div id="profile" class="tab-content p-6">
@@ -137,8 +122,24 @@
             <div onclick="showTab('welcomeScreen')" class="subject-row text-red-500">
                 <div class="flex items-center"><i class="fa-solid fa-right-from-bracket mr-4"></i><span>Change Level</span></div>
             </div>
+            <div onclick="alert('फीडबॅक पाठवल्याबद्दल धन्यवाद!')" class="subject-row text-blue-400">
+                <div class="flex items-center"><i class="fa-solid fa-comment-dots mr-4"></i><span>Send Feedback</span></div>
+            </div>
         </div>
     </div>
+
+    <nav class="nav-bar">
+        <div onclick="showTab('dashboard')" class="nav-item active" id="nav-home">
+            <i class="fa-solid fa-house"></i><span>Home</span>
+        </div>
+        <div onclick="alert('AI Loading...')" class="nav-item">
+            <i class="fa-solid fa-robot"></i><span>Ask AI</span>
+        </div>
+        <div onclick="showTab('profile')" class="nav-item" id="nav-profile">
+            <i class="fa-solid fa-gear"></i><span>Profile</span>
+        </div>
+    </nav>
+
     <script>
         const subsData = {
             'Foundation': [
@@ -147,33 +148,9 @@
                 { name: 'Quant. Aptitude', icon: 'fa-chart-line', color: 'bg-blue-600' },
                 { name: 'Economics', icon: 'fa-coins', color: 'bg-purple-600' }
             ],
-            'Intermediate': [
-                { name: 'Taxation', icon: 'fa-file-invoice-dollar', color: 'bg-red-600' },
-                { name: 'Auditing and Ethics ', icon: 'fa-shield', color: 'bg-indigo-600' },
-                { name: 'Cost and Management accounting', icon: 'fa-coins', color: 'bg-yellow-600' },
-                { name: 'Adv. Accounting', icon: 'fa-calculator', color: 'bg-green-600' },
-                { name: 'corporate Law', icon: 'fa-pen', color: 'bg-purple-600' },
-                { name: ' Financial Management and Strategic Management', icon: 'fa-university', color: 'bg-blue-600' }
-            ],
-            'Final': [
-                { name: 'Fin Reporting', icon: 'fa-chart-pie', color: 'bg-emerald-600' },
-                { name: 'Adv Fin Mgmt', icon: 'fa-university', color: 'bg-blue-600' }
-            ]
+            'Intermediate': [{ name: 'Taxation', icon: 'fa-file-invoice-dollar', color: 'bg-red-600' }],
+            'Final': [{ name: 'Fin Reporting', icon: 'fa-chart-pie', color: 'bg-emerald-600' }]
         };
-
-        const updatesData = [
-            "ICAI ने नवीन शैक्षणिक वर्षासाठी नोंदणी प्रक्रिया सुरू केली आहे.",
-            "GST रिटर्नच्या नियमात मोठे बदल झाले आहेत.",
-            "CA फाउंडेशन परीक्षेचा निकाल फेब्रुवारीत अपेक्षित आहे.",
-            "आयकर विभागाने नवीन ई-वेरिफिकेशन प्रणाली सुरू केली.",
-            "कंपनी कायद्यात २०२६ चे नवीन दुरुस्ती विधेयक मांडले.",
-            "डिजिटल सिग्नेचर वापरताना आधार ऑथेंटिकेशन बंधनकारक.",
-            "बँकिंग ऑडिटसाठी खास ट्रेनिंग प्रोग्रामचे आयोजन.",
-            "कॉर्पोरेट गव्हर्नन्समध्ये नवीन आचारसंहिता लागू.",
-            "स्टार्टअप्ससाठी टॅक्स सवलतीचा कालावधी वाढवला.",
-            "SEBI ने म्युच्युअल फंड ऑडिटमध्ये नवीन बदल सुचवले."
-            // असे २० पूर्ण करण्यासाठी तुम्ही अजून वाढवू शकता
-        ];
 
         function openDashboard(level) {
             document.getElementById('displayLevel').innerText = level;
@@ -182,10 +159,7 @@
             subsData[level].forEach(s => {
                 list.innerHTML += `
                     <div class="subject-row">
-                        <div class="flex items-center">
-                            <div class="sub-icon-box ${s.color} text-white"><i class="fa-solid ${s.icon}"></i></div>
-                            <span class="text-sm font-bold">${s.name}</span>
-                        </div>
+                        <div class="flex items-center"><div class="sub-icon-box ${s.color} text-white"><i class="fa-solid ${s.icon}"></i></div><span class="text-sm font-bold">${s.name}</span></div>
                         <i class="fa-solid fa-chevron-right text-gray-700"></i>
                     </div>`;
             });
@@ -193,24 +167,24 @@
         }
 
         function showTab(id) {
+            // सर्व टॅब्स लपवा
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active-tab'));
-            document.getElementById(id).classList.add('active-tab');
-            
-            // नेव्हिगेशन बारमधील ऍक्टिव्ह स्टेट बदलणे
+            // निवडलेली टॅब दाखवा
+            const selectedTab = document.getElementById(id);
+            if(selectedTab) selectedTab.classList.add('active-tab');
+
+            // नेव्हिगेशन आयकॉन कलर बदला
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            if(id === 'dashboard') document.querySelectorAll('.nav-item')[0].classList.add('active');
-            if(id === 'profile') document.querySelectorAll('.nav-item')[2].classList.add('active');
+            if(id === 'dashboard') document.getElementById('nav-home').classList.add('active');
+            if(id === 'profile') document.getElementById('nav-profile').classList.add('active');
         }
 
-        // अपडेट्सची यादी भरणे
+        // २० अपडेट्स
         const list = document.getElementById('updatesList');
-        updatesData.forEach((text, i) => {
-            list.innerHTML += `
-                <div class="content-box">
-                    <p class="text-xs text-blue-400 font-bold mb-1">Update #${i+1}</p>
-                    <p class="text-sm leading-relaxed">${text}</p>
-                </div>`;
-        });
+        for(let i=1; i<=20; i++) {
+            list.innerHTML += `<div class="content-box"><p class="text-xs text-blue-400 font-bold mb-1">Update #${i}</p><p class="text-sm">ICAI कडून प्राप्त झालेली नवीन अपडेट क्रमांक ${i} वाचा...</p></div>`;
+        }
     </script>
 </body>
 </html>
+     
