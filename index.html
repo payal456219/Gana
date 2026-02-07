@@ -1,13 +1,13 @@
-<!DOCTYPE html>
+
+   <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CA Partner Final Fix</title>
+    <title>CA Partner - Click Fix</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        /* पायाभूत रचना */
         body { 
             background-color: #0b0f1a; 
             color: #ffffff; 
@@ -15,38 +15,52 @@
             margin: 0; 
             padding: 0; 
             height: 100vh;
-            overflow: hidden; /* बॉडी स्क्रोल होणार नाही, फक्त कंटेंट होईल */
+            overflow: hidden; 
         }
 
-        /* कंटेंट स्क्रोलिंग साठी */
+        /* कंटेंट एरिया */
         .main-container {
-            height: calc(100vh - 70px); /* नेव्हिगेशन बार सोडून उरलेली जागा */
+            height: calc(100vh - 75px);
             overflow-y: auto;
-            padding-bottom: 20px;
+            position: relative;
+            z-index: 10;
         }
 
-        .tab-content { display: none; }
-        .active-tab { display: block; animation: fadeIn 0.3s ease-in-out; }
+        .tab-content { display: none; width: 100%; }
+        .active-tab { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* कार्ड डिझाइन */
-        .subject-row { background: #161b2c; border-radius: 20px; padding: 18px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border: 1px solid #2d364f; }
+        /* कार्ड्स आणि बटणे */
+        .subject-row { 
+            background: #161b2c; 
+            border-radius: 20px; 
+            padding: 18px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            margin-bottom: 15px; 
+            border: 1px solid #2d364f;
+            cursor: pointer;
+            position: relative;
+            z-index: 20; /* क्लिक होण्यासाठी */
+        }
+        
         .sub-icon-box { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-right: 15px; }
-        .action-card { background: #1c233a; border-radius: 20px; padding: 15px; text-align: center; border: 1px solid #2d364f; }
+        .action-card { background: #1c233a; border-radius: 20px; padding: 15px; text-align: center; border: 1px solid #2d364f; cursor: pointer; position: relative; z-index: 20; }
 
-        /* 🟢 फिक्स्ड नेव्हिगेशन बार (सर्वात महत्त्वाचा) */
+        /* नेव्हिगेशन बार */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            height: 70px;
+            height: 75px;
             background: #0b1426;
             border-top: 2px solid #1e293b;
             display: flex;
             justify-content: space-around;
             align-items: center;
-            z-index: 99999; /* सर्वात वर */
+            z-index: 100;
         }
 
         .nav-link {
@@ -56,8 +70,8 @@
             color: #64748b;
             text-decoration: none;
             font-size: 11px;
-            transition: 0.3s;
             width: 33%;
+            cursor: pointer;
         }
 
         .nav-link.active { color: #3b82f6; }
@@ -66,7 +80,7 @@
 </head>
 <body>
 
-    <div class="main-container">
+    <div class="main-container" id="scrollContainer">
         <div id="welcomeScreen" class="tab-content active-tab p-6">
             <div class="text-center mb-10 mt-10">
                 <div class="w-20 h-20 bg-blue-600 rounded-3xl mx-auto mb-5 flex items-center justify-center shadow-xl">
@@ -75,6 +89,7 @@
                 <h1 class="text-3xl font-bold">CA Partner</h1>
                 <p class="text-gray-400 mt-2">तुमची लेव्हल निवडा</p>
             </div>
+            
             <div onclick="openDashboard('Foundation')" class="subject-row">
                 <div class="flex items-center"><div class="sub-icon-box bg-emerald-500 text-white"><i class="fa-solid fa-book"></i></div><span class="font-bold">Foundation</span></div>
                 <i class="fa-solid fa-chevron-right text-gray-600"></i>
@@ -105,9 +120,6 @@
 
         <div id="newsMenu" class="tab-content p-5">
             <div class="flex items-center gap-4 mb-8"><button onclick="showTab('dashboard')"><i class="fa-solid fa-arrow-left text-xl"></i></button><h1 class="text-xl font-bold">News Center</h1></div>
-            <div onclick="window.open('https://www.google.com/search?q=ICAI+Results', '_blank')" class="subject-row border-l-4 border-rose-500">
-                <div class="flex items-center"><i class="fa-solid fa-camera text-rose-500 mr-4 text-xl"></i><span class="font-bold">Results (Lens)</span></div>
-            </div>
             <div onclick="showTab('liveUpdates')" class="subject-row border-l-4 border-blue-500">
                 <div class="flex items-center"><i class="fa-solid fa-broadcast-tower text-blue-500 mr-4 text-xl"></i><span class="font-bold">20+ Live Updates</span></div>
             </div>
@@ -118,17 +130,14 @@
             <div id="updatesList"></div>
         </div>
 
-        <div id="profile" class="tab-content p-6 text-center">
-            <div class="mt-10 mb-10">
+        <div id="profile" class="tab-content p-6">
+            <div class="text-center mt-10 mb-10">
                 <div class="w-20 h-20 bg-slate-800 rounded-full mx-auto mb-4 flex items-center justify-center border border-blue-500">
                     <i class="fa-solid fa-user text-3xl text-blue-500"></i>
                 </div>
                 <h2 class="text-xl font-bold">Settings</h2>
             </div>
             <div class="space-y-3">
-                <a href="https://wa.me/917719081975" class="subject-row text-white no-underline">
-                    <div class="flex items-center"><i class="fa-brands fa-whatsapp text-green-500 mr-4 text-2xl"></i><span>Chat with Admin</span></div>
-                </a>
                 <div onclick="showTab('welcomeScreen')" class="subject-row text-red-500">
                     <div class="flex items-center"><i class="fa-solid fa-right-from-bracket mr-4"></i><span>Change Level</span></div>
                 </div>
@@ -141,16 +150,13 @@
 
     <div class="bottom-nav">
         <div onclick="showTab('dashboard')" class="nav-link active" id="btn-home">
-            <i class="fa-solid fa-house"></i>
-            <span>Home</span>
+            <i class="fa-solid fa-house"></i><span>Home</span>
         </div>
         <div onclick="alert('AI Coming Soon!')" class="nav-link">
-            <i class="fa-solid fa-robot"></i>
-            <span>Ask AI</span>
+            <i class="fa-solid fa-robot"></i><span>Ask AI</span>
         </div>
         <div onclick="showTab('profile')" class="nav-link" id="btn-profile">
-            <i class="fa-solid fa-gear"></i>
-            <span>Profile</span>
+            <i class="fa-solid fa-gear"></i><span>Profile</span>
         </div>
     </div>
 
@@ -162,8 +168,13 @@
                 { name: 'Quant. Aptitude', icon: 'fa-chart-line', color: 'bg-blue-600' },
                 { name: 'Economics', icon: 'fa-coins', color: 'bg-purple-600' }
             ],
-            'Intermediate': [{ name: 'Taxation', icon: 'fa-file-invoice-dollar', color: 'bg-red-600' }],
-            'Final': [{ name: 'Fin Reporting', icon: 'fa-chart-pie', color: 'bg-emerald-600' }]
+            'Intermediate': [
+                { name: 'Taxation', icon: 'fa-file-invoice-dollar', color: 'bg-red-600' },
+                { name: 'Auditing', icon: 'fa-shield', color: 'bg-indigo-600' }
+            ],
+            'Final': [
+                { name: 'Fin Reporting', icon: 'fa-chart-pie', color: 'bg-emerald-600' }
+            ]
         };
 
         function openDashboard(level) {
@@ -172,7 +183,7 @@
             list.innerHTML = '';
             subsData[level].forEach(s => {
                 list.innerHTML += `
-                    <div class="subject-row">
+                    <div class="subject-row" onclick="alert('${s.name} नोट्स लवकरच येतील!')">
                         <div class="flex items-center"><div class="sub-icon-box ${s.color} text-white"><i class="fa-solid ${s.icon}"></i></div><span class="text-sm font-bold">${s.name}</span></div>
                         <i class="fa-solid fa-chevron-right text-gray-700"></i>
                     </div>`;
@@ -185,17 +196,19 @@
             const target = document.getElementById(id);
             if(target) target.classList.add('active-tab');
 
-            // आयकॉन कलर मॅनेजमेंट
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
             if(id === 'dashboard') document.getElementById('btn-home').classList.add('active');
             if(id === 'profile') document.getElementById('btn-profile').classList.add('active');
+            
+            // टॅब बदलल्यावर वरच्या बाजूला स्क्रोल करा
+            document.getElementById('scrollContainer').scrollTop = 0;
         }
 
-        // अपडेट्स लोड करणे
-        const list = document.getElementById('updatesList');
+        const updatesList = document.getElementById('updatesList');
         for(let i=1; i<=20; i++) {
-            list.innerHTML += `<div class="bg-[#1c233a] p-4 rounded-xl mb-3 border-l-4 border-blue-500"><p class="text-xs text-blue-400 mb-1">Update #${i}</p><p class="text-sm">नवीन माहिती येथे दिसेल...</p></div>`;
+            updatesList.innerHTML += `<div class="bg-[#1c233a] p-4 rounded-xl mb-3 border-l-4 border-blue-500"><p class="text-xs text-blue-400 mb-1">Update #${i}</p><p class="text-sm">नवीन माहिती...</p></div>`;
         }
     </script>
 </body>
 </html>
+         
