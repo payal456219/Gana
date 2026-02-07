@@ -3,179 +3,245 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CA Partner Pro - Final</title>
+    <title>CA Partner Pro - 800 Papers Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { 
-            background-color: #0b0f1a; 
-            color: #ffffff; 
-            font-family: 'Inter', sans-serif; 
-            margin: 0; 
-            height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            overflow: hidden; 
-        }
-
-        #main-view {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        #nav-footer {
-            height: 70px;
-            background: #0b1426;
-            border-top: 2px solid #1e293b;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 999;
-        }
-
-        .tab-content { display: none; width: 100%; }
-        .show { display: block; animation: fadeIn 0.2s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .card { 
-            background: #161b2c; 
-            border-radius: 18px; 
-            padding: 16px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            margin-bottom: 12px; 
-            border: 1px solid #2d364f;
-            cursor: pointer;
-        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        body { background-color: #0b0f1a; color: #ffffff; font-family: 'Inter', sans-serif; margin: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
         
-        .icon-box { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 12px; }
-        .btn-action { background: #1c233a; border-radius: 18px; padding: 12px; text-align: center; border: 1px solid #2d364f; cursor: pointer; }
+        #main-view { flex: 1; overflow-y: auto; padding: 20px; -webkit-overflow-scrolling: touch; }
+        
+        #nav-footer { height: 75px; background: #0b1426; border-top: 1px solid #1e293b; display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
 
-        .nav-btn { display: flex; flex-direction: column; align-items: center; color: #64748b; font-size: 10px; width: 33%; cursor: pointer; }
+        .tab-content { display: none; }
+        .show { display: block; animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .card { background: linear-gradient(145deg, #161b2c, #111625); border-radius: 20px; padding: 18px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border: 1px solid #2d364f; transition: 0.2s; }
+        .card:active { transform: scale(0.97); background: #1c233a; }
+
+        .icon-box { width: 45px; height: 45px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-right: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        
+        .btn-action { background: #1c233a; border-radius: 20px; padding: 15px; text-align: center; border: 1px solid #2d364f; cursor: pointer; }
+        
+        .nav-btn { display: flex; flex-direction: column; align-items: center; color: #64748b; font-size: 11px; width: 33%; cursor: pointer; }
         .nav-btn.active { color: #3b82f6; }
-        .nav-btn i { font-size: 20px; margin-bottom: 2px; }
+        .nav-btn i { font-size: 22px; margin-bottom: 4px; }
 
-        .info-panel { background: #1e293b; border-radius: 15px; padding: 15px; margin-top: 10px; border-left: 4px solid #3b82f6; display: none; }
+        /* Exam Interface */
+        .timer-header { position: sticky; top: -20px; background: #ef4444; color: white; padding: 12px; border-radius: 0 0 20px 20px; text-align: center; font-weight: 800; z-index: 100; margin: -20px -20px 25px -20px; box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4); }
+        .q-card { background: #161b2c; padding: 20px; border-radius: 20px; margin-bottom: 20px; border: 1px solid #2d364f; }
+        .opt { display: block; width: 100%; padding: 15px; margin-top: 12px; background: #0f172a; border: 1px solid #2d364f; border-radius: 15px; text-align: left; font-size: 14px; transition: 0.2s; }
+        .opt.selected { background: #3b82f6; border-color: #60a5fa; color: white; font-weight: bold; }
+
+        .percentage-circle { width: 120px; height: 120px; border-radius: 50%; border: 8px solid #10b981; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 900; margin: 20px auto; color: #10b981; background: rgba(16, 185, 129, 0.1); }
     </style>
 </head>
 <body>
 
     <div id="main-view">
         <div id="welcome" class="tab-content show">
-            <div class="text-center mb-8 mt-4">
-                <div class="w-16 h-16 bg-blue-600 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg"><i class="fa-solid fa-user-graduate text-2xl text-white"></i></div>
-                <h1 class="text-2xl font-bold">CA Partner</h1>
-                <p class="text-gray-400 text-sm">तुमची लेव्हल निवडा</p>
+            <div class="text-center mb-10 mt-10">
+                <div class="w-20 h-20 bg-blue-600 rounded-3xl mx-auto mb-6 flex items-center justify-center shadow-2xl rotate-3">
+                    <i class="fa-solid fa-user-tie text-3xl text-white"></i>
+                </div>
+                <h1 class="text-3xl font-extrabold tracking-tight">CA Partner <span class="text-blue-500">PRO</span></h1>
+                <p class="text-gray-400 mt-2 text-sm">८००+ पेपर्स आणि एआय मार्गदर्शक</p>
             </div>
-            <div onclick="openLevel('Foundation')" class="card"><div class="flex items-center"><div class="icon-box bg-emerald-500 text-white"><i class="fa-solid fa-book"></i></div><span class="font-bold">Foundation</span></div><i class="fa-solid fa-chevron-right text-gray-700"></i></div>
-            <div onclick="openLevel('Intermediate')" class="card"><div class="flex items-center"><div class="icon-box bg-blue-500 text-white"><i class="fa-solid fa-layer-group"></i></div><span class="font-bold">Intermediate</span></div><i class="fa-solid fa-chevron-right text-gray-700"></i></div>
-            <div onclick="openLevel('Final')" class="card"><div class="flex items-center"><div class="icon-box bg-rose-500 text-white"><i class="fa-solid fa-trophy"></i></div><span class="font-bold">Final</span></div><i class="fa-solid fa-chevron-right text-gray-700"></i></div>
+            <div onclick="initLevel('Foundation')" class="card"><div class="flex items-center"><div class="icon-box bg-emerald-500 text-white"><i class="fa-solid fa-graduation-cap"></i></div><span class="font-bold">CA Foundation</span></div><i class="fa-solid fa-arrow-right text-gray-700"></i></div>
+            <div onclick="initLevel('Intermediate')" class="card"><div class="flex items-center"><div class="icon-box bg-blue-500 text-white"><i class="fa-solid fa-layer-group"></i></div><span class="font-bold">CA Intermediate</span></div><i class="fa-solid fa-arrow-right text-gray-700"></i></div>
+            <div onclick="initLevel('Final')" class="card"><div class="flex items-center"><div class="icon-box bg-rose-500 text-white"><i class="fa-solid fa-trophy"></i></div><span class="font-bold">CA Final</span></div><i class="fa-solid fa-arrow-right text-gray-700"></i></div>
         </div>
 
         <div id="dashboard" class="tab-content">
-            <div class="flex justify-between items-center mb-6">
-                <h1 class="text-xl font-bold text-blue-500">CA Mentor AI</h1>
-                <div class="bg-blue-600 text-white px-3 py-1 rounded-full text-[10px] font-bold" id="levelLabel">Level</div>
+            <div class="flex justify-between items-center mb-8">
+                <div><h1 class="text-xl font-black">STUDY <span class="text-blue-500">PORTAL</span></h1><p id="levelDisplay" class="text-[10px] text-gray-500 font-bold uppercase tracking-widest"></p></div>
+                <div class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center border border-gray-700"><i class="fa-solid fa-bell text-sm text-blue-400"></i></div>
             </div>
-            <div class="grid grid-cols-3 gap-3 mb-6">
-                <div onclick="changeTab('news')" class="btn-action"><i class="fa-solid fa-newspaper text-orange-400"></i><p class="text-[9px] mt-1 uppercase font-bold">News</p></div>
-                <div onclick="changeTab('study')" class="btn-action"><i class="fa-solid fa-file-lines text-emerald-400"></i><p class="text-[9px] mt-1 uppercase font-bold">Study</p></div>
-                <div onclick="alert('तुमचा डाऊट विचारा!')" class="btn-action"><i class="fa-solid fa-circle-question text-blue-400"></i><p class="text-[9px] mt-1 uppercase font-bold">Doubts</p></div>
+            <div class="grid grid-cols-3 gap-3 mb-8">
+                <div onclick="changeTab('news')" class="btn-action"><i class="fa-solid fa-newspaper text-orange-400 text-xl"></i><p class="text-[9px] mt-2 font-bold uppercase">News</p></div>
+                <div onclick="changeTab('study')" class="btn-action"><i class="fa-solid fa-book-open text-emerald-400 text-xl"></i><p class="text-[9px] mt-2 font-bold uppercase">Library</p></div>
+                <div onclick="alert('तुमचा प्रश्न टाईप करा...')" class="btn-action"><i class="fa-solid fa-brain text-blue-400 text-xl"></i><p class="text-[9px] mt-2 font-bold uppercase">Doubts</p></div>
             </div>
-            <h2 class="text-[10px] font-bold text-gray-500 mb-4 uppercase tracking-widest">Your Subjects</h2>
-            <div id="subjectContainer" class="space-y-3"></div>
-            
-            <div class="card border-l-4 border-yellow-500 mt-6" onclick="alert('Jobs Coming Soon!')">
-                <div class="flex items-center"><i class="fa-solid fa-briefcase text-yellow-500 mr-4 text-xl"></i><div><p class="font-bold text-xs">Job Opportunities</p></div></div>
-                <i class="fa-solid fa-arrow-right text-gray-600"></i>
-            </div>
+            <h2 class="text-[11px] font-black text-gray-600 mb-4 uppercase tracking-[3px]">Your Subjects</h2>
+            <div id="subjectList" class="space-y-3"></div>
         </div>
 
         <div id="study" class="tab-content">
-            <div class="flex items-center gap-4 mb-6"><button onclick="changeTab('dashboard')"><i class="fa-solid fa-arrow-left text-xl"></i></button><h1 class="text-xl font-bold">Study Resources</h1></div>
-            <div class="card" onclick="alert('Practice Papers Loading...')"><div class="flex items-center"><div class="icon-box bg-orange-500 text-white"><i class="fa-solid fa-stopwatch"></i></div><div><p class="font-bold">Practice Papers</p><p class="text-[10px] text-gray-400">Time Management</p></div></div></div>
-            <div class="card" onclick="alert('Flashcards Loading...')"><div class="flex items-center"><div class="icon-box bg-emerald-500 text-white"><i class="fa-solid fa-clone"></i></div><div><p class="font-bold">Flashcards</p><p class="text-[10px] text-gray-400">Quick Revision</p></div></div></div>
+            <div class="flex items-center gap-4 mb-8"><button onclick="changeTab('dashboard')"><i class="fa-solid fa-chevron-left text-xl"></i></button><h1 class="text-2xl font-bold">Mock Exams</h1></div>
+            <div class="card" onclick="renderPracticeSubList()">
+                <div class="flex items-center"><div class="icon-box bg-orange-600 text-white shadow-lg shadow-orange-900/40"><i class="fa-solid fa-clock"></i></div>
+                <div><p class="font-bold">Practice Papers</p><p class="text-[11px] text-gray-400">2 Hours Exam • 50 Sets Each</p></div></div>
+                <i class="fa-solid fa-chevron-right text-gray-700"></i>
+            </div>
+            <div class="card" onclick="alert('लवकरच येत आहे!')"><div class="flex items-center"><div class="icon-box bg-purple-600 text-white"><i class="fa-solid fa-bolt"></i></div><span class="font-bold">Speed Revision</span></div></div>
+        </div>
+
+        <div id="practiceSubList" class="tab-content">
+            <div class="flex items-center gap-4 mb-8"><button onclick="changeTab('study')"><i class="fa-solid fa-chevron-left text-xl"></i></button><h1 class="text-xl font-bold">विषय निवडा</h1></div>
+            <div id="subContainer" class="space-y-3"></div>
+        </div>
+
+        <div id="paperList" class="tab-content">
+            <div class="flex items-center gap-4 mb-6"><button onclick="changeTab('practiceSubList')"><i class="fa-solid fa-chevron-left text-xl"></i></button><div><h1 class="text-xl font-bold" id="currentSubName">Subject</h1><p class="text-[10px] text-orange-500 font-bold uppercase">Select Paper (1-50)</p></div></div>
+            <div id="paperGrid" class="grid grid-cols-2 gap-3 pb-10"></div>
+        </div>
+
+        <div id="examView" class="tab-content">
+            <div class="timer-header" id="examTimer">TIME LEFT: 02:00:00</div>
+            <div id="questionContainer"></div>
+            <button onclick="finishExam()" class="w-full bg-blue-600 py-4 rounded-2xl font-black text-lg mt-6 mb-10 shadow-xl shadow-blue-900/40">FINISH EXAM</button>
+        </div>
+
+        <div id="resultView" class="tab-content text-center">
+            <h1 class="text-2xl font-black mt-6">EXAM REPORT</h1>
+            <div class="percentage-circle" id="resPerc">0%</div>
+            <p id="resStatus" class="text-emerald-400 font-bold tracking-widest uppercase mb-6">PASSED</p>
+            <div class="grid grid-cols-2 gap-3 mb-8">
+                <div class="bg-gray-800/50 p-4 rounded-2xl border border-gray-700"><p class="text-[10px] text-gray-400 uppercase">Score</p><p class="text-xl font-black" id="resScore">0/10</p></div>
+                <div class="bg-gray-800/50 p-4 rounded-2xl border border-gray-700"><p class="text-[10px] text-gray-400 uppercase">Correct</p><p class="text-xl font-black text-emerald-500" id="resCorrect">0</p></div>
+            </div>
+            <h3 class="text-left font-bold text-red-500 mb-3 px-2">Review Wrong Answers:</h3>
+            <div id="reviewSection" class="text-left space-y-3 px-2 mb-10"></div>
+            <button onclick="changeTab('dashboard')" class="w-full bg-gray-100 text-black py-4 rounded-2xl font-black mb-10">GO TO HOME</button>
         </div>
 
         <div id="news" class="tab-content">
-            <div class="flex items-center gap-4 mb-6"><button onclick="changeTab('dashboard')"><i class="fa-solid fa-arrow-left text-xl"></i></button><h1 class="text-xl font-bold">News Center</h1></div>
-            
-            <div class="card border-l-4 border-rose-500" onclick="showNewsInfo('resInfo')"><div class="flex items-center"><i class="fa-solid fa-camera text-rose-500 mr-4"></i><span class="font-bold">Results (Lens)</span></div></div>
-            <div id="resInfo" class="info-panel mb-4 text-sm text-gray-300">ICAI रिझल्ट लवकरच जाहीर होतील. अधिकृत वेबसाइटवर लक्ष ठेवा.</div>
-
-            <div class="card border-l-4 border-blue-500" onclick="showNewsInfo('liveInfo')"><div class="flex items-center"><i class="fa-solid fa-broadcast-tower text-blue-500 mr-4"></i><span class="font-bold">Live Updates</span></div></div>
-            <div id="liveInfo" class="info-panel mb-4 text-sm text-gray-300">आजचे अपडेट: परीक्षा अर्जाची मुदत वाढवण्यात आली आहे.</div>
-
-            <div class="card border-l-4 border-amber-500" onclick="showNewsInfo('timeInfo')"><div class="flex items-center"><i class="fa-solid fa-calendar-days text-amber-500 mr-4"></i><span class="font-bold">Time Table</span></div></div>
-            <div id="timeInfo" class="info-panel mb-4 text-sm text-gray-300">पुढील परीक्षेचे वेळापत्रक मे/नोव्हेंबर २०२५ साठी उपलब्ध आहे.</div>
-
-            <div class="card border-l-4 border-emerald-500" onclick="showNewsInfo('notifInfo')"><div class="flex items-center"><i class="fa-solid fa-bell text-emerald-500 mr-4"></i><span class="font-bold">Notifications</span></div></div>
-            <div id="notifInfo" class="info-panel mb-4 text-sm text-gray-300">महत्त्वाची सूचना: नवीन अभ्यासक्रम (New Scheme) लागू झाला आहे.</div>
+            <div class="flex items-center gap-4 mb-8"><button onclick="changeTab('dashboard')"><i class="fa-solid fa-chevron-left text-xl"></i></button><h1 class="text-2xl font-bold">Live Updates</h1></div>
+            <div class="card border-l-4 border-rose-500"><div><p class="font-bold">ICAI Results 2026</p><p class="text-xs text-gray-500">Check your scores via Lens</p></div></div>
+            <div class="card border-l-4 border-blue-500"><div><p class="font-bold">New Exam Scheme</p><p class="text-xs text-gray-500">Download updated syllabus</p></div></div>
         </div>
 
         <div id="profile" class="tab-content">
-            <div class="text-center mt-8 mb-8">
-                <div class="w-20 h-20 bg-slate-800 rounded-full mx-auto mb-4 border border-blue-500 flex items-center justify-center"><i class="fa-solid fa-user text-3xl text-blue-500"></i></div>
-                <h2 class="text-xl font-bold">Settings</h2>
+            <div class="text-center mt-10 mb-10">
+                <div class="w-24 h-24 bg-gradient-to-tr from-blue-600 to-blue-400 rounded-full mx-auto mb-4 p-1 shadow-2xl"><div class="bg-slate-900 w-full h-full rounded-full flex items-center justify-center"><i class="fa-solid fa-user text-4xl text-blue-500"></i></div></div>
+                <h2 class="text-2xl font-bold">Candidate Profile</h2>
             </div>
             <div class="space-y-3">
-                <a href="https://wa.me/917719081975" class="card no-underline text-white"><div class="flex items-center"><i class="fa-brands fa-whatsapp text-green-500 mr-4 text-2xl"></i><span>Chat with Admin</span></div></a>
-                <div onclick="alert('तुमचा फीडबॅक पाठवला आहे!')" class="card text-blue-400"><div class="flex items-center"><i class="fa-solid fa-comment-dots mr-4"></i><span>Feedback</span></div></div>
-                <div onclick="changeTab('welcome')" class="card text-red-500"><div class="flex items-center"><i class="fa-solid fa-right-from-bracket mr-4"></i><span>Change Level</span></div></div>
+                <div onclick="alert('Feedback Recorded!')" class="card text-blue-400"><div class="flex items-center"><i class="fa-solid fa-comment-dots mr-4"></i><span>App Feedback</span></div></div>
+                <div onclick="changeTab('welcome')" class="card text-red-500"><div class="flex items-center"><i class="fa-solid fa-sign-out-alt mr-4"></i><span>Switch Level</span></div></div>
             </div>
         </div>
     </div>
 
     <div id="nav-footer">
-        <div onclick="changeTab('dashboard')" class="nav-btn active" id="btn-h"><i class="fa-solid fa-house"></i><span>Home</span></div>
-        <div onclick="alert('AI Coming Soon!')" class="nav-btn"><i class="fa-solid fa-robot"></i><span>Ask AI</span></div>
-        <div onclick="changeTab('profile')" class="nav-btn" id="btn-p"><i class="fa-solid fa-gear"></i><span>Profile</span></div>
+        <div onclick="changeTab('dashboard')" class="nav-btn active" id="n-h"><i class="fa-solid fa-house-chimney"></i><span>Home</span></div>
+        <div onclick="alert('एआय मेंटॉर लोड होत आहे...')" class="nav-btn"><i class="fa-solid fa-robot"></i><span>Ask AI</span></div>
+        <div onclick="changeTab('profile')" class="nav-btn" id="n-p"><i class="fa-solid fa-circle-user"></i><span>Profile</span></div>
     </div>
 
     <script>
-        const allData = {
-            'Foundation': [{n:'Accounting', i:'fa-calculator', c:'bg-green-600'},{n:'Business Law', i:'fa-gavel', c:'bg-orange-600'},{n:'Maths & Stats', i:'fa-chart-line', c:'bg-blue-600'},{n:'Economics', i:'fa-coins', c:'bg-purple-600'}],
-            'Intermediate': [{n:'Adv. Account', i:'fa-book', c:'bg-emerald-600'},{n:'Taxation', i:'fa-file-invoice-dollar', c:'bg-red-600'},{n:'Audit', i:'fa-shield-halved', c:'bg-indigo-600'},{n:'Costing', i:'fa-calculator', c:'bg-yellow-600'},{n:'Law', i:'fa-balance-scale', c:'bg-blue-700'},{n:'FM & SM', i:'fa-chart-pie', c:'bg-cyan-600'}],
-            'Final': [{n:'FR', i:'fa-chart-bar', c:'bg-emerald-600'},{n:'AFM', i:'fa-university', c:'bg-blue-600'},{n:'Adv. Audit', i:'fa-user-shield', c:'bg-rose-600'},{n:'Direct Tax', i:'fa-landmark', c:'bg-orange-600'},{n:'Indirect Tax', i:'fa-receipt', c:'bg-purple-600'},{n:'IBS', i:'fa-diagram-project', c:'bg-indigo-700'}]
+        const subjects = {
+            'Foundation': ['Accounting', 'Business Law', 'Quantitative Aptitude', 'Business Economics'],
+            'Intermediate': ['Adv. Accounting', 'Taxation', 'Audit', 'Costing', 'Corporate Laws', 'FM & SM'],
+            'Final': ['Financial Reporting', 'AFM', 'Audit Pro', 'Direct Tax', 'Indirect Tax', 'IBS']
         };
 
-        function openLevel(lvl) {
-            document.getElementById('levelLabel').innerText = lvl;
-            const container = document.getElementById('subjectContainer');
+        let currentLevel = "";
+        let userAnswers = {};
+        let timerInterval;
+
+        function initLevel(lvl) {
+            currentLevel = lvl;
+            document.getElementById('levelDisplay').innerText = "CA " + lvl;
+            const container = document.getElementById('subjectList');
             container.innerHTML = '';
-            allData[lvl].forEach(s => {
-                container.innerHTML += `<div class="card" onclick="alert('${s.n} नोट्स लवकरच!')"><div class="flex items-center"><div class="icon-box ${s.c} text-white"><i class="fa-solid ${s.i}"></i></div><span class="text-sm font-bold">${s.n}</span></div><i class="fa-solid fa-chevron-right text-gray-700"></i></div>`;
+            subjects[lvl].forEach(s => {
+                container.innerHTML += `<div class="card" onclick="alert('${s} नोट्स लवकरच!')"><div class="flex items-center"><div class="icon-box bg-blue-900/30 text-blue-400 border border-blue-800/50"><i class="fa-solid fa-book-bookmark"></i></div><span class="font-bold text-sm">${s}</span></div><i class="fa-solid fa-chevron-right text-gray-800"></i></div>`;
             });
             changeTab('dashboard');
         }
 
-        function changeTab(tabId) {
-            const tabs = document.getElementsByClassName('tab-content');
-            for(let t of tabs) { t.classList.remove('show'); }
-            const target = document.getElementById(tabId);
-            if(target) target.classList.add('show');
-
-            const btns = document.getElementsByClassName('nav-btn');
-            for(let b of btns) { b.classList.remove('active'); }
-            if(tabId==='dashboard' || tabId==='study' || tabId==='news') document.getElementById('btn-h').classList.add('active');
-            if(tabId==='profile') document.getElementById('btn-p').classList.add('active');
-            
-            document.getElementById('main-view').scrollTop = 0;
+        function renderPracticeSubList() {
+            const container = document.getElementById('subContainer');
+            container.innerHTML = '';
+            subjects[currentLevel].forEach(s => {
+                container.innerHTML += `<div class="card" onclick="renderPaperGrid('${s}')"><div class="flex items-center"><div class="icon-box bg-orange-600/20 text-orange-500"><i class="fa-solid fa-pen-fancy"></i></div><span class="font-bold">${s}</span></div><i class="fa-solid fa-chevron-right text-gray-700"></i></div>`;
+            });
+            changeTab('practiceSubList');
         }
 
-        function showNewsInfo(id) {
-            const panel = document.getElementById(id);
-            if(panel.style.display === 'block') {
-                panel.style.display = 'none';
-            } else {
-                document.querySelectorAll('.info-panel').forEach(p => p.style.display = 'none');
-                panel.style.display = 'block';
+        function renderPaperGrid(sub) {
+            document.getElementById('currentSubName').innerText = sub;
+            const grid = document.getElementById('paperGrid');
+            grid.innerHTML = '';
+            for(let i=1; i<=50; i++) {
+                grid.innerHTML += `<div onclick="startMockExam('${sub}', ${i})" class="bg-[#161b2c] p-5 rounded-2xl border border-gray-800 text-center shadow-lg active:bg-blue-600 transition-all"><p class="text-[10px] text-gray-500 font-bold uppercase mb-1">SET</p><p class="text-xl font-black">${i}</p></div>`;
             }
+            changeTab('paperList');
+        }
+
+        function startMockExam(sub, setNum) {
+            changeTab('examView');
+            userAnswers = {};
+            runTimer(120 * 60);
+            const container = document.getElementById('questionContainer');
+            container.innerHTML = `<h2 class="text-xl font-black mb-6 text-blue-500">${sub} - Paper ${setNum}</h2>`;
+            
+            // ८०० पेपर्ससाठी डायनॅमिक प्रश्न जनरेटर
+            for(let q=1; q<=10; q++) {
+                const options = ["Option A", "Option B", "Option C", "Option D"];
+                container.innerHTML += `
+                    <div class="q-card">
+                        <p class="font-bold mb-4 text-gray-200">${q}. ${sub} मधील पेपर सेट ${setNum} चा महत्त्वाचा संकल्पनात्मक प्रश्न ${q} काय आहे?</p>
+                        ${options.map(o => `<button class="opt" onclick="pickOpt(${q}, '${o}', this)">${o}</button>`).join('')}
+                    </div>`;
+            }
+        }
+
+        function pickOpt(q, val, btn) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.opt').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            userAnswers[q] = val;
+        }
+
+        function runTimer(sec) {
+            clearInterval(timerInterval);
+            let t = sec;
+            timerInterval = setInterval(() => {
+                let h = Math.floor(t / 3600);
+                let m = Math.floor((t % 3600) / 60);
+                let s = t % 60;
+                document.getElementById('examTimer').innerText = `TIME LEFT: ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+                if(t-- <= 0) finishExam();
+            }, 1000);
+        }
+
+        function finishExam() {
+            clearInterval(timerInterval);
+            let correct = 0;
+            const review = document.getElementById('reviewSection');
+            review.innerHTML = '';
+
+            for(let i=1; i<=10; i++) {
+                const isCorrect = userAnswers[i] === "Option A"; // डेमोसाठी 'Option A' बरोबर धरले आहे
+                if(isCorrect) {
+                    correct++;
+                } else {
+                    review.innerHTML += `<div class="bg-red-900/20 border border-red-900/50 p-4 rounded-2xl"><p class="font-bold text-sm text-red-400">प्रश्न ${i}</p><p class="text-xs text-gray-400 mt-1">तुमचे उत्तर: ${userAnswers[i] || 'दिले नाही'} | बरोबर उत्तर: Option A</p></div>`;
+                }
+            }
+
+            const perc = (correct / 10) * 100;
+            document.getElementById('resScore').innerText = correct + "/10";
+            document.getElementById('resCorrect').innerText = correct;
+            document.getElementById('resPerc').innerText = perc + "%";
+            document.getElementById('resStatus').innerText = perc >= 40 ? "PASSED" : "FAILED";
+            document.getElementById('resStatus').className = perc >= 40 ? "text-emerald-500 font-black tracking-widest" : "text-red-500 font-black tracking-widest";
+            changeTab('resultView');
+        }
+
+        function changeTab(id) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('show'));
+            document.getElementById(id).classList.add('show');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            if(['dashboard', 'study', 'news', 'practiceSubList', 'paperList', 'examView', 'resultView'].includes(id)) document.getElementById('n-h').classList.add('active');
+            if(id === 'profile') document.getElementById('n-p').classList.add('active');
+            document.getElementById('main-view').scrollTop = 0;
         }
     </script>
 </body>
 </html>
+            
