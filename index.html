@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CA Partner Pro</title>
+    <title>CA Partner Pro - Final</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
@@ -19,7 +19,6 @@
             overflow: hidden; 
         }
 
-        /* स्क्रोल एरिया */
         #main-view {
             flex: 1;
             overflow-y: auto;
@@ -27,7 +26,6 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* नेव्हिगेशन बार - एकदम फिक्स */
         #nav-footer {
             height: 70px;
             background: #0b1426;
@@ -42,7 +40,6 @@
         .show { display: block; animation: fadeIn 0.2s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* डिझाइन कार्ड्स */
         .card { 
             background: #161b2c; 
             border-radius: 18px; 
@@ -61,6 +58,8 @@
         .nav-btn { display: flex; flex-direction: column; align-items: center; color: #64748b; font-size: 10px; width: 33%; cursor: pointer; }
         .nav-btn.active { color: #3b82f6; }
         .nav-btn i { font-size: 20px; margin-bottom: 2px; }
+
+        .info-panel { background: #1e293b; border-radius: 15px; padding: 15px; margin-top: 10px; border-left: 4px solid #3b82f6; display: none; }
     </style>
 </head>
 <body>
@@ -98,16 +97,24 @@
 
         <div id="study" class="tab-content">
             <div class="flex items-center gap-4 mb-6"><button onclick="changeTab('dashboard')"><i class="fa-solid fa-arrow-left text-xl"></i></button><h1 class="text-xl font-bold">Study Resources</h1></div>
-            <div class="card" onclick="alert('Papers Loading...')"><div class="flex items-center"><div class="icon-box bg-orange-500 text-white"><i class="fa-solid fa-stopwatch"></i></div><div><p class="font-bold">Practice Papers</p><p class="text-[10px] text-gray-400">Time Management</p></div></div></div>
-            <div class="card" onclick="alert('Cards Loading...')"><div class="flex items-center"><div class="icon-box bg-emerald-500 text-white"><i class="fa-solid fa-clone"></i></div><div><p class="font-bold">Flashcards</p><p class="text-[10px] text-gray-400">Quick Revision</p></div></div></div>
+            <div class="card" onclick="alert('Practice Papers Loading...')"><div class="flex items-center"><div class="icon-box bg-orange-500 text-white"><i class="fa-solid fa-stopwatch"></i></div><div><p class="font-bold">Practice Papers</p><p class="text-[10px] text-gray-400">Time Management</p></div></div></div>
+            <div class="card" onclick="alert('Flashcards Loading...')"><div class="flex items-center"><div class="icon-box bg-emerald-500 text-white"><i class="fa-solid fa-clone"></i></div><div><p class="font-bold">Flashcards</p><p class="text-[10px] text-gray-400">Quick Revision</p></div></div></div>
         </div>
 
         <div id="news" class="tab-content">
             <div class="flex items-center gap-4 mb-6"><button onclick="changeTab('dashboard')"><i class="fa-solid fa-arrow-left text-xl"></i></button><h1 class="text-xl font-bold">News Center</h1></div>
-            <div class="card border-l-4 border-rose-500" onclick="alert('Results Update!')"><div class="flex items-center"><i class="fa-solid fa-camera text-rose-500 mr-4"></i><span class="font-bold">Results (Lens)</span></div></div>
-            <div class="card border-l-4 border-blue-500" onclick="alert('20+ Updates...')"><div class="flex items-center"><i class="fa-solid fa-broadcast-tower text-blue-500 mr-4"></i><span class="font-bold">Live Updates</span></div></div>
-            <div class="card border-l-4 border-amber-500" onclick="alert('Time Table!')"><div class="flex items-center"><i class="fa-solid fa-calendar-days text-amber-500 mr-4"></i><span class="font-bold">Time Table</span></div></div>
-            <div class="card border-l-4 border-emerald-500" onclick="alert('Notifications!')"><div class="flex items-center"><i class="fa-solid fa-bell text-emerald-500 mr-4"></i><span class="font-bold">Notifications</span></div></div>
+            
+            <div class="card border-l-4 border-rose-500" onclick="showNewsInfo('resInfo')"><div class="flex items-center"><i class="fa-solid fa-camera text-rose-500 mr-4"></i><span class="font-bold">Results (Lens)</span></div></div>
+            <div id="resInfo" class="info-panel mb-4 text-sm text-gray-300">ICAI रिझल्ट लवकरच जाहीर होतील. अधिकृत वेबसाइटवर लक्ष ठेवा.</div>
+
+            <div class="card border-l-4 border-blue-500" onclick="showNewsInfo('liveInfo')"><div class="flex items-center"><i class="fa-solid fa-broadcast-tower text-blue-500 mr-4"></i><span class="font-bold">Live Updates</span></div></div>
+            <div id="liveInfo" class="info-panel mb-4 text-sm text-gray-300">आजचे अपडेट: परीक्षा अर्जाची मुदत वाढवण्यात आली आहे.</div>
+
+            <div class="card border-l-4 border-amber-500" onclick="showNewsInfo('timeInfo')"><div class="flex items-center"><i class="fa-solid fa-calendar-days text-amber-500 mr-4"></i><span class="font-bold">Time Table</span></div></div>
+            <div id="timeInfo" class="info-panel mb-4 text-sm text-gray-300">पुढील परीक्षेचे वेळापत्रक मे/नोव्हेंबर २०२५ साठी उपलब्ध आहे.</div>
+
+            <div class="card border-l-4 border-emerald-500" onclick="showNewsInfo('notifInfo')"><div class="flex items-center"><i class="fa-solid fa-bell text-emerald-500 mr-4"></i><span class="font-bold">Notifications</span></div></div>
+            <div id="notifInfo" class="info-panel mb-4 text-sm text-gray-300">महत्त्वाची सूचना: नवीन अभ्यासक्रम (New Scheme) लागू झाला आहे.</div>
         </div>
 
         <div id="profile" class="tab-content">
@@ -117,6 +124,7 @@
             </div>
             <div class="space-y-3">
                 <a href="https://wa.me/917719081975" class="card no-underline text-white"><div class="flex items-center"><i class="fa-brands fa-whatsapp text-green-500 mr-4 text-2xl"></i><span>Chat with Admin</span></div></a>
+                <div onclick="alert('तुमचा फीडबॅक पाठवला आहे!')" class="card text-blue-400"><div class="flex items-center"><i class="fa-solid fa-comment-dots mr-4"></i><span>Feedback</span></div></div>
                 <div onclick="changeTab('welcome')" class="card text-red-500"><div class="flex items-center"><i class="fa-solid fa-right-from-bracket mr-4"></i><span>Change Level</span></div></div>
             </div>
         </div>
@@ -146,22 +154,27 @@
         }
 
         function changeTab(tabId) {
-            // सर्व टॅब्स लपवा
             const tabs = document.getElementsByClassName('tab-content');
             for(let t of tabs) { t.classList.remove('show'); }
-            
-            // हवी ती टॅब दाखवा
             const target = document.getElementById(tabId);
             if(target) target.classList.add('show');
 
-            // नेव्हिगेशन हायलाईट
             const btns = document.getElementsByClassName('nav-btn');
             for(let b of btns) { b.classList.remove('active'); }
-            
             if(tabId==='dashboard' || tabId==='study' || tabId==='news') document.getElementById('btn-h').classList.add('active');
             if(tabId==='profile') document.getElementById('btn-p').classList.add('active');
             
             document.getElementById('main-view').scrollTop = 0;
+        }
+
+        function showNewsInfo(id) {
+            const panel = document.getElementById(id);
+            if(panel.style.display === 'block') {
+                panel.style.display = 'none';
+            } else {
+                document.querySelectorAll('.info-panel').forEach(p => p.style.display = 'none');
+                panel.style.display = 'block';
+            }
         }
     </script>
 </body>
