@@ -1,1108 +1,996 @@
-<!DOCTYPE html>
+python3 << 'EOF'
+import base64
+
+with open('/mnt/user-data/uploads/Screenshot_2026_0301_225538.jpg','rb') as f:
+    logo_b64 = base64.b64encode(f.read()).decode()
+
+logo_uri = f"data:image/jpeg;base64,{logo_b64}"
+
+html = r"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CA Student Hub</title>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>CA Mentor AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <style>
-  :root {
-    --navy: #0A1628;
-    --navy2: #0F2040;
-    --blue: #1B5BF7;
-    --blue2: #4B7FFF;
-    --gold: #F5A623;
-    --gold2: #FFD166;
-    --green: #00C896;
-    --red: #FF4757;
-    --purple: #9B59F5;
-    --text: #E8EDF5;
-    --text2: #8A98B0;
-    --card: rgba(255,255,255,0.04);
-    --card-border: rgba(255,255,255,0.08);
-    --radius: 16px;
-  }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#0D0D0D;--card:#1A1A1A;--card2:#222;--border:#2A2A2A;
+  --text:#FFF;--text2:#777;
+  --blue:#2B8EF0;--green:#1DB954;--gold:#F5A623;--red:#FF4444;--cyan:#00C9E0;
+  --r:18px;
+}
+html,body{height:100%;background:#000;}
+body{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  background:var(--bg);color:var(--text);
+  max-width:430px;margin:0 auto;min-height:100vh;overflow-x:hidden;
+}
+/* PAGES */
+.page{display:none;flex-direction:column;min-height:100vh;padding-bottom:82px;}
+.page.active{display:flex;animation:fadeUp .25s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
 
-  * { margin:0; padding:0; box-sizing:border-box; }
+/* TOP BAR */
+.topbar{padding:22px 20px 0;display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0;}
+.welcome{font-size:13px;color:var(--text2);font-weight:500;margin-bottom:3px;}
+.app-title{font-size:26px;font-weight:900;letter-spacing:-0.5px;}
+.level-btn{
+  background:#1E3A5F;border:1px solid rgba(43,142,240,0.4);
+  color:var(--blue);border-radius:50px;padding:8px 16px;
+  font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;
+  cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;white-space:nowrap;position:relative;
+}
+.level-drop{
+  position:absolute;top:calc(100% + 8px);right:0;
+  background:#1A1A1A;border:1px solid var(--border);
+  border-radius:14px;overflow:hidden;min-width:160px;
+  z-index:200;box-shadow:0 10px 40px rgba(0,0,0,.7);display:none;
+}
+.level-drop.open{display:block;}
+.ldrop-opt{padding:12px 16px;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:8px;}
+.ldrop-opt:hover{background:#2A2A2A;}
+.ldrop-opt.sel{color:var(--blue);}
 
-  body {
-    font-family: 'Sora', sans-serif;
-    background: var(--navy);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+/* INNER HEADER */
+.inner-hdr{
+  padding:18px 20px 0;display:flex;align-items:center;gap:14px;flex-shrink:0;margin-bottom:18px;
+}
+.back-btn{
+  width:38px;height:38px;border-radius:12px;
+  background:var(--card);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;font-size:18px;color:var(--text);
+  font-weight:700;transition:all .2s;text-decoration:none;
+}
+.back-btn:hover{background:#2A2A2A;}
+.inner-title{font-size:20px;font-weight:800;letter-spacing:-.4px;}
 
-  /* BG GRID */
-  body::before {
-    content: '';
-    position: fixed; inset: 0; z-index: 0;
-    background-image:
-      linear-gradient(rgba(27,91,247,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(27,91,247,0.04) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-  }
+/* SCROLL */
+.scroll{flex:1;overflow-y:auto;padding:18px 20px 0;scrollbar-width:none;}
+.scroll::-webkit-scrollbar{display:none;}
+.sec-lbl{font-size:18px;font-weight:700;margin-bottom:14px;letter-spacing:-.3px;}
 
-  /* GLOW ORB */
-  .glow-orb {
-    position: fixed; border-radius: 50%; filter: blur(100px);
-    pointer-events: none; z-index: 0; opacity: 0.15;
-  }
-  .orb1 { width: 600px; height: 600px; background: var(--blue); top: -200px; right: -200px; }
-  .orb2 { width: 400px; height: 400px; background: var(--gold); bottom: -100px; left: -100px; }
+/* LOGO HEADER */
+.logo-hdr{display:flex;align-items:center;gap:10px;}
+.logo-img{width:42px;height:42px;border-radius:12px;object-fit:cover;border:2px solid rgba(43,142,240,0.4);box-shadow:0 0 18px rgba(43,142,240,0.25);}
 
-  /* LAYOUT */
-  .shell { display: flex; min-height: 100vh; position: relative; z-index: 1; }
+/* QUICK ACTIONS */
+.qa-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;}
+.qa-card{
+  background:var(--card);border-radius:var(--r);
+  padding:20px 10px 16px;display:flex;flex-direction:column;
+  align-items:center;gap:10px;cursor:pointer;
+  border:1px solid var(--border);transition:all .2s;position:relative;overflow:hidden;
+}
+.qa-card:active{transform:scale(.95);}
+.qa-ico{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.qa-lbl{font-size:13px;font-weight:700;text-align:center;}
 
-  /* SIDEBAR */
-  .sidebar {
-    width: 240px; flex-shrink: 0;
-    background: rgba(255,255,255,0.02);
-    border-right: 1px solid var(--card-border);
-    padding: 2rem 1.2rem;
-    position: sticky; top: 0; height: 100vh;
-    display: flex; flex-direction: column;
-    backdrop-filter: blur(20px);
-  }
+/* MENU */
+.menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;}
+.menu-card{
+  background:var(--card);border-radius:var(--r);
+  padding:22px 10px 18px;display:flex;flex-direction:column;
+  align-items:center;gap:10px;cursor:pointer;
+  border:1px solid var(--border);transition:all .2s;
+}
+.menu-card:active{transform:scale(.95);}
+.menu-ico{font-size:34px;line-height:1;}
+.menu-lbl{font-size:13px;font-weight:700;text-align:center;line-height:1.3;}
 
-  .brand {
-    display: flex; align-items: center; gap: 12px;
-    margin-bottom: 2.5rem; padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--card-border);
-  }
-  .brand-icon {
-    width: 42px; height: 42px; border-radius: 12px;
-    background: linear-gradient(135deg, var(--gold), #E8920F);
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 800; color: var(--navy); font-size: 1rem;
-    font-family: 'JetBrains Mono', monospace;
-    box-shadow: 0 4px 20px rgba(245,166,35,0.3);
-  }
-  .brand-text { font-size: 1.1rem; font-weight: 700; }
-  .brand-text span { color: var(--gold); }
+/* LIST ROW */
+.list-row{
+  background:var(--card);border-radius:var(--r);
+  padding:18px 20px;display:flex;align-items:center;gap:14px;
+  cursor:pointer;border:1px solid var(--border);margin-bottom:10px;transition:all .2s;
+}
+.list-row:active{transform:scale(.99);}
+.list-row:hover{background:#202020;}
+.list-row-ico{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.list-row-title{font-size:18px;font-weight:700;flex:1;}
+.list-arrow{color:var(--text2);font-size:13px;}
 
-  .nav-section { font-size: 0.68rem; font-weight: 700; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; margin: 1.2rem 0 0.6rem 0.5rem; }
+/* BOTTOM NAV */
+.bottom-nav{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:430px;
+  background:#111;border-top:1px solid var(--border);
+  display:flex;align-items:center;padding:10px 0 20px;z-index:50;
+}
+.ntab{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px 0;}
+.ntab .ni{font-size:22px;color:var(--text2);transition:color .2s;}
+.ntab .nl{font-size:11px;font-weight:600;color:var(--text2);transition:color .2s;text-align:center;line-height:1.2;}
+.ntab.active .ni,.ntab.active .nl{color:var(--blue);}
 
-  .nav-item {
-    display: flex; align-items: center; gap: 10px;
-    padding: 10px 12px; border-radius: 10px;
-    cursor: pointer; transition: all 0.2s;
-    color: var(--text2); font-size: 0.88rem; font-weight: 500;
-    margin-bottom: 2px; border: 1px solid transparent;
-  }
-  .nav-item:hover { background: var(--card); color: var(--text); }
-  .nav-item.active {
-    background: rgba(27,91,247,0.15);
-    color: var(--blue2); border-color: rgba(27,91,247,0.2);
-  }
-  .nav-item .icon { width: 20px; text-align: center; font-size: 0.95rem; }
-  .nav-badge { margin-left: auto; background: var(--gold); color: var(--navy); font-size: 0.65rem; font-weight: 700; padding: 2px 7px; border-radius: 50px; }
+/* CHAT */
+.chat-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.chat-msgs{flex:1;overflow-y:auto;padding:0 16px;display:flex;flex-direction:column;gap:12px;scrollbar-width:none;}
+.chat-msgs::-webkit-scrollbar{display:none;}
+.bub{max-width:82%;padding:12px 16px;border-radius:18px;font-size:14px;line-height:1.6;}
+.bub.ai{background:#1E1E1E;border:1px solid var(--border);border-bottom-left-radius:4px;align-self:flex-start;}
+.bub.user{background:var(--blue);color:white;border-bottom-right-radius:4px;align-self:flex-end;}
+.bub-time{font-size:11px;color:var(--text2);margin-top:4px;}
+.ai-lbl{font-size:11px;color:var(--blue);font-weight:700;margin-bottom:4px;}
+.chat-inp-wrap{padding:12px 16px 4px;display:flex;gap:8px;align-items:center;flex-shrink:0;}
+.chat-inp{flex:1;background:#1A1A1A;border:1px solid var(--border);border-radius:14px;padding:11px 15px;color:var(--text);font-size:14px;outline:none;font-family:'Plus Jakarta Sans',sans-serif;}
+.chat-inp:focus{border-color:rgba(43,142,240,.5);}
+.chat-inp::placeholder{color:var(--text2);}
+.send-btn{width:42px;height:42px;border-radius:12px;background:var(--blue);border:none;color:white;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+.send-btn:hover{background:#1A7AE0;}
+.sugg-chips{display:flex;flex-wrap:wrap;gap:7px;padding:8px 16px 6px;}
+.chip{background:#1E1E1E;border:1px solid var(--border);border-radius:50px;padding:7px 14px;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;}
+.chip:hover{border-color:var(--blue);color:var(--blue);}
+.typing-wrap{display:flex;gap:5px;padding:4px;}
+.td{width:7px;height:7px;border-radius:50%;background:#555;animation:td 1.2s infinite;}
+.td:nth-child(2){animation-delay:.2s;}.td:nth-child(3){animation-delay:.4s;}
+@keyframes td{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-7px);}}
 
-  .sidebar-footer { margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--card-border); }
-  .sidebar-footer p { font-size: 0.75rem; color: var(--text2); text-align: center; line-height: 1.5; }
+/* QUIZ */
+.q-filter{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px;}
+.qfbtn{padding:7px 15px;border-radius:50px;font-size:12px;font-weight:700;border:1px solid var(--border);background:var(--card);color:var(--text2);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;}
+.qfbtn.on{background:var(--blue);color:white;border-color:var(--blue);}
+.qprog-wrap{background:#2A2A2A;border-radius:50px;height:6px;overflow:hidden;margin-bottom:16px;}
+.qprog-bar{height:6px;border-radius:50px;background:linear-gradient(90deg,var(--blue),var(--cyan));transition:width .5s ease;}
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:14px;}
+.q-tags{display:flex;gap:6px;margin-bottom:12px;}
+.qtag{padding:3px 10px;border-radius:50px;font-size:11px;font-weight:700;background:rgba(43,142,240,.12);color:var(--blue);}
+.q-text{font-size:15px;font-weight:700;line-height:1.5;margin-bottom:14px;}
+.q-opt{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:1px solid var(--border);margin-bottom:9px;cursor:pointer;transition:all .2s;background:rgba(255,255,255,.02);}
+.q-opt:hover{border-color:rgba(43,142,240,.4);}
+.q-opt.sel{border-color:var(--blue);background:rgba(43,142,240,.1);}
+.q-opt.ok{border-color:var(--green);background:rgba(29,185,84,.08);}
+.q-opt.no{border-color:var(--red);background:rgba(255,68,68,.08);}
+.opt-l{width:29px;height:29px;border-radius:50%;background:#2A2A2A;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;}
+.exp-box{background:rgba(29,185,84,.07);border:1px solid rgba(29,185,84,.2);border-radius:12px;padding:12px;margin-top:10px;font-size:13px;color:#6EE7C8;line-height:1.6;display:none;}
+.q-nav{display:flex;gap:10px;margin-top:4px;}
+.qnbtn{flex:1;padding:13px;border-radius:12px;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;}
+.qnbtn.prev{background:var(--card);color:var(--text);border:1px solid var(--border);}
+.qnbtn.nxt{background:var(--blue);color:white;}
+.qnbtn.sub{background:var(--gold);color:#000;}
+.result-box{text-align:center;padding:28px 20px;}
+.res-emo{font-size:60px;margin-bottom:12px;}
+.res-pct{font-size:58px;font-weight:900;}
+.res-msg{color:var(--text2);margin:8px 0 24px;font-size:14px;}
+.res-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:300px;margin:0 auto 24px;}
+.rsc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 8px;text-align:center;}
+.rsc-val{font-size:22px;font-weight:800;}
+.rsc-lbl{font-size:11px;color:var(--text2);margin-top:3px;}
 
-  /* MAIN */
-  .main { flex: 1; padding: 2rem; overflow-y: auto; }
+/* FLASHCARDS */
+.fc-wrap-outer{height:185px;perspective:900px;cursor:pointer;margin-bottom:12px;}
+.fc-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .5s;}
+.fc-wrap-outer.flipped .fc-inner{transform:rotateY(180deg);}
+.fc-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:var(--r);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:1.5rem;border:1px solid var(--border);}
+.fc-front{color:white;}
+.fc-back{background:#1E1E1E;transform:rotateY(180deg);}
+.fc-sub{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;opacity:.65;margin-bottom:8px;}
+.fc-q{font-size:15px;font-weight:700;line-height:1.4;}
+.fc-a{font-size:13px;line-height:1.6;color:var(--text2);}
+.fc-hint{font-size:11px;opacity:.4;margin-top:8px;}
+.fc-rev{margin-top:12px;padding:6px 16px;background:rgba(29,185,84,.1);border:1px solid rgba(29,185,84,.3);color:var(--green);border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
+.fc-rev.done{opacity:.5;cursor:default;}
 
-  /* PAGES */
-  .page { display: none; }
-  .page.active { display: block; animation: fadeIn 0.3s ease; }
-  @keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+/* NOTES */
+.notes-tabs{display:flex;background:var(--card);border-radius:12px;padding:4px;margin-bottom:16px;border:1px solid var(--border);}
+.ntab2{flex:1;padding:9px;text-align:center;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;color:var(--text2);}
+.ntab2.on{background:var(--blue);color:white;}
+.note-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:12px;cursor:pointer;transition:all .2s;}
+.note-card:hover{background:#202020;}
+.note-card:active{transform:scale(.99);}
+.note-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.note-title{font-size:15px;font-weight:700;}
+.nbadge{padding:3px 10px;border-radius:50px;font-size:11px;font-weight:700;}
+.note-desc{font-size:13px;color:var(--text2);line-height:1.5;}
+.note-footer{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:12px;color:var(--text2);}
 
-  /* PAGE HEADER */
-  .page-hero {
-    background: linear-gradient(135deg, var(--navy2), rgba(27,91,247,0.15));
-    border: 1px solid var(--card-border);
-    border-radius: 20px; padding: 2.5rem 2rem;
-    margin-bottom: 2rem; position: relative; overflow: hidden;
-  }
-  .page-hero::after {
-    content: ''; position: absolute; right: -40px; top: -40px;
-    width: 200px; height: 200px; border-radius: 50%;
-    background: rgba(27,91,247,0.1); border: 1px solid rgba(27,91,247,0.2);
-  }
-  .page-hero h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 6px; }
-  .page-hero p { color: var(--text2); font-size: 0.95rem; }
-  .page-hero .hero-tag {
-    display: inline-block; background: rgba(245,166,35,0.15); color: var(--gold);
-    border: 1px solid rgba(245,166,35,0.3); border-radius: 50px;
-    font-size: 0.75rem; font-weight: 700; padding: 4px 14px;
-    margin-bottom: 0.8rem; letter-spacing: 1px;
-  }
+/* NOTE BOTTOM SHEET */
+.sheet-ov{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:300;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px);}
+.sheet-ov.open{display:flex;}
+.sheet{background:#111;border-radius:24px 24px 0 0;width:100%;max-width:430px;max-height:88vh;display:flex;flex-direction:column;overflow:hidden;}
+.sheet-hdr{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.sheet-title{font-size:16px;font-weight:800;}
+.sheet-x{width:36px;height:36px;border-radius:10px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--text2);}
+.sheet-body{flex:1;overflow-y:auto;padding:20px;scrollbar-width:none;}
+.sheet-body::-webkit-scrollbar{display:none;}
+.sheet-body p,.sheet-body li{font-size:14px;color:#aaa;line-height:1.8;}
+.sheet-body ul{padding-left:1.2rem;}
+.sheet-body strong{color:var(--text);}
+.sheet-body h4{color:var(--gold);margin:14px 0 8px;font-size:14px;}
 
-  /* CARDS */
-  .card {
-    background: var(--card); border: 1px solid var(--card-border);
-    border-radius: var(--radius); padding: 1.4rem;
-    transition: border-color 0.2s, transform 0.2s;
-  }
-  .card:hover { border-color: rgba(255,255,255,0.14); }
-  .card.lift:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+/* JOBS */
+.job-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:12px;}
+.job-top{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;}
+.job-ico{font-size:30px;flex-shrink:0;}
+.job-title{font-size:15px;font-weight:700;margin-bottom:2px;}
+.job-co{font-size:12px;color:var(--text2);}
+.jmeta{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px;}
+.jmi{background:rgba(255,255,255,.03);border-radius:8px;padding:8px 10px;}
+.jmi-lbl{font-size:10px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.4px;}
+.jmi-val{font-size:12px;font-weight:700;margin-top:2px;}
 
-  /* GRIDS */
-  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
-  .g3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.2rem; }
-  .g4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.2rem; }
+/* PROFILE */
+.prof-hero{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px;text-align:center;margin-bottom:16px;}
+.avatar{width:74px;height:74px;border-radius:50%;overflow:hidden;margin:0 auto 12px;border:3px solid rgba(43,142,240,.4);box-shadow:0 0 20px rgba(43,142,240,.2);}
+.avatar img{width:100%;height:100%;object-fit:cover;}
+.prof-name{font-size:18px;font-weight:800;margin-bottom:3px;}
+.prof-sub{font-size:13px;color:var(--text2);}
+.pstat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;}
+.pstat{background:#222;border-radius:12px;padding:12px 8px;text-align:center;}
+.pstat-val{font-size:20px;font-weight:800;color:var(--blue);}
+.pstat-lbl{font-size:11px;color:var(--text2);margin-top:2px;}
+.prow{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;}
+.prow:last-child{border-bottom:none;}
+.prow-ico{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.prow-lbl{flex:1;font-size:14px;font-weight:600;}
 
-  /* STAT CARD */
-  .stat-card { text-align: center; padding: 1.5rem; }
-  .stat-val { font-size: 2.4rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; }
-  .stat-lbl { font-size: 0.8rem; color: var(--text2); margin-top: 4px; }
+/* TESTS */
+.test-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:12px;}
+.test-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.test-name{font-size:15px;font-weight:700;}
+.test-meta{font-size:12px;color:var(--text2);margin-bottom:10px;}
+.tbar-wrap{background:#2A2A2A;border-radius:50px;height:6px;overflow:hidden;}
+.tbar{height:6px;border-radius:50px;}
+.test-footer{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--text2);}
 
-  /* SECTION TITLE */
-  .sec-title { font-size: 1rem; font-weight: 700; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 8px; color: var(--text); }
-  .sec-title .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+/* PAPERS */
+.paper-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:12px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .2s;}
+.paper-card:hover{background:#202020;}
+.paper-ico{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.paper-info{flex:1;}
+.paper-title{font-size:14px;font-weight:700;margin-bottom:3px;}
+.paper-meta{font-size:12px;color:var(--text2);}
 
-  /* TAGS */
-  .tag { display: inline-block; padding: 3px 10px; border-radius: 50px; font-size: 0.72rem; font-weight: 700; }
-  .tag-blue { background: rgba(27,91,247,0.15); color: var(--blue2); border: 1px solid rgba(27,91,247,0.2); }
-  .tag-gold { background: rgba(245,166,35,0.15); color: var(--gold); border: 1px solid rgba(245,166,35,0.25); }
-  .tag-green { background: rgba(0,200,150,0.12); color: var(--green); border: 1px solid rgba(0,200,150,0.2); }
-  .tag-red { background: rgba(255,71,87,0.12); color: var(--red); border: 1px solid rgba(255,71,87,0.2); }
-  .tag-purple { background: rgba(155,89,245,0.12); color: var(--purple); border: 1px solid rgba(155,89,245,0.2); }
+/* TOAST */
+.toast{
+  position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(14px);
+  background:#222;border:1px solid var(--border);border-radius:12px;
+  padding:10px 20px;font-size:13px;font-weight:600;
+  opacity:0;transition:all .3s;pointer-events:none;z-index:400;white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-  /* BTNS */
-  .btn {
-    padding: 9px 20px; border-radius: 10px; border: none;
-    cursor: pointer; font-weight: 600; font-size: 0.87rem;
-    transition: all 0.2s; display: inline-flex; align-items: center; gap: 7px;
-    font-family: 'Sora', sans-serif;
-  }
-  .btn-blue { background: var(--blue); color: white; }
-  .btn-blue:hover { background: #0F4AE0; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(27,91,247,0.4); }
-  .btn-gold { background: var(--gold); color: var(--navy); }
-  .btn-gold:hover { background: #E8920F; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(245,166,35,0.4); }
-  .btn-ghost { background: var(--card); color: var(--text); border: 1px solid var(--card-border); }
-  .btn-ghost:hover { border-color: rgba(255,255,255,0.2); }
-  .btn-sm { padding: 6px 14px; font-size: 0.8rem; }
+/* ICAI */
+.icai-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;}
+.icai-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.icai-dt{font-size:10px;color:var(--text2);margin-bottom:4px;font-family:monospace;}
+.icai-ttl{font-size:14px;font-weight:700;margin-bottom:5px;}
+.icai-desc{font-size:12px;color:var(--text2);line-height:1.5;}
+.portal-link{background:#1A1A1A;border:1px solid var(--border);border-radius:8px;padding:7px 13px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;display:inline-block;margin:4px;}
+.portal-link:hover{border-color:var(--blue);color:var(--blue);}
 
-  /* ─── HOME PAGE ─── */
-  .hero-main {
-    background: linear-gradient(135deg, var(--navy2) 0%, rgba(27,91,247,0.1) 100%);
-    border: 1px solid var(--card-border); border-radius: 24px;
-    padding: 3rem 2.5rem; margin-bottom: 2rem;
-    position: relative; overflow: hidden;
-  }
-  .hero-main::before {
-    content: ''; position: absolute; right: 2rem; top: 50%;
-    transform: translateY(-50%);
-    font-size: 8rem; opacity: 0.05;
-  }
-  .hero-main h1 { font-size: 2.4rem; font-weight: 800; line-height: 1.2; margin-bottom: 1rem; }
-  .hero-main h1 em { color: var(--gold); font-style: normal; }
-  .hero-main p { color: var(--text2); max-width: 520px; line-height: 1.7; margin-bottom: 1.5rem; }
-
-  .quick-links { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-bottom: 2rem; }
-  .qlink {
-    background: var(--card); border: 1px solid var(--card-border);
-    border-radius: 14px; padding: 1.2rem; cursor: pointer;
-    transition: all 0.2s; display: flex; align-items: center; gap: 12px;
-  }
-  .qlink:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-2px); }
-  .qlink-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
-  .qlink-text { font-weight: 600; font-size: 0.88rem; }
-  .qlink-sub { font-size: 0.75rem; color: var(--text2); margin-top: 2px; }
-
-  /* PROGRESS BAR */
-  .prog-bar-wrap { background: rgba(255,255,255,0.06); border-radius: 50px; height: 10px; overflow: hidden; margin-bottom: 6px; }
-  .prog-bar { height: 100%; border-radius: 50px; transition: width 0.8s cubic-bezier(0.4,0,0.2,1); }
-
-  /* ─── QUIZ ─── */
-  .quiz-wrap { max-width: 720px; margin: 0 auto; }
-  .q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-  .q-num { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text2); }
-
-  .question-card { background: var(--card); border: 1px solid var(--card-border); border-radius: 20px; padding: 2rem; margin-bottom: 1.5rem; }
-  .q-text { font-size: 1.05rem; font-weight: 600; line-height: 1.6; margin-bottom: 1.5rem; }
-
-  .opt {
-    display: flex; align-items: center; gap: 12px;
-    padding: 12px 16px; border-radius: 12px; cursor: pointer;
-    border: 1px solid var(--card-border); margin-bottom: 10px;
-    transition: all 0.2s; background: rgba(255,255,255,0.02);
-  }
-  .opt:hover { border-color: rgba(27,91,247,0.4); background: rgba(27,91,247,0.06); }
-  .opt.selected { border-color: var(--blue); background: rgba(27,91,247,0.12); }
-  .opt.correct { border-color: var(--green); background: rgba(0,200,150,0.1); }
-  .opt.wrong { border-color: var(--red); background: rgba(255,71,87,0.1); }
-  .opt-letter {
-    width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
-    background: rgba(255,255,255,0.06); display: flex; align-items: center;
-    justify-content: center; font-weight: 700; font-size: 0.82rem;
-    font-family: 'JetBrains Mono', monospace;
-  }
-  .opt-text { font-size: 0.9rem; }
-
-  .explanation-box { background: rgba(0,200,150,0.08); border: 1px solid rgba(0,200,150,0.2); border-radius: 12px; padding: 1rem; margin-top: 1rem; font-size: 0.88rem; color: #6EE7C8; display: none; }
-
-  .quiz-nav { display: flex; justify-content: space-between; align-items: center; }
-  .quiz-filter { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
-
-  /* RESULT CARD */
-  .result-card { text-align: center; padding: 3rem; }
-  .result-score { font-size: 5rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; }
-  .result-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; max-width: 400px; margin: 1.5rem auto; }
-
-  /* ─── FLASHCARDS ─── */
-  .fc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.2rem; }
-  .fc-wrap { height: 200px; perspective: 1000px; cursor: pointer; }
-  .fc-inner {
-    position: relative; width: 100%; height: 100%;
-    transform-style: preserve-3d; transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
-  }
-  .fc-wrap.flipped .fc-inner { transform: rotateY(180deg); }
-  .fc-face {
-    position: absolute; width: 100%; height: 100%;
-    backface-visibility: hidden; border-radius: 16px;
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
-    text-align: center; padding: 1.5rem;
-    border: 1px solid var(--card-border);
-  }
-  .fc-front { color: white; }
-  .fc-back { background: var(--navy2); transform: rotateY(180deg); }
-  .fc-subject { font-size: 0.72rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.75; margin-bottom: 10px; }
-  .fc-q { font-size: 0.92rem; font-weight: 600; line-height: 1.5; }
-  .fc-a { font-size: 0.85rem; line-height: 1.6; color: var(--text2); }
-  .fc-hint { font-size: 0.72rem; opacity: 0.6; margin-top: 10px; }
-
-  .fc-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
-  .fc-reviewed-btn { margin-top: 12px; padding: 5px 14px; background: rgba(0,200,150,0.15); border: 1px solid rgba(0,200,150,0.3); color: var(--green); border-radius: 8px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: 'Sora', sans-serif; }
-  .fc-reviewed-btn:hover { background: rgba(0,200,150,0.25); }
-  .fc-reviewed-btn.done { background: rgba(0,200,150,0.2); cursor: default; }
-
-  /* ─── STUDY ─── */
-  .level-section { margin-bottom: 2.5rem; }
-  .level-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.2rem; }
-  .level-badge { padding: 5px 16px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; }
-
-  .subject-card { background: var(--card); border: 1px solid var(--card-border); border-radius: 16px; padding: 1.4rem; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
-  .subject-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-2px); }
-  .subject-card .acc-bar { position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 16px 16px 0 0; }
-  .subj-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 10px; }
-  .topics-wrap { display: flex; flex-wrap: wrap; gap: 5px; }
-  .topic-pill { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.07); border-radius: 6px; font-size: 0.72rem; padding: 3px 9px; color: var(--text2); }
-
-  /* MODAL */
-  .modal-overlay { position: fixed; inset:0; background: rgba(0,0,0,0.7); z-index: 200; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-  .modal-overlay.open { display: flex; }
-  .modal { background: #0F1E35; border: 1px solid var(--card-border); border-radius: 20px; padding: 2rem; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; position: relative; }
-  .modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--text2); font-size: 1.4rem; cursor: pointer; }
-  .modal h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; color: var(--gold); }
-  .modal p, .modal li { font-size: 0.9rem; color: var(--text2); line-height: 1.8; }
-  .modal ul { padding-left: 1.5rem; }
-  .modal strong { color: var(--text); }
-  .note-tip { background: rgba(27,91,247,0.1); border: 1px solid rgba(27,91,247,0.2); border-radius: 10px; padding: 1rem; margin-top: 1rem; font-size: 0.85rem; color: var(--blue2); }
-
-  /* ─── JOBS ─── */
-  .job-card { border: 1px solid var(--card-border); border-radius: 16px; padding: 1.4rem; background: var(--card); transition: all 0.2s; }
-  .job-card:hover { border-color: rgba(255,255,255,0.14); transform: translateY(-2px); }
-  .job-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-  .job-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
-  .job-title { font-weight: 700; font-size: 1rem; }
-  .job-co { font-size: 0.82rem; color: var(--text2); margin-top: 2px; }
-  .job-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
-  .job-meta-item { background: rgba(255,255,255,0.04); border-radius: 8px; padding: 8px 10px; }
-  .job-meta-label { font-size: 0.67rem; color: var(--text2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-  .job-meta-val { font-size: 0.83rem; font-weight: 600; margin-top: 2px; }
-  .job-desc { font-size: 0.83rem; color: var(--text2); line-height: 1.6; margin-bottom: 12px; }
-
-  /* ─── ICAI ─── */
-  .update-item { border: 1px solid var(--card-border); border-radius: 14px; padding: 1.4rem; background: var(--card); margin-bottom: 1rem; display: flex; gap: 1rem; align-items: flex-start; transition: border-color 0.2s; }
-  .update-item:hover { border-color: rgba(255,255,255,0.14); }
-  .update-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
-  .update-date { font-size: 0.75rem; color: var(--text2); font-family: 'JetBrains Mono', monospace; margin-bottom: 4px; }
-  .update-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 6px; }
-  .update-desc { font-size: 0.85rem; color: var(--text2); line-height: 1.6; }
-
-  .icai-links { display: flex; flex-wrap: wrap; gap: 10px; }
-  .icai-link { background: var(--card); border: 1px solid var(--card-border); border-radius: 10px; padding: 10px 16px; font-size: 0.85rem; font-weight: 600; color: var(--text2); text-decoration: none; display: flex; align-items: center; gap: 8px; transition: all 0.2s; cursor: pointer; }
-  .icai-link:hover { border-color: var(--blue2); color: var(--blue2); }
-
-  /* ─── PROGRESS ─── */
-  .milestone { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--card-border); }
-  .milestone:last-child { border-bottom: none; }
-  .ms-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
-  .ms-label { font-weight: 600; font-size: 0.88rem; }
-  .ms-sub { font-size: 0.75rem; color: var(--text2); margin-top: 2px; }
-  .ms-bar-wrap { width: 80px; margin-left: auto; }
-
-  /* EXAM TABLE */
-  .exam-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-  .exam-table th { background: rgba(27,91,247,0.15); color: var(--blue2); padding: 10px 14px; text-align: left; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-  .exam-table td { padding: 10px 14px; border-bottom: 1px solid var(--card-border); }
-  .exam-table tr:last-child td { border-bottom: none; }
-  .exam-table tr:hover td { background: rgba(255,255,255,0.02); }
-
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
-
-  @media (max-width: 900px) {
-    .sidebar { width: 200px; }
-    .g3, .fc-grid, .quick-links { grid-template-columns: 1fr 1fr; }
-    .g4 { grid-template-columns: 1fr 1fr; }
-  }
-  @media (max-width: 650px) {
-    .sidebar { display: none; }
-    .g2, .g3, .fc-grid, .quick-links, .g4 { grid-template-columns: 1fr; }
-  }
+/* STUDY MATERIAL */
+.study-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:12px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
+.study-card:active{transform:scale(.99);}
+.study-top-bar{position:absolute;top:0;left:0;right:0;height:3px;}
+.study-title{font-size:15px;font-weight:700;margin-bottom:8px;}
+.study-desc{font-size:13px;color:var(--text2);line-height:1.5;}
+.study-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;}
 </style>
 </head>
 <body>
 
-<div class="glow-orb orb1"></div>
-<div class="glow-orb orb2"></div>
-
-<div class="shell">
-  <!-- ═══ SIDEBAR ═══ -->
-  <aside class="sidebar">
-    <div class="brand">
-      <div class="brand-icon">CA</div>
-      <div class="brand-text">Student <span>Hub</span></div>
+<!-- ═══════════ HOME ═══════════ -->
+<div class="page active" id="pg-home">
+  <div class="topbar">
+    <div>
+      <div class="welcome">Welcome back!</div>
+      <div class="logo-hdr">
+        <img class="logo-img" src="LOGO_URI" alt="CA-GPT">
+        <div class="app-title">CA Mentor AI</div>
+      </div>
     </div>
-
-    <div class="nav-section">Main</div>
-    <div class="nav-item active" onclick="showPage('home',this)"><span class="icon"><i class="fas fa-home"></i></span> Dashboard</div>
-    <div class="nav-item" onclick="showPage('study',this)"><span class="icon"><i class="fas fa-book"></i></span> Study Material</div>
-    <div class="nav-item" onclick="showPage('quiz',this)"><span class="icon"><i class="fas fa-brain"></i></span> MCQ Quiz <span class="nav-badge">8</span></div>
-    <div class="nav-item" onclick="showPage('flashcards',this)"><span class="icon"><i class="fas fa-layer-group"></i></span> Flashcards <span class="nav-badge">8</span></div>
-
-    <div class="nav-section">Track & Grow</div>
-    <div class="nav-item" onclick="showPage('progress',this)"><span class="icon"><i class="fas fa-chart-line"></i></span> Progress</div>
-    <div class="nav-item" onclick="showPage('jobs',this)"><span class="icon"><i class="fas fa-briefcase"></i></span> Job Opportunities</div>
-    <div class="nav-item" onclick="showPage('icai',this)"><span class="icon"><i class="fas fa-building-columns"></i></span> ICAI Updates</div>
-
-    <div class="sidebar-footer">
-      <p>© 2024 CA Student Hub<br>For Future CAs 🎓</p>
+    <div style="position:relative">
+      <button class="level-btn" onclick="toggleDrop()">
+        <span id="lv-label">Foundation</span>
+        <i class="fas fa-chevron-down" style="font-size:10px"></i>
+      </button>
+      <div class="level-drop" id="lv-drop">
+        <div class="ldrop-opt sel" onclick="setLv('Foundation')"><i class="fas fa-circle" style="font-size:8px;color:var(--blue)"></i>Foundation</div>
+        <div class="ldrop-opt" onclick="setLv('Intermediate')"><i class="fas fa-circle" style="font-size:8px;color:var(--gold)"></i>Intermediate</div>
+        <div class="ldrop-opt" onclick="setLv('Final')"><i class="fas fa-circle" style="font-size:8px;color:var(--red)"></i>Final</div>
+      </div>
     </div>
-  </aside>
+  </div>
 
-  <!-- ═══ MAIN CONTENT ═══ -->
-  <main class="main">
-
-    <!-- ══════════ HOME ══════════ -->
-    <div class="page active" id="page-home">
-      <div class="hero-main">
-        <div style="font-size:0.72rem;font-weight:700;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:0.8rem;">🎓 Your CA Journey Starts Here</div>
-        <h1>Master CA Exams<br>with <em>Smart Learning</em></h1>
-        <p>ICAI-aligned study materials, MCQ practice, flashcards, progress tracking, job opportunities and live ICAI updates — all in one place.</p>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <button class="btn btn-gold" onclick="showPage('study',document.querySelector('[onclick*=study]'))"><i class="fas fa-book-open"></i> Start Studying</button>
-          <button class="btn btn-ghost" onclick="showPage('quiz',document.querySelector('[onclick*=quiz]'))"><i class="fas fa-brain"></i> Take a Quiz</button>
-        </div>
+  <div class="scroll">
+    <div class="sec-lbl">Quick Actions</div>
+    <div class="qa-grid">
+      <div class="qa-card" onclick="goto('pg-askai')">
+        <div class="qa-ico" style="background:rgba(43,142,240,.15)"><i class="fas fa-robot" style="color:var(--blue);font-size:22px"></i></div>
+        <div class="qa-lbl">Ask AI</div>
       </div>
-
-      <!-- STATS -->
-      <div class="sec-title"><span class="dot" style="background:var(--blue);"></span> Progress Overview</div>
-      <div class="g4" style="margin-bottom:2rem;" id="home-stats">
-        <div class="card stat-card" style="border-top:3px solid var(--purple);">
-          <div class="stat-val" style="color:var(--purple);" id="hs-attempted">0</div>
-          <div class="stat-lbl">Questions Attempted</div>
-        </div>
-        <div class="card stat-card" style="border-top:3px solid var(--green);">
-          <div class="stat-val" style="color:var(--green);" id="hs-correct">0</div>
-          <div class="stat-lbl">Correct Answers</div>
-        </div>
-        <div class="card stat-card" style="border-top:3px solid var(--gold);">
-          <div class="stat-val" style="color:var(--gold);" id="hs-flashcards">0</div>
-          <div class="stat-lbl">Flashcards Reviewed</div>
-        </div>
-        <div class="card stat-card" style="border-top:3px solid var(--red);">
-          <div class="stat-val" style="color:var(--red);" id="hs-accuracy">—</div>
-          <div class="stat-lbl">Accuracy Rate</div>
-        </div>
+      <div class="qa-card" onclick="goto('pg-quiz')">
+        <div class="qa-ico" style="background:rgba(29,185,84,.15)"><i class="fas fa-question-circle" style="color:var(--green);font-size:22px"></i></div>
+        <div class="qa-lbl">Practice</div>
       </div>
-
-      <!-- QUICK LINKS -->
-      <div class="sec-title"><span class="dot" style="background:var(--gold);"></span> Quick Access</div>
-      <div class="quick-links" style="margin-bottom:2rem;">
-        <div class="qlink" onclick="showPage('study',document.querySelector('[onclick*=study]'))">
-          <div class="qlink-icon" style="background:rgba(27,91,247,0.12);color:var(--blue2);">📚</div>
-          <div><div class="qlink-text">Study Materials</div><div class="qlink-sub">Foundation · Inter · Final</div></div>
-        </div>
-        <div class="qlink" onclick="showPage('quiz',document.querySelector('[onclick*=quiz]'))">
-          <div class="qlink-icon" style="background:rgba(0,200,150,0.12);color:var(--green);">🧠</div>
-          <div><div class="qlink-text">MCQ Practice</div><div class="qlink-sub">8 questions with explanations</div></div>
-        </div>
-        <div class="qlink" onclick="showPage('flashcards',document.querySelector('[onclick*=flashcard]'))">
-          <div class="qlink-icon" style="background:rgba(245,166,35,0.12);color:var(--gold);">🃏</div>
-          <div><div class="qlink-text">Flashcards</div><div class="qlink-sub">Quick flip-card revision</div></div>
-        </div>
-        <div class="qlink" onclick="showPage('progress',document.querySelector('[onclick*=progress]'))">
-          <div class="qlink-icon" style="background:rgba(255,71,87,0.12);color:var(--red);">📊</div>
-          <div><div class="qlink-text">Progress Tracker</div><div class="qlink-sub">Track your journey</div></div>
-        </div>
-        <div class="qlink" onclick="showPage('jobs',document.querySelector('[onclick*=jobs]'))">
-          <div class="qlink-icon" style="background:rgba(155,89,245,0.12);color:var(--purple);">💼</div>
-          <div><div class="qlink-text">Job Opportunities</div><div class="qlink-sub">CA career paths</div></div>
-        </div>
-        <div class="qlink" onclick="showPage('icai',document.querySelector('[onclick*=icai]'))">
-          <div class="qlink-icon" style="background:rgba(0,200,150,0.1);color:var(--green);">🏛️</div>
-          <div><div class="qlink-text">ICAI Updates</div><div class="qlink-sub">Exam dates & news</div></div>
-        </div>
-      </div>
-
-      <!-- TIP -->
-      <div class="card" style="background:rgba(245,166,35,0.06);border-color:rgba(245,166,35,0.2);display:flex;gap:1rem;align-items:center;">
-        <div style="font-size:2rem;flex-shrink:0;">💡</div>
-        <div>
-          <div style="font-weight:700;color:var(--gold);margin-bottom:4px;font-size:0.9rem;">Study Tip of the Day</div>
-          <div style="font-size:0.85rem;color:var(--text2);line-height:1.6;">Use the <strong style="color:var(--text);">Pomodoro Technique</strong>: Study 25 min, rest 5 min. After 4 sessions, take a 30-min break. This maximises focus and prevents burnout during CA exam prep.</div>
-        </div>
+      <div class="qa-card" onclick="goto('pg-icai')">
+        <div class="qa-ico" style="background:rgba(245,166,35,.15)"><i class="fas fa-newspaper" style="color:var(--gold);font-size:22px"></i></div>
+        <div class="qa-lbl">News</div>
       </div>
     </div>
 
-    <!-- ══════════ STUDY ══════════ -->
-    <div class="page" id="page-study">
-      <div class="page-hero">
-        <div class="hero-tag">📚 ICAI CURRICULUM</div>
-        <h1>Study Materials</h1>
-        <p>Foundation, Intermediate & Final — all levels covered</p>
+    <div class="sec-lbl">Menu</div>
+    <div class="menu-grid">
+      <div class="menu-card" onclick="goto('pg-flashcards')">
+        <div class="menu-ico">🗂️</div>
+        <div class="menu-lbl">Flashcards</div>
       </div>
-
-      <div id="study-content"></div>
-    </div>
-
-    <!-- ══════════ QUIZ ══════════ -->
-    <div class="page" id="page-quiz">
-      <div class="page-hero">
-        <div class="hero-tag">🧠 MCQ PRACTICE</div>
-        <h1>Quiz Practice</h1>
-        <p>Test your knowledge with ICAI-style questions</p>
+      <div class="menu-card" onclick="goto('pg-papers')">
+        <div class="menu-ico">📄</div>
+        <div class="menu-lbl">Sample Papers</div>
       </div>
-
-      <div class="quiz-wrap">
-        <!-- FILTER -->
-        <div class="quiz-filter" id="quiz-filter"></div>
-
-        <!-- PROGRESS -->
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.8rem;">
-          <div class="q-num">Question <span id="q-cur">1</span> of <span id="q-tot">8</span></div>
-          <div class="q-num" id="q-score-live" style="color:var(--green);"></div>
-        </div>
-        <div class="prog-bar-wrap" style="margin-bottom:1.5rem;">
-          <div class="prog-bar" id="q-progress" style="background:linear-gradient(90deg,var(--blue),var(--purple));width:0%;"></div>
-        </div>
-
-        <div id="quiz-slides"></div>
-
-        <div class="quiz-nav" id="quiz-nav">
-          <button class="btn btn-ghost" id="btn-prev" onclick="quizNav(-1)" style="display:none;"><i class="fas fa-arrow-left"></i> Prev</button>
-          <div style="flex:1;"></div>
-          <button class="btn btn-blue" id="btn-next" onclick="quizNav(1)">Next <i class="fas fa-arrow-right"></i></button>
-          <button class="btn btn-gold" id="btn-submit" onclick="submitQuiz()" style="display:none;"><i class="fas fa-check"></i> Submit</button>
-        </div>
-
-        <!-- RESULT -->
-        <div class="card result-card" id="quiz-result" style="display:none;">
-          <div id="result-emoji" style="font-size:4rem;margin-bottom:1rem;">🎉</div>
-          <div class="result-score" id="result-score" style="color:var(--gold);">0%</div>
-          <div id="result-msg" style="color:var(--text2);margin-top:8px;margin-bottom:1.5rem;"></div>
-          <div class="result-grid">
-            <div class="card stat-card"><div class="stat-val" id="r-correct" style="color:var(--green);">0</div><div class="stat-lbl">Correct</div></div>
-            <div class="card stat-card"><div class="stat-val" id="r-wrong" style="color:var(--red);">0</div><div class="stat-lbl">Wrong</div></div>
-            <div class="card stat-card"><div class="stat-val" id="r-pct" style="color:var(--purple);">0%</div><div class="stat-lbl">Score</div></div>
-          </div>
-          <div style="display:flex;gap:10px;justify-content:center;">
-            <button class="btn btn-blue" onclick="resetQuiz()"><i class="fas fa-redo"></i> Try Again</button>
-            <button class="btn btn-gold" onclick="showPage('progress',document.querySelector('[onclick*=progress]'))"><i class="fas fa-chart-line"></i> View Progress</button>
-          </div>
-        </div>
+      <div class="menu-card" onclick="goto('pg-quiz')">
+        <div class="menu-ico">✏️</div>
+        <div class="menu-lbl">Quizs</div>
+      </div>
+      <div class="menu-card" onclick="openNotes('short')">
+        <div class="menu-ico">📝</div>
+        <div class="menu-lbl">Short Notes</div>
+      </div>
+      <div class="menu-card" onclick="openNotes('long')">
+        <div class="menu-ico">📖</div>
+        <div class="menu-lbl">Long Notes</div>
+      </div>
+      <div class="menu-card" onclick="goto('pg-jobs')">
+        <div class="menu-ico">💼</div>
+        <div class="menu-lbl">Jobs</div>
       </div>
     </div>
 
-    <!-- ══════════ FLASHCARDS ══════════ -->
-    <div class="page" id="page-flashcards">
-      <div class="page-hero">
-        <div class="hero-tag">🃏 FLIP CARDS</div>
-        <h1>Flashcards</h1>
-        <p>Click any card to flip and reveal the answer</p>
-      </div>
-      <div class="fc-filters" id="fc-filters"></div>
-      <div class="fc-grid" id="fc-grid"></div>
+    <div class="list-row" onclick="openNotes('short')">
+      <div class="list-row-ico">📝</div>
+      <div class="list-row-title">Short Notes</div>
+      <i class="fas fa-chevron-right list-arrow"></i>
     </div>
-
-    <!-- ══════════ PROGRESS ══════════ -->
-    <div class="page" id="page-progress">
-      <div class="page-hero">
-        <div class="hero-tag">📊 ANALYTICS</div>
-        <h1>Your Progress</h1>
-        <p>Track your learning milestones and improve</p>
-      </div>
-
-      <!-- STATS -->
-      <div class="g4" style="margin-bottom:2rem;">
-        <div class="card stat-card" style="border-top:3px solid var(--purple);">
-          <div class="stat-val" style="color:var(--purple);" id="p-attempted">0</div>
-          <div class="stat-lbl">Questions Attempted</div>
-        </div>
-        <div class="card stat-card" style="border-top:3px solid var(--green);">
-          <div class="stat-val" style="color:var(--green);" id="p-correct">0</div>
-          <div class="stat-lbl">Correct Answers</div>
-        </div>
-        <div class="card stat-card" style="border-top:3px solid var(--gold);">
-          <div class="stat-val" style="color:var(--gold);" id="p-flashcards">0</div>
-          <div class="stat-lbl">Flashcards Reviewed</div>
-        </div>
-        <div class="card stat-card" style="border-top:3px solid var(--red);">
-          <div class="stat-val" style="color:var(--red);" id="p-accuracy">—</div>
-          <div class="stat-lbl">Accuracy Rate</div>
-        </div>
-      </div>
-
-      <!-- ACCURACY BAR -->
-      <div class="card" style="margin-bottom:2rem;">
-        <div class="sec-title"><span class="dot" style="background:var(--red);"></span> Quiz Accuracy Meter</div>
-        <div class="prog-bar-wrap" style="height:16px;margin-bottom:10px;">
-          <div class="prog-bar" id="accuracy-bar" style="width:0%;background:linear-gradient(90deg,var(--red),var(--gold),var(--green));"></div>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text2);">
-          <span>0% · Needs Work</span><span>40% · Average</span><span>70% · Good</span><span>100% · Expert</span>
-        </div>
-        <div id="accuracy-msg" style="margin-top:1rem;padding:1rem;background:rgba(27,91,247,0.08);border:1px solid rgba(27,91,247,0.15);border-radius:10px;font-size:0.85rem;color:var(--blue2);">
-          Start taking quizzes to see your accuracy here!
-        </div>
-      </div>
-
-      <!-- MILESTONES + TIPS -->
-      <div class="g2" style="margin-bottom:2rem;">
-        <div class="card">
-          <div class="sec-title"><span class="dot" style="background:var(--gold);"></span> Milestones</div>
-          <div id="milestones-list"></div>
-        </div>
-        <div class="card">
-          <div class="sec-title"><span class="dot" style="background:var(--purple);"></span> Study Tips</div>
-          <div style="display:flex;flex-direction:column;gap:10px;">
-            <div style="padding:10px;background:rgba(27,91,247,0.08);border-radius:10px;border-left:3px solid var(--blue2);">
-              <div style="font-weight:700;font-size:0.85rem;color:var(--blue2);margin-bottom:3px;">📖 Daily Goal</div>
-              <div style="font-size:0.8rem;color:var(--text2);">2 hours of focused study using the Pomodoro Technique.</div>
-            </div>
-            <div style="padding:10px;background:rgba(0,200,150,0.08);border-radius:10px;border-left:3px solid var(--green);">
-              <div style="font-weight:700;font-size:0.85rem;color:var(--green);margin-bottom:3px;">🧠 Quiz Practice</div>
-              <div style="font-size:0.8rem;color:var(--text2);">Attempt 20+ MCQs daily. Focus on weak subjects first.</div>
-            </div>
-            <div style="padding:10px;background:rgba(245,166,35,0.08);border-radius:10px;border-left:3px solid var(--gold);">
-              <div style="font-weight:700;font-size:0.85rem;color:var(--gold);margin-bottom:3px;">🃏 Flashcards</div>
-              <div style="font-size:0.8rem;color:var(--text2);">Review 10 flashcards every morning for spaced repetition.</div>
-            </div>
-            <div style="padding:10px;background:rgba(155,89,245,0.08);border-radius:10px;border-left:3px solid var(--purple);">
-              <div style="font-weight:700;font-size:0.85rem;color:var(--purple);margin-bottom:3px;">📝 Revision</div>
-              <div style="font-size:0.8rem;color:var(--text2);">Revise previous topics weekly. Past papers are key!</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card" style="background:rgba(255,71,87,0.05);border-color:rgba(255,71,87,0.2);text-align:center;">
-        <p style="color:var(--text2);font-size:0.85rem;margin-bottom:1rem;">⚠️ This will permanently reset all your progress data.</p>
-        <button class="btn" style="background:var(--red);color:white;" onclick="if(confirm('Reset all progress?')){resetProgress();}"><i class="fas fa-trash"></i> Reset Progress</button>
-      </div>
+    <div class="list-row" onclick="openNotes('long')">
+      <div class="list-row-ico">📖</div>
+      <div class="list-row-title">Long Notes</div>
+      <i class="fas fa-chevron-right list-arrow"></i>
     </div>
-
-    <!-- ══════════ JOBS ══════════ -->
-    <div class="page" id="page-jobs">
-      <div class="page-hero" style="background:linear-gradient(135deg,#061A12,rgba(0,200,150,0.1));">
-        <div class="hero-tag" style="background:rgba(0,200,150,0.1);color:var(--green);border-color:rgba(0,200,150,0.3);">💼 CA CAREERS</div>
-        <h1>Job Opportunities</h1>
-        <p>Explore career paths available to Chartered Accountants</p>
-      </div>
-
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.5rem;" id="job-filters"></div>
-      <div class="g2" id="jobs-grid"></div>
-
-      <div class="card" style="margin-top:1.5rem;background:rgba(27,91,247,0.06);border-color:rgba(27,91,247,0.2);display:flex;gap:1rem;align-items:flex-start;">
-        <div style="font-size:2rem;flex-shrink:0;">🎯</div>
-        <div>
-          <div style="font-weight:700;color:var(--blue2);margin-bottom:5px;">ICAI Campus Placement Programme</div>
-          <p style="font-size:0.85rem;color:var(--text2);line-height:1.6;">ICAI organizes campus placements twice a year for newly qualified CAs. 100+ companies participate including Big 4, banks, PSUs & MNCs. Register at <strong style="color:var(--text);">icai.org</strong></p>
-        </div>
-      </div>
+    <div class="list-row" onclick="goto('pg-study')">
+      <div class="list-row-ico">📚</div>
+      <div class="list-row-title">Study Materials</div>
+      <i class="fas fa-chevron-right list-arrow"></i>
     </div>
-
-    <!-- ══════════ ICAI ══════════ -->
-    <div class="page" id="page-icai">
-      <div class="page-hero" style="background:linear-gradient(135deg,#0F1E35,rgba(155,89,245,0.1));">
-        <div class="hero-tag" style="background:rgba(155,89,245,0.1);color:var(--purple);border-color:rgba(155,89,245,0.3);">🏛️ LIVE UPDATES</div>
-        <h1>ICAI Institute</h1>
-        <p>Official updates, exam schedules, results & more</p>
-      </div>
-
-      <div class="card" style="margin-bottom:2rem;">
-        <div class="sec-title"><span class="dot" style="background:var(--blue2);"></span> Official ICAI Portals</div>
-        <div class="icai-links">
-          <a class="icai-link" href="https://www.icai.org" target="_blank"><i class="fas fa-globe"></i> ICAI Official</a>
-          <a class="icai-link" href="https://icaiexam.icai.org" target="_blank"><i class="fas fa-file-alt"></i> Exam Results</a>
-          <a class="icai-link" href="https://eservices.icai.org" target="_blank"><i class="fas fa-edit"></i> Exam Forms</a>
-          <a class="icai-link" href="https://icaiknowledgegateway.org" target="_blank"><i class="fas fa-book"></i> Study Material</a>
-          <a class="icai-link" href="https://members.icai.org" target="_blank"><i class="fas fa-user"></i> Members Portal</a>
-        </div>
-      </div>
-
-      <div class="sec-title"><span class="dot" style="background:var(--red);"></span> Recent Announcements</div>
-      <div id="icai-updates"></div>
-
-      <!-- EXAM TABLE -->
-      <div class="card" style="margin-top:1.5rem;background:rgba(245,166,35,0.04);border-color:rgba(245,166,35,0.2);">
-        <div class="sec-title"><span class="dot" style="background:var(--gold);"></span> Tentative Exam Calendar 2025</div>
-        <table class="exam-table">
-          <thead><tr><th>Exam</th><th>Level</th><th>Session</th><th>Period</th></tr></thead>
-          <tbody>
-            <tr><td>CA Foundation</td><td><span class="tag tag-blue">Foundation</span></td><td>May 2025</td><td style="color:var(--gold);">May 2025</td></tr>
-            <tr><td>CA Intermediate</td><td><span class="tag tag-green">Intermediate</span></td><td>May 2025</td><td style="color:var(--gold);">May 2025</td></tr>
-            <tr><td>CA Final</td><td><span class="tag tag-red">Final</span></td><td>May 2025</td><td style="color:var(--gold);">May 2025</td></tr>
-            <tr><td>CA Foundation</td><td><span class="tag tag-blue">Foundation</span></td><td>Nov 2025</td><td style="color:var(--gold);">November 2025</td></tr>
-            <tr><td>CA Intermediate</td><td><span class="tag tag-green">Intermediate</span></td><td>Nov 2025</td><td style="color:var(--gold);">November 2025</td></tr>
-            <tr><td>CA Final</td><td><span class="tag tag-red">Final</span></td><td>Nov 2025</td><td style="color:var(--gold);">November 2025</td></tr>
-          </tbody>
-        </table>
-        <p style="font-size:0.75rem;color:var(--text2);margin-top:1rem;"><i class="fas fa-info-circle"></i> Dates are tentative. Always verify on the official ICAI website.</p>
-      </div>
-    </div>
-
-  </main>
-</div>
-
-<!-- STUDY MODAL -->
-<div class="modal-overlay" id="study-modal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">×</button>
-    <h3 id="modal-title">Subject Notes</h3>
-    <div id="modal-body"></div>
   </div>
 </div>
 
-<script>
-// ═══════════════════════════════════════
-// DATA
-// ═══════════════════════════════════════
-const STUDY = {
-  Foundation: [
-    { id:1, title:"Principles & Practice of Accounting", color:"#1B5BF7", topics:["Journal Entries","Ledger","Trial Balance","Final Accounts","Depreciation"], notes:`<p>Accounting is the systematic process of recording, classifying and summarizing financial transactions.</p><br><h4 style="color:var(--gold);margin-bottom:8px;">🔑 Golden Rules</h4><ul><li><strong>Personal Account:</strong> Debit the Receiver, Credit the Giver</li><li><strong>Real Account:</strong> Debit what Comes In, Credit what Goes Out</li><li><strong>Nominal Account:</strong> Debit all Expenses & Losses, Credit all Incomes & Gains</li></ul><div class="note-tip">💡 <strong>Exam Tip:</strong> Golden Rules are the most tested area. Memorize all three with examples.</div>` },
-    { id:2, title:"Business Laws", color:"#9B59F5", topics:["Contract Act","Sale of Goods Act","Companies Act Basics","Negotiable Instruments"], notes:`<p>Business Laws govern commercial relationships and transactions in India.</p><br><ul><li><strong>Indian Contract Act 1872:</strong> Offer, Acceptance, Consideration — essentials of a valid contract</li><li><strong>Sale of Goods Act 1930:</strong> Conditions and warranties in sale transactions</li><li><strong>Negotiable Instruments Act:</strong> Cheques, Bills of Exchange, Promissory Notes</li></ul><div class="note-tip">💡 Remember: A contract must have Offer + Acceptance + Consideration + Capacity + Free Consent.</div>` },
-    { id:3, title:"Business Mathematics", color:"#F5A623", topics:["Ratio & Proportion","Simple & Compound Interest","Permutation & Combination","Sets & Functions"], notes:`<p>Mathematical tools used in business decision-making and financial analysis.</p><br><ul><li><strong>Simple Interest:</strong> SI = P × R × T / 100</li><li><strong>Compound Interest:</strong> A = P(1 + r/n)^(nt)</li><li><strong>Permutation:</strong> nPr = n! / (n-r)!</li><li><strong>Combination:</strong> nCr = n! / [r!(n-r)!]</li></ul><div class="note-tip">💡 Practice numerical problems daily — 60% of this paper is calculation-based.</div>` },
-    { id:4, title:"Business Economics", color:"#00C896", topics:["Demand & Supply","Market Structures","National Income","Monetary Policy"], notes:`<p>Economics helps understand resource allocation and market behavior relevant to business decisions.</p><br><ul><li><strong>Law of Demand:</strong> As price rises, quantity demanded falls (inverse relationship)</li><li><strong>Market Structures:</strong> Perfect Competition → Monopoly → Oligopoly → Monopolistic</li><li><strong>GDP = C + I + G + (X-M)</strong></li></ul><div class="note-tip">💡 National Income concepts and demand/supply diagrams are frequently tested.</div>` },
-  ],
-  Intermediate: [
-    { id:5, title:"Advanced Accounting", color:"#00C896", topics:["Partnership Accounts","Company Accounts","Amalgamation","Accounting Standards"], notes:`<p>Advanced accounting covers complex financial reporting scenarios encountered in professional practice.</p><br><ul><li><strong>Partnership:</strong> Admission, Retirement, Death of a partner — Goodwill treatment is key</li><li><strong>Amalgamation:</strong> Purchase method vs Merger method (AS-14)</li><li><strong>Company Accounts:</strong> Issue of shares, debentures, final accounts</li></ul><div class="note-tip">💡 AS-14 amalgamation questions are high-value numericals in exams.</div>` },
-    { id:6, title:"Income Tax", color:"#FF4757", topics:["Heads of Income","Deductions (80C-80U)","TDS/TCS","Advance Tax","Capital Gains"], notes:`<p>Income Tax Act 1961 governs taxation of income in India. 5 heads of income are critical.</p><br><ul><li><strong>5 Heads:</strong> Salary | House Property | Business/Profession | Capital Gains | Other Sources</li><li><strong>Section 80C:</strong> ₹1.5 Lakh deduction — LIC, PPF, ELSS, NSC</li><li><strong>Advance Tax:</strong> Payable if tax liability > ₹10,000 in 4 installments</li></ul><div class="note-tip">💡 Capital Gains chapter — know STCG (15%/slab) vs LTCG (10%/20%) tax rates thoroughly.</div>` },
-    { id:7, title:"Auditing & Assurance", color:"#1B5BF7", topics:["SA Standards","Internal Controls","Risk Assessment","Audit Report","CARO"], notes:`<p>Auditing is an independent examination of financial information to express an opinion on its truth and fairness.</p><br><ul><li><strong>SA 240:</strong> Auditor's responsibility to detect fraud</li><li><strong>SA 315:</strong> Identifying and assessing risks of material misstatement</li><li><strong>Types of Opinion:</strong> Unmodified / Qualified / Adverse / Disclaimer</li></ul><div class="note-tip">💡 Learn SA numbers — at least 10 important SAs and their key requirements for exam.</div>` },
-    { id:8, title:"Financial Management", color:"#9B59F5", topics:["Capital Budgeting","Working Capital","Leverage","Cost of Capital","Dividend Policy"], notes:`<p>Financial Management deals with financial planning, analysis and control in organisations.</p><br><ul><li><strong>NPV > 0:</strong> Accept project | <strong>IRR > Cost of Capital:</strong> Accept</li><li><strong>Working Capital = Current Assets - Current Liabilities</strong></li><li><strong>Operating Leverage = Contribution / EBIT</strong></li></ul><div class="note-tip">💡 Capital Budgeting (NPV/IRR/Payback) and Leverage numericals are most frequently asked.</div>` },
-    { id:9, title:"Corporate Law", color:"#F5A623", topics:["Companies Act 2013","Board Meetings","Share Capital","Winding Up","Insolvency Code"], notes:`<p>Companies Act 2013 is the primary legislation governing companies in India.</p><br><ul><li><strong>Private Company:</strong> 2 to 200 members, min 2 directors</li><li><strong>Public Company:</strong> Min 7 members, min 3 directors</li><li><strong>AGM:</strong> Within 6 months of FY end; first AGM within 9 months</li></ul><div class="note-tip">💡 Section numbers are important — Sec 2(20) company definition, Sec 149 directors, Sec 96 AGM.</div>` },
-    { id:10, title:"Cost & Management Accounting", color:"#00C896", topics:["Cost Sheet","Marginal Costing","Standard Costing","Budget Control","Activity Costing"], notes:`<p>Cost accounting helps management in planning, decision-making and control through cost information.</p><br><ul><li><strong>Marginal Cost:</strong> Variable Cost per unit | Fixed costs remain constant</li><li><strong>Contribution = Sales - Variable Costs</strong></li><li><strong>BEP = Fixed Costs / Contribution per unit</strong></li></ul><div class="note-tip">💡 Variance analysis (Material, Labour, Overhead) is a favourite high-marks topic in exams.</div>` },
-  ],
-  Final: [
-    { id:11, title:"Financial Reporting (Ind AS)", color:"#1B5BF7", topics:["Ind AS Standards","IFRS","Consolidated Accounts","Fair Value","Revenue Recognition"], notes:`<p>Ind AS are Indian Accounting Standards converged with IFRS for listed and large companies.</p><br><ul><li><strong>Ind AS 115:</strong> Revenue Recognition — 5-step model</li><li><strong>Ind AS 116:</strong> Leases — Right of Use asset</li><li><strong>Ind AS 109:</strong> Financial Instruments classification and measurement</li></ul><div class="note-tip">💡 Ind AS 115 (Revenue) and Ind AS 116 (Leases) are highest-weightage topics in FR paper.</div>` },
-    { id:12, title:"Strategic Financial Management", color:"#FF4757", topics:["Portfolio Theory","Derivatives","Mergers & Acquisitions","Foreign Exchange","Risk Management"], notes:`<p>SFM applies financial concepts to strategic business decisions involving risk and uncertainty.</p><br><ul><li><strong>CAPM:</strong> Expected Return = Rf + β(Rm - Rf)</li><li><strong>Options:</strong> Call (right to buy) / Put (right to sell) with Black-Scholes model</li><li><strong>Forex:</strong> Forward Rate, Interest Rate Parity, Purchasing Power Parity</li></ul><div class="note-tip">💡 Derivatives (Options, Futures) and Portfolio theory are guaranteed numericals in SFM paper.</div>` },
-    { id:13, title:"Advanced Auditing", color:"#00C896", topics:["Risk-Based Audit","Forensic Accounting","Audit Reports","CARO 2020","Bank Audit"], notes:`<p>Advanced Auditing covers professional audit practice at the highest level of complexity.</p><br><ul><li><strong>Forensic Accounting:</strong> Investigation of fraud, money laundering</li><li><strong>CARO 2020:</strong> Companies Auditor's Report Order — 21 matters to be reported</li><li><strong>Bank Audit:</strong> NPA classification, provisions, income recognition</li></ul><div class="note-tip">💡 CARO 2020 requirements and forensic auditing are emerging high-weightage areas.</div>` },
-    { id:14, title:"GST & Customs", color:"#F5A623", topics:["GST Registration","Input Tax Credit","Place of Supply","Customs Duty","Import/Export"], notes:`<p>GST is a comprehensive destination-based tax replacing multiple indirect taxes from July 1, 2017.</p><br><ul><li><strong>GST Rates:</strong> 0%, 5%, 12%, 18%, 28%</li><li><strong>ITC:</strong> Claim GST paid on inputs — blocked credits under Section 17(5)</li><li><strong>IGST:</strong> Inter-state | CGST+SGST: Intra-state supply</li></ul><div class="note-tip">💡 ITC (Input Tax Credit) rules and Place of Supply determination are highest-scoring topics.</div>` },
-  ]
-};
+<!-- ═══════════ ASK AI ═══════════ -->
+<div class="page" id="pg-askai">
+  <div class="inner-hdr">
+    <div class="back-btn" onclick="goBack()">&#8249;</div>
+    <div class="inner-title">Ask AI</div>
+    <img src="LOGO_URI" alt="CA-GPT" style="width:34px;height:34px;border-radius:10px;object-fit:cover;margin-left:auto;border:1px solid rgba(43,142,240,.3)">
+  </div>
+  <div class="chat-wrap">
+    <div class="sugg-chips" id="sugg-chips">
+      <button class="chip" onclick="askChip('What is GST?')">What is GST?</button>
+      <button class="chip" onclick="askChip('Income Tax 5 heads')">Income Tax</button>
+      <button class="chip" onclick="askChip('SA 240 Auditing')">SA 240</button>
+      <button class="chip" onclick="askChip('What is Articleship?')">Articleship</button>
+      <button class="chip" onclick="askChip('CA course structure')">CA Course</button>
+      <button class="chip" onclick="askChip('Golden Rules accounting')">Golden Rules</button>
+    </div>
+    <div class="chat-msgs" id="chat-msgs"></div>
+    <div class="chat-inp-wrap">
+      <input class="chat-inp" id="chat-inp" placeholder="Ask any CA question…" onkeydown="if(event.key==='Enter')sendChat()">
+      <button class="send-btn" onclick="sendChat()"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
+</div>
 
-const QUIZZES = [
-  { id:1, subject:"Accounting", level:"Foundation", q:"Which concept states that revenue should be recognized when earned, not when cash is received?", opts:["Matching Concept","Accrual Concept","Going Concern","Cost Concept"], ans:1, exp:"The Accrual Concept states that revenue is recognized when earned, regardless of cash receipt." },
-  { id:2, subject:"Taxation", level:"Intermediate", q:"Under Income Tax Act, the year in which income of previous year is assessed is called?", opts:["Fiscal Year","Assessment Year","Previous Year","Calendar Year"], ans:1, exp:"Assessment Year (AY) is the year in which income of the previous year is assessed and taxed." },
-  { id:3, subject:"Auditing", level:"Intermediate", q:"Which SA standard governs the auditor's responsibility to detect fraud?", opts:["SA 240","SA 250","SA 315","SA 700"], ans:0, exp:"SA 240 - The Auditor's Responsibilities Relating to Fraud in an Audit of Financial Statements." },
-  { id:4, subject:"Company Law", level:"Intermediate", q:"Minimum number of directors required for a Public Company as per Companies Act 2013?", opts:["2","3","5","7"], ans:1, exp:"As per Section 149 of Companies Act 2013, a Public Company must have minimum 3 directors." },
-  { id:5, subject:"GST", level:"Final", q:"GST was implemented in India from which date?", opts:["1st April 2017","1st July 2017","1st January 2018","1st April 2018"], ans:1, exp:"GST was implemented in India from 1st July 2017, replacing multiple indirect taxes like VAT, Service Tax, Excise." },
-  { id:6, subject:"Fin. Management", level:"Intermediate", q:"Net Working Capital is calculated as:", opts:["Fixed Assets - Current Liabilities","Current Assets - Current Liabilities","Total Assets - Total Liabilities","Current Assets + Fixed Assets"], ans:1, exp:"Net Working Capital = Current Assets - Current Liabilities. It measures short-term liquidity." },
-  { id:7, subject:"Accounting", level:"Foundation", q:"Depreciation under the Written Down Value (WDV) method is charged on:", opts:["Original Cost","Book Value / WDV","Market Value","Replacement Cost"], ans:1, exp:"Under WDV method, depreciation is charged on the book value (WDV) which reduces every year, giving higher depreciation in early years." },
-  { id:8, subject:"Cost Accounting", level:"Intermediate", q:"Break-Even Point (in units) is calculated as:", opts:["Fixed Costs / Sales Price","Fixed Costs / Contribution per unit","Variable Costs / Contribution","Total Costs / Units Sold"], ans:1, exp:"BEP (units) = Fixed Costs / Contribution per unit. At BEP, Total Revenue = Total Cost (zero profit/loss)." },
-];
-
-const FLASHCARDS = [
-  { id:1, subject:"Accounting", q:"Golden Rule for Personal Account?", a:"Debit the Receiver, Credit the Giver", color:"linear-gradient(135deg,#1B5BF7,#9B59F5)" },
-  { id:2, subject:"Accounting", q:"Golden Rule for Real Account?", a:"Debit what Comes In, Credit what Goes Out", color:"linear-gradient(135deg,#0A1628,#1B5BF7)" },
-  { id:3, subject:"Taxation", q:"What is Section 80C of Income Tax Act?", a:"Deductions up to ₹1.5 Lakhs for investments in LIC, PPF, ELSS, NSC, Home Loan principal etc.", color:"linear-gradient(135deg,#7B1D1D,#DC2626)" },
-  { id:4, subject:"Auditing", q:"What is Materiality in Auditing?", a:"Information is material if its omission or misstatement could influence economic decisions of users of financial statements.", color:"linear-gradient(135deg,#064E3B,#059669)" },
-  { id:5, subject:"Company Law", q:"What is the Memorandum of Association (MOA)?", a:"The charter document of a company defining its objectives and scope of activities. It is the supreme document of the company.", color:"linear-gradient(135deg,#3B0764,#7C3AED)" },
-  { id:6, subject:"GST", q:"What is Input Tax Credit (ITC)?", a:"ITC allows businesses to reduce tax liability by claiming credit for GST paid on inputs used for business purposes (Sec 16).", color:"linear-gradient(135deg,#0C4A6E,#0891B2)" },
-  { id:7, subject:"Fin. Management", q:"What is Internal Rate of Return (IRR)?", a:"The discount rate at which NPV of all project cash flows = 0. If IRR > Cost of Capital, accept the project.", color:"linear-gradient(135deg,#78350F,#D97706)" },
-  { id:8, subject:"Cost Accounting", q:"What is Break-Even Point (BEP)?", a:"Output level where Total Revenue = Total Cost. No profit, no loss. BEP (units) = Fixed Cost ÷ Contribution per unit.", color:"linear-gradient(135deg,#14532D,#16A34A)" },
-];
-
-const JOBS = [
-  { icon:"🏢", title:"Audit Associate", company:"Big 4 (Deloitte, EY, KPMG, PwC)", type:"Full-time", location:"Mumbai/Delhi/Bengaluru", eligibility:"CA Final Qualified", salary:"₹7–12 LPA", desc:"Statutory audits, internal audits, and financial reviews for listed companies.", tag:"Audit", color:"var(--blue2)" },
-  { icon:"💼", title:"Tax Consultant", company:"CA Firms / Corporates", type:"Full-time / Contract", location:"Pan India", eligibility:"CA Inter / Final", salary:"₹4–10 LPA", desc:"Direct and indirect tax compliance, GST returns, advisory and tax planning.", tag:"Taxation", color:"var(--green)" },
-  { icon:"📊", title:"Finance Manager", company:"MNCs / Listed Companies", type:"Full-time", location:"Metro Cities", eligibility:"CA Final Qualified", salary:"₹10–20 LPA", desc:"Financial reporting, budgeting, forecasting and internal controls management.", tag:"Finance", color:"var(--purple)" },
-  { icon:"🎯", title:"CFO / Controller", company:"Startups / Mid-Size Companies", type:"Full-time", location:"Mumbai/Bengaluru", eligibility:"CA with 5+ years exp.", salary:"₹20–50 LPA", desc:"Strategic financial leadership, investor relations and governance.", tag:"Leadership", color:"var(--gold)" },
-  { icon:"📚", title:"Article Assistant", company:"Practicing CA Firms", type:"Articleship (3 yrs)", location:"All India", eligibility:"CA Foundation Cleared", salary:"₹2,000–15,000/month", desc:"Mandatory 3-year training covering audit, taxation, accounts and law.", tag:"Training", color:"var(--text2)" },
-  { icon:"🔍", title:"Forensic Auditor", company:"Consulting Firms / Banks", type:"Full-time", location:"Mumbai / Delhi", eligibility:"CA Final + Forensic cert.", salary:"₹8–18 LPA", desc:"Financial fraud investigation, forensic accounting and litigation support.", tag:"Forensic", color:"var(--red)" },
-  { icon:"📈", title:"Cost Accountant", company:"Manufacturing Companies", type:"Full-time", location:"Pan India", eligibility:"CA with Costing exp.", salary:"₹5–12 LPA", desc:"Cost audit, standard costing, variance analysis and pricing decisions.", tag:"Costing", color:"var(--green)" },
-  { icon:"🏛️", title:"Indian Revenue Service", company:"Government of India", type:"Government Job", location:"Pan India", eligibility:"CA / Graduates (UPSC)", salary:"₹56,100–₹2,50,000/month", desc:"Tax administration and revenue collection under CBDT/CBIC via UPSC exam.", tag:"Government", color:"var(--blue2)" },
-];
-
-const ICAI_UPDATES = [
-  { dot:"#1B5BF7", date:"Dec 2024", tag:"🗓️ Exam", title:"CA Final May 2025 Exam Dates Announced", desc:"ICAI has announced CA Final examinations for May 2025. Examination forms available from January 2025. Students are advised to check the official ICAI portal for the detailed schedule and city-wise exam centre allocation." },
-  { dot:"#00C896", date:"Nov 2024", tag:"📋 Regulation", title:"New Ind AS Amendments Effective April 2025", desc:"ICAI issued guidance on newly applicable Ind AS amendments effective from April 2025. CA Final students must update their study material for Financial Reporting paper accordingly." },
-  { dot:"#F5A623", date:"Nov 2024", tag:"💼 Placement", title:"Campus Placement Programme 2024–25 Begins", desc:"ICAI's campus placement for newly qualified CAs begins in December 2024. Over 100+ companies including Big 4, nationalized banks, PSUs and MNCs are expected to participate." },
-  { dot:"#9B59F5", date:"Oct 2024", tag:"📖 CPE", title:"Mandatory CPE Hours Updated for Members", desc:"ICAI has updated Continuing Professional Education (CPE) requirements for members. Both structured and unstructured learning hours count. Check the ICAI portal for specific requirements by membership category." },
-  { dot:"#FF4757", date:"Oct 2024", tag:"📚 Curriculum", title:"Revised Study Material for Intermediate Course", desc:"Updated study material for CA Intermediate incorporating recent legal amendments in Companies Act 2013 and GST law is now available for download on the ICAI Knowledge Gateway portal." },
-  { dot:"#00C896", date:"Sep 2024", tag:"🎉 Results", title:"CA Foundation Sep 2024 Results Declared", desc:"Results of CA Foundation September 2024 examination have been declared. Students can check their results on icaiexam.icai.org. Overall pass percentage and subject-wise analysis also published." },
-];
-
-// ═══════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════
-let progress = JSON.parse(localStorage.getItem('ca_progress') || '{"attempted":0,"correct":0,"flashcards":0}');
-let quizAnswers = {};
-let quizIdx = 0;
-let quizFiltered = [...QUIZZES];
-let quizSubmitted = false;
-let activeJobTag = 'All';
-let activeFcFilter = 'All';
-
-function saveProgress() { localStorage.setItem('ca_progress', JSON.stringify(progress)); }
-
-// ═══════════════════════════════════════
-// NAVIGATION
-// ═══════════════════════════════════════
-function showPage(id, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  if (el) el.classList.add('active');
-  updateStats();
-}
-
-// ═══════════════════════════════════════
-// STATS
-// ═══════════════════════════════════════
-function updateStats() {
-  const acc = progress.attempted ? Math.round(progress.correct/progress.attempted*100) : null;
-  const accStr = acc !== null ? acc+'%' : '—';
-
-  // Home
-  document.getElementById('hs-attempted').textContent = progress.attempted;
-  document.getElementById('hs-correct').textContent = progress.correct;
-  document.getElementById('hs-flashcards').textContent = progress.flashcards;
-  document.getElementById('hs-accuracy').textContent = accStr;
-
-  // Progress page
-  document.getElementById('p-attempted').textContent = progress.attempted;
-  document.getElementById('p-correct').textContent = progress.correct;
-  document.getElementById('p-flashcards').textContent = progress.flashcards;
-  document.getElementById('p-accuracy').textContent = accStr;
-
-  const bar = document.getElementById('accuracy-bar');
-  if (bar && acc !== null) bar.style.width = acc + '%';
-
-  const msg = document.getElementById('accuracy-msg');
-  if (msg && acc !== null) {
-    if (acc >= 70) { msg.textContent = '🌟 Outstanding! Your accuracy is excellent. Keep it up!'; msg.style.color = 'var(--green)'; msg.style.background = 'rgba(0,200,150,0.08)'; msg.style.borderColor = 'rgba(0,200,150,0.2)'; }
-    else if (acc >= 40) { msg.textContent = '📚 Good progress! Focus on weak areas and practice more MCQs.'; msg.style.color = 'var(--gold)'; msg.style.background = 'rgba(245,166,35,0.08)'; msg.style.borderColor = 'rgba(245,166,35,0.2)'; }
-    else { msg.textContent = '💪 Keep practicing! Review the study materials and retake the quiz.'; msg.style.color = 'var(--red)'; msg.style.background = 'rgba(255,71,87,0.08)'; msg.style.borderColor = 'rgba(255,71,87,0.2)'; }
-  }
-
-  renderMilestones();
-}
-
-function renderMilestones() {
-  const milestones = [
-    { target:10, current:progress.attempted, label:"First 10 Questions", emoji:"🎯" },
-    { target:50, current:progress.attempted, label:"Quiz Champion (50 Qs)", emoji:"🏆" },
-    { target:10, current:progress.flashcards, label:"Flashcard Starter (10)", emoji:"🃏" },
-    { target:30, current:progress.flashcards, label:"Revision Master (30)", emoji:"📖" },
-  ];
-  const el = document.getElementById('milestones-list');
-  if (!el) return;
-  el.innerHTML = milestones.map(m => {
-    const done = m.current >= m.target;
-    const pct = Math.min(100, Math.round(m.current/m.target*100));
-    return `<div class="milestone">
-      <div class="ms-icon" style="background:${done?'rgba(0,200,150,0.12)':'rgba(255,255,255,0.04)'};">${done?'✅':m.emoji}</div>
-      <div>
-        <div class="ms-label" style="color:${done?'var(--green)':'var(--text)'};">${m.label}</div>
-        <div class="ms-sub">${Math.min(m.current,m.target)} / ${m.target}</div>
-      </div>
-      <div class="ms-bar-wrap">
-        <div class="prog-bar-wrap" style="height:6px;"><div class="prog-bar" style="width:${pct}%;background:${done?'var(--green)':'var(--blue2)'};"></div></div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function resetProgress() {
-  progress = {attempted:0, correct:0, flashcards:0};
-  saveProgress(); updateStats();
-}
-
-// ═══════════════════════════════════════
-// STUDY
-// ═══════════════════════════════════════
-function renderStudy() {
-  const el = document.getElementById('study-content');
-  const colors = { Foundation:'rgba(27,91,247,0.12)', Intermediate:'rgba(0,200,150,0.12)', Final:'rgba(255,71,87,0.12)' };
-  const textColors = { Foundation:'var(--blue2)', Intermediate:'var(--green)', Final:'var(--red)' };
-  el.innerHTML = Object.entries(STUDY).map(([level, subjects]) => `
-    <div class="level-section">
-      <div class="level-header">
-        <span class="level-badge" style="background:${colors[level]};color:${textColors[level]};">${level}</span>
-        <span style="color:var(--text2);font-size:0.85rem;">${subjects.length} Subjects</span>
-      </div>
-      <div class="g2">
-        ${subjects.map(s => `
-          <div class="subject-card lift" onclick="openStudyModal(${s.id})">
-            <div class="acc-bar" style="background:${s.color};"></div>
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-              <div class="subj-title">${s.title}</div>
-              <div style="width:36px;height:36px;border-radius:10px;background:${s.color}20;display:flex;align-items:center;justify-content:center;color:${s.color};font-size:1rem;flex-shrink:0;"><i class="fas fa-book"></i></div>
-            </div>
-            <div class="topics-wrap" style="margin-bottom:12px;">
-              ${s.topics.map(t=>`<span class="topic-pill">${t}</span>`).join('')}
-            </div>
-            <button class="btn btn-sm" style="background:${s.color}20;color:${s.color};border:none;cursor:pointer;" onclick="event.stopPropagation();openStudyModal(${s.id})"><i class="fas fa-eye"></i> View Notes</button>
-          </div>`).join('')}
-      </div>
-    </div>`).join('');
-}
-
-function openStudyModal(id) {
-  const all = Object.values(STUDY).flat();
-  const s = all.find(x=>x.id===id);
-  if (!s) return;
-  document.getElementById('modal-title').textContent = s.title;
-  document.getElementById('modal-body').innerHTML = s.notes;
-  document.getElementById('study-modal').classList.add('open');
-}
-function closeModal() { document.getElementById('study-modal').classList.remove('open'); }
-
-// ═══════════════════════════════════════
-// QUIZ
-// ═══════════════════════════════════════
-function renderQuizFilters() {
-  const el = document.getElementById('quiz-filter');
-  const levels = ['All','Foundation','Intermediate','Final'];
-  el.innerHTML = levels.map(l=>`<button class="btn btn-sm ${l==='All'?'btn-blue':'btn-ghost'}" onclick="filterQuiz('${l}',this)">${l}</button>`).join('');
-}
-
-function filterQuiz(level, btn) {
-  document.querySelectorAll('#quiz-filter .btn').forEach(b=>b.className='btn btn-sm btn-ghost');
-  btn.className='btn btn-sm btn-blue';
-  quizFiltered = level==='All' ? [...QUIZZES] : QUIZZES.filter(q=>q.level===level);
-  quizIdx = 0; quizAnswers = {}; quizSubmitted = false;
-  renderQuizSlides();
-}
-
-function renderQuizSlides() {
-  const el = document.getElementById('quiz-slides');
-  document.getElementById('q-tot').textContent = quizFiltered.length;
-  el.innerHTML = quizFiltered.map((q,i)=>`
-    <div class="question-slide" id="qs-${i}" style="display:${i===0?'block':'none'};">
-      <div class="question-card">
-        <div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap;">
-          <span class="tag tag-blue">${q.subject}</span>
-          <span class="tag tag-purple">${q.level}</span>
+<!-- ═══════════ QUIZ ═══════════ -->
+<div class="page" id="pg-quiz">
+  <div class="inner-hdr">
+    <div class="back-btn" onclick="goBack()">&#8249;</div>
+    <div class="inner-title">Practice Quiz</div>
+  </div>
+  <div class="scroll" style="padding-top:0">
+    <div class="q-filter" id="q-filter"></div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+      <span style="font-size:12px;color:var(--text2)">Q <span id="q-cur">1</span> of <span id="q-tot">8</span></span>
+    </div>
+    <div class="qprog-wrap"><div class="qprog-bar" id="q-bar" style="width:0%"></div></div>
+    <div id="q-slides"></div>
+    <div class="q-nav" id="q-nav">
+      <button class="qnbtn prev" id="q-prev" onclick="qNav(-1)" style="display:none"><i class="fas fa-arrow-left"></i> Prev</button>
+      <div style="flex:1"></div>
+      <button class="qnbtn nxt" id="q-next" onclick="qNav(1)">Next <i class="fas fa-arrow-right"></i></button>
+      <button class="qnbtn sub" id="q-sub" onclick="submitQ()" style="display:none">Submit ✓</button>
+    </div>
+    <div id="q-result" style="display:none">
+      <div class="result-box">
+        <div class="res-emo" id="r-emo">🎉</div>
+        <div class="res-pct" id="r-pct" style="color:var(--gold)">0%</div>
+        <div class="res-msg" id="r-msg"></div>
+        <div class="res-stats">
+          <div class="rsc"><div class="rsc-val" id="r-c" style="color:var(--green)">0</div><div class="rsc-lbl">Correct</div></div>
+          <div class="rsc"><div class="rsc-val" id="r-w" style="color:var(--red)">0</div><div class="rsc-lbl">Wrong</div></div>
+          <div class="rsc"><div class="rsc-val" id="r-s" style="color:var(--blue)">0%</div><div class="rsc-lbl">Score</div></div>
         </div>
+        <div style="display:flex;gap:10px;justify-content:center">
+          <button class="qnbtn nxt" style="flex:none;padding:13px 28px" onclick="resetQ()"><i class="fas fa-redo"></i> Try Again</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ FLASHCARDS ═══════════ -->
+<div class="page" id="pg-flashcards">
+  <div class="inner-hdr">
+    <div class="back-btn" onclick="goBack()">&#8249;</div>
+    <div class="inner-title">Flashcards</div>
+  </div>
+  <div class="scroll" style="padding-top:0">
+    <div class="q-filter" id="fc-filter"></div>
+    <div id="fc-grid"></div>
+  </div>
+</div>
+
+<!-- ═══════════ NOTES ═══════════ -->
+<div class="page" id="pg-notes">
+  <div class="inner-hdr">
+    <div class="back-btn" onclick="goBack()">&#8249;</div>
+    <div class="inner-title" id="notes-title">Short Notes</div>
+  </div>
+  <div class="scroll" style="padding-top:0">
+    <div class="notes-tabs">
+      <div class="ntab2 on" id="ntt-s" onclick="switchNotes('short')">📝 Short Notes</div>
+      <div class="ntab2" id="ntt-l" onclick="switchNotes('long')">📖 Long Notes</div>
+    </div>
+    <div id="notes-list"></div>
+  </div>
+</div>
+
+<!-- ═══════════ STUDY ═══════════ -->
+<div class="page" id="pg-study">
+  <div class="inner-hdr">
+    <div class="back-btn" onclick="goBack()">&#8249;</div>
+    <div class="inner-title">Study Materials</div>
+  </div>
+  <div class="scroll" style="padding-top:0"><div id="study-list"></div></div>
+</div>
+
+<!-- ═══════════ SAMPLE PAPERS ═══════════ -->
+<div class="page" id="pg-papers">
+  <div class="inner-hdr">
+    <div class="back-btn" onclick="goBack()">&#8249;</div>
+    <div class="inner-title">Sample Papers</div>
+  </div>
+  <div class="scroll" style="padding-top:0"><div id="papers-list"></div></div>
+</div>
+
+<!-- ═══════════ ICAI NEWS ═══════════ -->
+<div class="page" id="pg-icai">
+  <div class="inner-hdr">
+    <div class="back-btn" onclick="goBack()">&#8249;</div>
+    <div class="inner-title">ICAI News & Updates</div>
+  </div>
+  <div class="scroll" style="padding-top:0">
+    <div id="icai-list"></div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px">
+      <div style="font-weight:700;color:var(--blue);margin-bottom:10px;font-size:14px">🔗 Official ICAI Portals</div>
+      <div style="display:flex;flex-wrap:wrap">
+        <a class="portal-link" href="https://www.icai.org" target="_blank">icai.org</a>
+        <a class="portal-link" href="https://icaiexam.icai.org" target="_blank">Exam Results</a>
+        <a class="portal-link" href="https://eservices.icai.org" target="_blank">Exam Forms</a>
+        <a class="portal-link" href="https://icaiknowledgegateway.org" target="_blank">Study Material</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ JOBS ═══════════ -->
+<div class="page" id="pg-jobs">
+  <div class="inner-hdr">
+    <div class="back-btn" onclick="goBack()">&#8249;</div>
+    <div class="inner-title">Job Opportunities</div>
+  </div>
+  <div class="scroll" style="padding-top:0"><div id="jobs-list"></div></div>
+</div>
+
+<!-- ═══════════ SOLVED TESTS ═══════════ -->
+<div class="page" id="pg-tests">
+  <div class="inner-hdr">
+    <div class="back-btn" onclick="goBack()">&#8249;</div>
+    <div class="inner-title">Solved Tests</div>
+  </div>
+  <div class="scroll" style="padding-top:0"><div id="tests-list"></div></div>
+</div>
+
+<!-- ═══════════ PROFILE ═══════════ -->
+<div class="page" id="pg-profile">
+  <div class="inner-hdr">
+    <div class="back-btn" onclick="goBack()">&#8249;</div>
+    <div class="inner-title">Profile</div>
+  </div>
+  <div class="scroll" style="padding-top:0">
+    <div class="prof-hero">
+      <div class="avatar"><img src="LOGO_URI" alt="CA-GPT"></div>
+      <div class="prof-name">CA Student</div>
+      <div class="prof-sub" id="prof-lv">CA Foundation · Preparing</div>
+      <div class="pstat-grid">
+        <div class="pstat"><div class="pstat-val" id="ps-q">0</div><div class="pstat-lbl">Quizzes</div></div>
+        <div class="pstat"><div class="pstat-val" id="ps-f">0</div><div class="pstat-lbl">Flashcards</div></div>
+        <div class="pstat"><div class="pstat-val" id="ps-a">—</div><div class="pstat-lbl">Accuracy</div></div>
+      </div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:4px 16px">
+      <div class="prow"><div class="prow-ico" style="background:rgba(43,142,240,.1);color:var(--blue)">📊</div><div class="prow-lbl">Progress Report</div><i class="fas fa-chevron-right" style="color:var(--text2);font-size:13px"></i></div>
+      <div class="prow"><div class="prow-ico" style="background:rgba(29,185,84,.1);color:var(--green)">🔔</div><div class="prow-lbl">Notifications</div><i class="fas fa-chevron-right" style="color:var(--text2);font-size:13px"></i></div>
+      <div class="prow"><div class="prow-ico" style="background:rgba(245,166,35,.1);color:var(--gold)">⚙️</div><div class="prow-lbl">Settings</div><i class="fas fa-chevron-right" style="color:var(--text2);font-size:13px"></i></div>
+      <div class="prow" onclick="if(confirm('Reset all progress?'))resetProg()"><div class="prow-ico" style="background:rgba(255,68,68,.1);color:var(--red)">🗑️</div><div class="prow-lbl">Reset Progress</div><i class="fas fa-chevron-right" style="color:var(--text2);font-size:13px"></i></div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="ntab active" id="ntab-home" onclick="navTab('home')"><i class="fas fa-house ni"></i><span class="nl">Home</span></div>
+  <div class="ntab" id="ntab-tests" onclick="navTab('tests')"><i class="fas fa-file-circle-check ni"></i><span class="nl">Solved<br>Tests</span></div>
+  <div class="ntab" id="ntab-help" onclick="navTab('askai')"><i class="fas fa-circle-question ni"></i><span class="nl">Help</span></div>
+  <div class="ntab" id="ntab-jobs" onclick="navTab('jobs')"><i class="fas fa-newspaper ni"></i><span class="nl">Job<br>Opport.</span></div>
+  <div class="ntab" id="ntab-profile" onclick="navTab('profile')"><i class="fas fa-user ni"></i><span class="nl">Profile</span></div>
+</nav>
+
+<!-- NOTE BOTTOM SHEET -->
+<div class="sheet-ov" id="sheet-ov">
+  <div class="sheet">
+    <div class="sheet-hdr">
+      <div class="sheet-title" id="sheet-title"></div>
+      <div class="sheet-x" onclick="closeSheet()"><i class="fas fa-times"></i></div>
+    </div>
+    <div class="sheet-body" id="sheet-body"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ════ DATA ════
+const QB=[
+  {id:1,sub:"Accounting",lv:"Foundation",q:"Which concept recognizes revenue when earned, not when cash is received?",opts:["Matching Concept","Accrual Concept","Going Concern","Cost Concept"],ans:1,exp:"Accrual Concept — revenue recognized when earned, regardless of cash receipt."},
+  {id:2,sub:"Taxation",lv:"Intermediate",q:"The year in which income of previous year is assessed is called?",opts:["Fiscal Year","Assessment Year","Previous Year","Calendar Year"],ans:1,exp:"Assessment Year (AY) — the year income of previous year is assessed and taxed."},
+  {id:3,sub:"Auditing",lv:"Intermediate",q:"SA 240 deals with which responsibility of the auditor?",opts:["Internal Controls","Fraud Detection","Risk Assessment","Audit Reporting"],ans:1,exp:"SA 240 — The Auditor's Responsibilities Relating to Fraud in an Audit of Financial Statements."},
+  {id:4,sub:"Company Law",lv:"Intermediate",q:"Minimum directors for a Public Company under Companies Act 2013?",opts:["2","3","5","7"],ans:1,exp:"Section 149 requires a Public Company to have minimum 3 directors."},
+  {id:5,sub:"GST",lv:"Final",q:"GST was implemented in India from which date?",opts:["1 April 2017","1 July 2017","1 January 2018","1 April 2018"],ans:1,exp:"GST implemented 1st July 2017, replacing VAT, Service Tax, Excise Duty etc."},
+  {id:6,sub:"Fin. Mgmt",lv:"Intermediate",q:"Net Working Capital formula is?",opts:["Fixed Assets − CL","Current Assets − CL","Total Assets − TL","CA + Fixed Assets"],ans:1,exp:"Net Working Capital = Current Assets − Current Liabilities. Measures short-term liquidity."},
+  {id:7,sub:"Accounting",lv:"Foundation",q:"Under WDV method, depreciation is charged on?",opts:["Original Cost","Book Value (WDV)","Market Value","Replacement Cost"],ans:1,exp:"WDV method charges depreciation on Book Value — reduces each year, higher in early years."},
+  {id:8,sub:"Cost",lv:"Intermediate",q:"BEP in units formula?",opts:["FC ÷ Sales Price","FC ÷ Contribution per unit","VC ÷ Contribution","TC ÷ Units"],ans:1,exp:"BEP(units) = Fixed Costs ÷ Contribution per unit. At BEP: Revenue = Total Cost."},
+];
+
+const FC_DATA=[
+  {id:1,sub:"Accounting",q:"Golden Rule — Personal Account?",a:"Debit the Receiver, Credit the Giver",bg:"linear-gradient(135deg,#1A4FCC,#7C3AED)"},
+  {id:2,sub:"Accounting",q:"Golden Rule — Real Account?",a:"Debit what Comes In, Credit what Goes Out",bg:"linear-gradient(135deg,#0A1628,#2B7FFF)"},
+  {id:3,sub:"Taxation",q:"Section 80C deduction limit?",a:"Up to ₹1.5 Lakhs — LIC, PPF, ELSS, NSC, Home Loan Principal",bg:"linear-gradient(135deg,#7F1D1D,#DC2626)"},
+  {id:4,sub:"Auditing",q:"What is Materiality in Auditing?",a:"Info is material if its omission/misstatement could influence economic decisions of financial statement users.",bg:"linear-gradient(135deg,#064E3B,#059669)"},
+  {id:5,sub:"Company Law",q:"What is MOA (Memorandum of Association)?",a:"Supreme/charter document of a company defining its objectives, scope and relation with the outside world.",bg:"linear-gradient(135deg,#3B0764,#7C3AED)"},
+  {id:6,sub:"GST",q:"What is Input Tax Credit (ITC)?",a:"GST paid on inputs claimed to reduce output tax liability. Blocked credits under Sec 17(5).",bg:"linear-gradient(135deg,#0C4A6E,#0891B2)"},
+  {id:7,sub:"Fin. Mgmt",q:"What is IRR?",a:"Discount rate at which NPV of project cash flows = 0. Accept project if IRR > Cost of Capital.",bg:"linear-gradient(135deg,#78350F,#D97706)"},
+  {id:8,sub:"Cost",q:"What is Break-Even Point?",a:"Level where Total Revenue = Total Cost. Zero profit/loss. BEP(units) = Fixed Cost ÷ Contribution per unit.",bg:"linear-gradient(135deg,#14532D,#16A34A)"},
+];
+
+const SHORT_NOTES=[
+  {id:1,icon:"💡",badge:"GST",bc:"rgba(0,201,224,.15)",btc:"var(--cyan)",title:"GST — Quick Summary",desc:"Rates: 0%,5%,12%,18%,28%. CGST+SGST=intra-state. IGST=inter-state. Threshold: ₹40L goods, ₹20L services.",content:`<h4>GST Quick Notes</h4><p><strong>Effective:</strong> 1st July 2017</p><p><strong>Rates:</strong> 0%, 5%, 12%, 18%, 28%</p><p><strong>CGST+SGST</strong> = Intra-state | <strong>IGST</strong> = Inter-state</p><p><strong>Registration:</strong> ₹40L (goods), ₹20L (services)</p><p><strong>GSTIN:</strong> 15-digit unique number</p><h4>Key Provisions</h4><ul><li><strong>ITC:</strong> Claim GST paid on inputs to reduce output tax</li><li><strong>Blocked Credits (Sec 17(5)):</strong> Motor vehicles, food, beauty</li><li><strong>E-way Bill:</strong> Required for goods movement > ₹50,000</li></ul>`},
+  {id:2,icon:"📒",badge:"Accounts",bc:"rgba(43,142,240,.15)",btc:"var(--blue)",title:"Golden Rules of Accounting",desc:"Personal: Debit Receiver, Credit Giver. Real: Debit Comes In. Nominal: Debit Expenses, Credit Incomes.",content:`<h4>Golden Rules</h4><ul><li><strong>Personal A/c:</strong> Debit the Receiver, Credit the Giver</li><li><strong>Real A/c:</strong> Debit what Comes In, Credit what Goes Out</li><li><strong>Nominal A/c:</strong> Debit all Expenses & Losses, Credit all Incomes & Gains</li></ul><h4>Examples</h4><ul><li>Cash A/c → Real Account</li><li>Capital A/c → Personal Account</li><li>Salary A/c → Nominal Account</li></ul>`},
+  {id:3,icon:"🔍",badge:"Audit",bc:"rgba(29,185,84,.15)",btc:"var(--green)",title:"SA Standards — Key Numbers",desc:"SA 240: Fraud. SA 315: Risk. SA 700: Opinion. SA 705: Modified. SA 570: Going Concern.",content:`<h4>Key SA Standards</h4><ul><li><strong>SA 200:</strong> Overall objectives of auditor</li><li><strong>SA 240:</strong> Fraud detection responsibility</li><li><strong>SA 315:</strong> Risk identification & assessment</li><li><strong>SA 570:</strong> Going Concern</li><li><strong>SA 700:</strong> Forming & reporting opinion</li><li><strong>SA 705:</strong> Modified opinions — Qualified/Adverse/Disclaimer</li><li><strong>SA 706:</strong> Emphasis of matter paragraphs</li></ul><h4>Audit Opinion Types</h4><ul><li>✅ Unmodified (Clean)</li><li>⚠️ Qualified — except for a matter</li><li>❌ Adverse — material & pervasive</li><li>🚫 Disclaimer — unable to form opinion</li></ul>`},
+  {id:4,icon:"📊",badge:"Tax",bc:"rgba(255,68,68,.15)",btc:"var(--red)",title:"Capital Gains Tax Rates",desc:"STCG: Listed shares ≤1yr = 15%. LTCG: >1yr = 10% above ₹1L. Other assets WDV = 20%.",content:`<h4>Capital Gains</h4><p><strong>STCG (Short Term):</strong></p><ul><li>Listed shares/equity MF ≤ 1 year: <strong>15%</strong></li><li>Other assets ≤ 3 years: Slab rates</li></ul><p><strong>LTCG (Long Term):</strong></p><ul><li>Listed shares/equity MF > 1 year: <strong>10%</strong> (above ₹1L)</li><li>Other assets > 3 years: <strong>20% with indexation</strong></li><li>Land/building > 2 years: 20% with indexation</li></ul><p><strong>Exemptions:</strong> Sec 54, 54EC, 54F</p>`},
+];
+
+const LONG_NOTES=[
+  {id:10,icon:"📘",badge:"Income Tax",bc:"rgba(255,68,68,.15)",btc:"var(--red)",title:"Income Tax — Complete Chapter Notes",desc:"All 5 heads of income, deductions 80C-80U, TDS, advance tax, assessment and computation.",content:`<h4>Income Tax Act 1961</h4><p>Tax levied on income of <strong>Previous Year</strong> in the <strong>Assessment Year</strong>.</p><h4>5 Heads of Income</h4><ul><li><strong>1. Salary:</strong> Basic + HRA + Allowances − Exemptions</li><li><strong>2. House Property:</strong> Annual Value − 30% − Home Loan Interest</li><li><strong>3. Business/Profession:</strong> Net Profit after allowable deductions</li><li><strong>4. Capital Gains:</strong> STCG or LTCG based on holding period</li><li><strong>5. Other Sources:</strong> Interest, dividends, gifts, lottery</li></ul><h4>Key Deductions (Chapter VIA)</h4><ul><li><strong>Sec 80C:</strong> ₹1.5L — LIC, PPF, ELSS, NSC, Home Loan Principal</li><li><strong>Sec 80D:</strong> Health insurance — ₹25K (self/family), ₹50K (seniors)</li><li><strong>Sec 80E:</strong> Education loan interest — entire interest amount</li><li><strong>Sec 24(b):</strong> Home loan interest — ₹2L (self-occupied)</li></ul><h4>TDS Key Sections</h4><ul><li>Sec 192: Salary | Sec 194A: Interest 10% | Sec 194J: Professional 10%</li><li>Sec 194C: Contractor 1%/2% | Sec 194I: Rent 10%/20%</li><li>Deposit by 7th of following month. Quarterly TDS returns mandatory.</li></ul><h4>Advance Tax</h4><ul><li>Payable if liability > ₹10,000 in 4 installments</li><li>15% by June 15 | 45% by Sep 15 | 75% by Dec 15 | 100% by Mar 15</li></ul>`},
+  {id:11,icon:"⚖️",badge:"Law",bc:"rgba(168,85,247,.15)",btc:"#A855F7",title:"Companies Act 2013 — Detailed Notes",desc:"Types of companies, directors, meetings, share capital, key sections and compliance requirements.",content:`<h4>Companies Act 2013</h4><h4>Types of Companies</h4><ul><li><strong>Private (Sec 2(68)):</strong> 2–200 members, min 2 directors</li><li><strong>Public (Sec 2(71)):</strong> Min 7 members, min 3 directors</li><li><strong>OPC (Sec 2(62)):</strong> 1 member, 1 director, nominee required</li></ul><h4>Key Sections</h4><ul><li><strong>Sec 149:</strong> Directors — min 1 woman director for certain cos.</li><li><strong>Sec 166:</strong> Duties of directors — act in good faith, avoid conflicts</li><li><strong>Sec 96:</strong> AGM — within 6 months of FY end</li><li><strong>Sec 139:</strong> Auditors — 5-year term for companies</li><li><strong>Sec 177:</strong> Audit Committee — mandatory for listed companies</li></ul><h4>Share Capital Types</h4><ul><li>Authorized → Issued → Subscribed → Paid-up</li></ul><h4>Board Meetings</h4><ul><li>Min 4 meetings per year | Max gap: 120 days</li><li>Quorum: 1/3rd of directors or 2, whichever is higher</li></ul>`},
+  {id:12,icon:"📋",badge:"GST",bc:"rgba(0,201,224,.15)",btc:"var(--cyan)",title:"GST — Complete Chapter Notes",desc:"Registration, ITC rules, place of supply, returns (GSTR-1/3B/9), e-way bill and composition scheme.",content:`<h4>GST — Complete Notes</h4><p>Destination-based, comprehensive, multi-stage indirect tax from <strong>1st July 2017</strong>.</p><h4>Registration (Sec 22-30)</h4><ul><li>Threshold: ₹40L (goods), ₹20L (services)</li><li>Mandatory: Inter-state supply, e-commerce, RCM payee</li><li>GSTIN: 2(state) + 10(PAN) + 1 + 1 + 1 = 15 digits</li></ul><h4>Input Tax Credit (Sec 16-21)</h4><ul><li>Conditions: Tax invoice + goods received + tax paid + return filed</li><li>Blocked Credits (Sec 17(5)): Motor vehicles, food, beauty, clubs</li><li>Avail by: Nov 30 of next FY or annual return, whichever is earlier</li></ul><h4>GST Returns</h4><ul><li>GSTR-1: Outward supplies (monthly/quarterly)</li><li>GSTR-3B: Summary return (monthly)</li><li>GSTR-9: Annual return | GSTR-9C: Reconciliation</li></ul><h4>E-way Bill</h4><ul><li>Required for movement > ₹50,000</li><li>Validity: 1 day per 100 km</li></ul>`},
+  {id:13,icon:"💰",badge:"FM",bc:"rgba(245,166,35,.15)",btc:"var(--gold)",title:"Financial Management — Complete Notes",desc:"Capital budgeting NPV/IRR, working capital, leverage (OL/FL/CL), WACC, cost of capital, dividend policy.",content:`<h4>Financial Management</h4><h4>Capital Budgeting</h4><ul><li><strong>NPV:</strong> PV of inflows − Initial Investment. Accept if NPV > 0</li><li><strong>IRR:</strong> Rate where NPV = 0. Accept if IRR > Cost of Capital</li><li><strong>Payback Period:</strong> Time to recover investment. Lower = better</li><li><strong>PI:</strong> PV of inflows ÷ Investment. Accept if PI > 1</li></ul><h4>Working Capital</h4><ul><li>NWC = Current Assets − Current Liabilities</li><li>Operating Cycle = Raw material → WIP → FG → Debtors → Cash</li></ul><h4>Leverage</h4><ul><li>Operating Leverage = Contribution ÷ EBIT</li><li>Financial Leverage = EBIT ÷ EBT</li><li>Combined Leverage = OL × FL = Contribution ÷ EBT</li></ul><h4>Cost of Capital</h4><ul><li>WACC = Weighted Average Cost of each source of capital</li><li>Cost of Equity (Gordon): Ke = D1/P0 + g</li><li>Cost of Debt: Kd = Interest × (1 − Tax) ÷ Net Proceeds</li></ul><h4>Dividend Policy</h4><ul><li>Walter's Model: Dividend affects value when r ≠ Ke</li><li>Gordon's Model: Bird-in-hand — dividends reduce uncertainty</li><li>MM Theory: Dividend irrelevant in perfect markets</li></ul>`},
+];
+
+const STUDY_MATS=[
+  {color:"#2B7FFF",icon:"📘",title:"Principles & Practice of Accounting",badge:"Foundation",bc:"rgba(43,142,240,.15)",btc:"var(--blue)",desc:"Golden Rules, Journal, Ledger, Trial Balance, Final Accounts, Depreciation methods (SLM/WDV)."},
+  {color:"#A855F7",icon:"⚖️",title:"Business Laws",badge:"Foundation",bc:"rgba(43,142,240,.15)",btc:"var(--blue)",desc:"Contract Act 1872, Sale of Goods Act, Companies Act Basics, Negotiable Instruments Act."},
+  {color:"#FF5252",icon:"📊",title:"Income Tax",badge:"Intermediate",bc:"rgba(29,185,84,.15)",btc:"var(--green)",desc:"5 Heads of Income, Deductions 80C-80U, TDS, Advance Tax, Capital Gains (STCG/LTCG)."},
+  {color:"#1DB954",icon:"🔍",title:"Auditing & Assurance",badge:"Intermediate",bc:"rgba(29,185,84,.15)",btc:"var(--green)",desc:"SA Standards (SA 200-800), Internal Controls, Risk Assessment, CARO 2020, Audit Opinions."},
+  {color:"#2B7FFF",icon:"📈",title:"Financial Reporting (Ind AS)",badge:"Final",bc:"rgba(255,68,68,.15)",btc:"var(--red)",desc:"Ind AS 115 (Revenue), Ind AS 116 (Leases), Ind AS 109 (Financial Instruments), Consolidation."},
+  {color:"#F5A623",icon:"🧾",title:"GST & Customs",badge:"Final",bc:"rgba(255,68,68,.15)",btc:"var(--red)",desc:"GST Registration, ITC, Place of Supply, E-way Bill, Customs Duty, Import/Export provisions."},
+];
+
+const PAPERS_DATA=[
+  {sub:"CA Foundation",year:"Nov 2024",ico:"📄",color:"rgba(43,142,240,.1)",icoBg:"rgba(43,142,240,.15)"},
+  {sub:"CA Foundation",year:"May 2024",ico:"📄",color:"rgba(43,142,240,.1)",icoBg:"rgba(43,142,240,.15)"},
+  {sub:"CA Intermediate",year:"Nov 2024",ico:"📋",color:"rgba(29,185,84,.1)",icoBg:"rgba(29,185,84,.15)"},
+  {sub:"CA Intermediate",year:"May 2024",ico:"📋",color:"rgba(29,185,84,.1)",icoBg:"rgba(29,185,84,.15)"},
+  {sub:"CA Final",year:"Nov 2024",ico:"📘",color:"rgba(255,68,68,.1)",icoBg:"rgba(255,68,68,.15)"},
+  {sub:"CA Final",year:"May 2024",ico:"📘",color:"rgba(255,68,68,.1)",icoBg:"rgba(255,68,68,.15)"},
+];
+
+const ICAI_DATA=[
+  {dot:"#2B7FFF",dt:"Dec 2024",tag:"Exam",title:"CA Final May 2025 Dates Announced",desc:"Exam forms available January 2025. Check ICAI portal for city-wise centre schedule."},
+  {dot:"#1DB954",dt:"Nov 2024",tag:"Update",title:"New Ind AS Amendments from April 2025",desc:"CA Final FR students must update study material for new Ind AS amendments."},
+  {dot:"#F5A623",dt:"Nov 2024",tag:"Placement",title:"Campus Placement 2024-25 Begins December",desc:"100+ companies including Big 4, banks, PSUs & MNCs participating."},
+  {dot:"#A855F7",dt:"Oct 2024",tag:"CPE",title:"CPE Hours Requirements Updated for Members",desc:"Both structured and unstructured learning count towards CPE compliance."},
+  {dot:"#FF4444",dt:"Oct 2024",tag:"Study",title:"Revised CA Intermediate Study Material",desc:"Updated for Companies Act 2013 and GST amendments. Available on ICAI gateway."},
+  {dot:"#00C9E0",dt:"Sep 2024",tag:"Results",title:"CA Foundation Sep 2024 Results Declared",desc:"Check at icaiexam.icai.org. Subject-wise analysis also published."},
+];
+
+const JOBS_DATA=[
+  {icon:"🏢",title:"Audit Associate",co:"Big 4 — Deloitte, EY, KPMG, PwC",sal:"₹7–12 LPA",type:"Full-time",loc:"Mumbai/Delhi/BLR",elig:"CA Final Qualified",desc:"Statutory audits, internal audits and financial reviews for listed companies.",tag:"Audit",tc:"var(--blue)"},
+  {icon:"💼",title:"Tax Consultant",co:"CA Firms / Corporates",sal:"₹4–10 LPA",type:"Full-time",loc:"Pan India",elig:"CA Inter / Final",desc:"Direct & indirect tax compliance, GST returns and advisory services.",tag:"Tax",tc:"var(--green)"},
+  {icon:"📊",title:"Finance Manager",co:"MNCs / Listed Companies",sal:"₹10–20 LPA",type:"Full-time",loc:"Metro Cities",elig:"CA Final Qualified",desc:"Financial reporting, budgeting, forecasting and internal controls management.",tag:"Finance",tc:"var(--cyan)"},
+  {icon:"📚",title:"Article Assistant",co:"Practicing CA Firms",sal:"₹2K–15K/month",type:"Articleship",loc:"All India",elig:"Foundation Cleared",desc:"Mandatory 3-year training in audit, taxation, accounts and business law.",tag:"Training",tc:"var(--gold)"},
+  {icon:"🔍",title:"Forensic Auditor",co:"Consulting Firms / Banks",sal:"₹8–18 LPA",type:"Full-time",loc:"Mumbai/Delhi",elig:"CA Final + Cert.",desc:"Financial fraud investigation, forensic accounting and litigation support.",tag:"Forensic",tc:"var(--red)"},
+  {icon:"🏛️",title:"IRS Officer (UPSC)",co:"Government of India",sal:"₹56K–₹2.5L/mo",type:"Govt. Job",loc:"Pan India",elig:"CA / UPSC Qualified",desc:"Tax administration under CBDT/CBIC via UPSC Civil Services examination.",tag:"Govt",tc:"var(--purple)"},
+];
+
+const TESTS_DATA=[
+  {name:"Accounting Mock Test 1",sub:"Foundation",date:"28 Feb 2025",score:72,correct:18,total:25},
+  {name:"GST Practice Test",sub:"Final",date:"25 Feb 2025",score:84,correct:21,total:25},
+  {name:"Income Tax MCQ Set",sub:"Intermediate",date:"20 Feb 2025",score:56,correct:14,total:25},
+  {name:"Auditing Revision Test",sub:"Intermediate",date:"15 Feb 2025",score:68,correct:17,total:25},
+];
+
+// ════ STATE ════
+let pg=JSON.parse(localStorage.getItem('camg_pg')||'{"q":0,"c":0,"f":0}');
+function savePg(){localStorage.setItem('camg_pg',JSON.stringify(pg));}
+let prevPg='pg-home';
+let qAns={},qIdx=0,qFilt=[...QB],qDone=false;
+let fcFilt='All';
+const reviewed=new Set();
+let notesMode='short';
+let chatInited=false;
+let curLv='Foundation';
+
+// ════ NAVIGATION ════
+function goto(id){
+  const cur=document.querySelector('.page.active');
+  prevPg=cur?cur.id:'pg-home';
+  cur.classList.remove('active');
+  const nxt=document.getElementById(id);
+  nxt.classList.add('active');
+  syncNavTabs(id);
+  if(id==='pg-askai'&&!chatInited){initChat();chatInited=true;}
+  if(id==='pg-quiz'){renderQFilters();renderQSlides();}
+  if(id==='pg-flashcards'){renderFCFilters();renderFC();}
+  if(id==='pg-study')renderStudy();
+  if(id==='pg-papers')renderPapers();
+  if(id==='pg-icai')renderICAI();
+  if(id==='pg-jobs')renderJobs();
+  if(id==='pg-tests')renderTests();
+  if(id==='pg-profile')syncProfile();
+  if(id==='pg-notes')renderNotes();
+  nxt.scrollTop=0;
+}
+function goBack(){goto(prevPg==='pg-home'?'pg-home':prevPg);prevPg='pg-home';}
+function navTab(name){
+  const m={home:'pg-home',tests:'pg-tests',askai:'pg-askai',jobs:'pg-jobs',profile:'pg-profile'};
+  goto(m[name]);
+}
+function syncNavTabs(id){
+  document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('active'));
+  const m={'pg-home':'ntab-home','pg-tests':'ntab-tests','pg-askai':'ntab-help','pg-jobs':'ntab-jobs','pg-profile':'ntab-profile'};
+  const t=m[id];if(t)document.getElementById(t).classList.add('active');
+}
+function openNotes(mode){notesMode=mode;goto('pg-notes');switchNotes(mode);}
+function switchNotes(mode){
+  notesMode=mode;
+  document.getElementById('ntt-s').classList.toggle('on',mode==='short');
+  document.getElementById('ntt-l').classList.toggle('on',mode==='long');
+  document.getElementById('notes-title').textContent=mode==='short'?'Short Notes':'Long Notes';
+  renderNotes();
+}
+
+// ════ LEVEL ════
+function toggleDrop(){document.getElementById('lv-drop').classList.toggle('open');}
+function setLv(lv){
+  curLv=lv;
+  document.getElementById('lv-label').textContent=lv;
+  document.getElementById('lv-drop').classList.remove('open');
+  document.querySelectorAll('.ldrop-opt').forEach(o=>o.classList.toggle('sel',o.textContent.trim()===lv));
+  document.getElementById('prof-lv').textContent='CA '+lv+' · Preparing';
+  showToast('Level: '+lv);
+}
+document.addEventListener('click',e=>{if(!e.target.closest('.level-btn')&&!e.target.closest('.level-drop'))document.getElementById('lv-drop').classList.remove('open');});
+
+// ════ CHAT ════
+const KB={
+  "gst":"<strong>GST (Goods & Services Tax)</strong> — from <strong>1 July 2017</strong><br><br>📌 Rates: 0%, 5%, 12%, 18%, 28%<br>📌 CGST+SGST = Intra-state | IGST = Inter-state<br>📌 Registration: ₹40L (goods), ₹20L (services)<br>📌 ITC: Claim GST on inputs to reduce output tax<br>📌 Blocked Credits Sec 17(5): Motor vehicles, food, beauty<br>📌 Returns: GSTR-1 (outward), GSTR-3B (summary), GSTR-9 (annual)",
+  "income tax":"<strong>Income Tax Act 1961</strong><br><br><strong>5 Heads of Income:</strong><br>1️⃣ Salary<br>2️⃣ House Property<br>3️⃣ Business/Profession<br>4️⃣ Capital Gains (STCG/LTCG)<br>5️⃣ Other Sources<br><br>📌 Sec 80C: ₹1.5L — LIC, PPF, ELSS, NSC<br>📌 Sec 80D: Health insurance premium<br>📌 Sec 24(b): Home loan interest ₹2L<br>📌 Advance Tax: If liability > ₹10,000",
+  "audit":"<strong>Key SA Standards:</strong><br><br>📌 SA 200: Overall objectives<br>📌 SA 240: Fraud detection<br>📌 SA 315: Risk assessment<br>📌 SA 570: Going Concern<br>📌 SA 700: Forming opinion<br>📌 SA 705: Modified opinions<br><br><strong>Audit Opinions:</strong><br>✅ Unmodified (Clean)<br>⚠️ Qualified — except for<br>❌ Adverse — material & pervasive<br>🚫 Disclaimer — unable to form opinion",
+  "accounting":"<strong>Golden Rules:</strong><br><br>📌 Personal A/c: Debit Receiver, Credit Giver<br>📌 Real A/c: Debit Comes In, Credit Goes Out<br>📌 Nominal A/c: Debit Expenses, Credit Incomes<br><br><strong>Key Concepts:</strong> Accrual, Matching, Going Concern, Prudence, Consistency",
+  "company law":"<strong>Companies Act 2013:</strong><br><br>📌 Private Co: 2–200 members, min 2 directors<br>📌 Public Co: Min 7 members, min 3 directors<br>📌 AGM: Within 6 months of FY end<br><br>Key Sections: Sec 149 (Directors), Sec 96 (AGM), Sec 139 (Auditors), Sec 166 (Duties)",
+  "financial management":"<strong>Financial Management:</strong><br><br>📌 Accept if NPV > 0 | IRR > Cost of Capital<br>📌 NWC = Current Assets − Current Liabilities<br>📌 OL = Contribution ÷ EBIT<br>📌 FL = EBIT ÷ EBT<br>📌 WACC = weighted cost of all capital sources",
+  "articleship":"<strong>CA Articleship:</strong><br><br>📌 3 years mandatory training in CA firm<br>📌 Areas: Audit, Tax, Accounts, Law<br>📌 Appear CA Final in last 6 months<br>📌 Transfer allowed once per ICAI rules<br>📌 Complete ITT & Orientation before starting",
+  "ca course":"<strong>CA Course — 3 Levels:</strong><br><br>📘 Foundation: 4 subjects, after 10+2<br>📗 Intermediate: 6 subjects + 3-yr articleship<br>📕 Final: 6 subjects, after articleship<br><br>📌 ~5 years total | 40% per subject, 50% aggregate",
+  "depreciation":"<strong>Depreciation:</strong><br><br>📌 SLM: Fixed amount = (Cost − Residual) ÷ Life<br>📌 WDV: % on book value, higher in early years<br>📌 Income Tax: WDV mandatory (Block of Assets)<br>📌 Companies Act: Schedule II specifies useful life",
+  "tds":"<strong>TDS Key Sections:</strong><br><br>📌 Sec 192: Salary — slab rates<br>📌 Sec 194A: Interest — 10%<br>📌 Sec 194J: Professional — 10%<br>📌 Sec 194C: Contractor — 1%/2%<br>📌 Sec 194I: Rent — 10%/20%<br><br>Deposit by 7th of next month. Quarterly TDS returns required.",
+  "default":"👋 I can help you with:<br><br>📌 GST & Indirect Tax<br>📌 Income Tax, TDS, Capital Gains<br>📌 Auditing & SA Standards<br>📌 Accounting & Golden Rules<br>📌 Company Law<br>📌 Financial Management & FM<br>📌 CA Course & Articleship<br>📌 Cost Accounting & BEP<br><br>💡 Use ICAI official material & solve past 5 years papers!"
+};
+function getReply(q){
+  const ql=q.toLowerCase();
+  for(const[k,v]of Object.entries(KB)){if(k!=='default'&&ql.includes(k))return v;}
+  if(ql.includes('bep')||ql.includes('break'))return'<strong>Break-Even Point:</strong><br><br>📌 BEP(units) = Fixed Costs ÷ Contribution per unit<br>📌 BEP(₹) = Fixed Costs ÷ P/V Ratio<br>📌 Contribution = Sales − Variable Costs<br>📌 P/V Ratio = Contribution ÷ Sales × 100<br><br>At BEP: Total Revenue = Total Cost (zero profit/loss)';
+  if(ql.includes('exam')||ql.includes('pass')||ql.includes('prepare'))return'📚 <strong>CA Exam Prep Tips:</strong><br><br>✅ ICAI study material is the Bible<br>✅ Solve ICAI Practice Manual<br>✅ Past 5 years papers — must do<br>✅ Mock tests 2-3 months before exam<br><br>📌 Min: 40% per subject, 50% aggregate per group';
+  if(ql.includes('golden'))return KB['accounting'];
+  return KB['default'];
+}
+function initChat(){
+  addBub('ai','👋 <strong>Namaste! I am CA Mentor AI.</strong><br><br>Ask me anything about CA — GST, Income Tax, Auditing, Accounting, Company Law, Financial Management, Articleship and more!');
+}
+function addBub(type,text){
+  const el=document.getElementById('chat-msgs');
+  const time=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  const isAI=type==='ai';
+  const d=document.createElement('div');
+  d.innerHTML=`${isAI?'<div class="ai-lbl">CA Mentor AI</div>':''}<div class="bub ${type}">${text}</div><div class="bub-time" style="text-align:${isAI?'left':'right'}">${time}</div>`;
+  el.appendChild(d);el.scrollTop=el.scrollHeight;
+}
+function showTyping(){
+  const el=document.getElementById('chat-msgs');
+  const d=document.createElement('div');d.id='tbd';
+  d.innerHTML='<div class="ai-lbl">CA Mentor AI</div><div class="bub ai"><div class="typing-wrap"><div class="td"></div><div class="td"></div><div class="td"></div></div></div>';
+  el.appendChild(d);el.scrollTop=el.scrollHeight;
+}
+function sendChat(){
+  const inp=document.getElementById('chat-inp');const t=inp.value.trim();if(!t)return;
+  addBub('user',t);inp.value='';
+  document.getElementById('sugg-chips').style.display='none';
+  showTyping();
+  setTimeout(()=>{const tb=document.getElementById('tbd');if(tb)tb.remove();addBub('ai',getReply(t));},700+Math.random()*500);
+}
+function askChip(q){document.getElementById('chat-inp').value=q;sendChat();}
+
+// ════ QUIZ ════
+function renderQFilters(){
+  document.getElementById('q-filter').innerHTML=['All','Foundation','Intermediate','Final'].map(l=>`<button class="qfbtn ${l==='All'?'on':''}" onclick="filterQ('${l}',this)">${l}</button>`).join('');
+}
+function filterQ(lv,btn){
+  document.querySelectorAll('#q-filter .qfbtn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+  qFilt=lv==='All'?[...QB]:QB.filter(q=>q.lv===lv);
+  qIdx=0;qAns={};qDone=false;renderQSlides();
+}
+function renderQSlides(){
+  document.getElementById('q-tot').textContent=qFilt.length;
+  document.getElementById('q-slides').innerHTML=qFilt.map((q,i)=>`
+    <div id="qs-${i}" style="display:${i===0?'block':'none'}">
+      <div class="q-card">
+        <div class="q-tags"><span class="qtag">${q.sub}</span><span class="qtag">${q.lv}</span></div>
         <div class="q-text">Q${i+1}. ${q.q}</div>
-        ${q.opts.map((o,j)=>`
-          <div class="opt" id="opt-${q.id}-${j}" onclick="selectOpt(${q.id},${j})">
-            <span class="opt-letter">${['A','B','C','D'][j]}</span>
-            <span class="opt-text">${o}</span>
-          </div>`).join('')}
-        <div class="explanation-box" id="exp-${q.id}"><strong>💡 Explanation:</strong> ${q.exp}</div>
+        ${q.opts.map((o,j)=>`<div class="q-opt" id="qo-${q.id}-${j}" onclick="pickAns(${q.id},${j})">
+          <span class="opt-l">${['A','B','C','D'][j]}</span>
+          <span style="font-size:13px;flex:1">${o}</span>
+        </div>`).join('')}
+        <div class="exp-box" id="exp-${q.id}">💡 ${q.exp}</div>
       </div>
     </div>`).join('');
-  updateQuizNav();
+  updateQNav();
 }
-
-function selectOpt(qid, idx) {
-  if (quizSubmitted) return;
-  quizAnswers[qid] = idx;
-  const q = quizFiltered.find(x=>x.id===qid);
-  quizFiltered.forEach((qq,i)=>{
-    if(qq.id===qid){
-      qq.opts.forEach((_,j)=>{
-        const el = document.getElementById(`opt-${qid}-${j}`);
-        if(el){ el.className='opt'; if(j===idx){ el.className='opt selected'; } }
-      });
-    }
-  });
+function pickAns(qid,idx){
+  if(qDone)return;qAns[qid]=idx;
+  QB.forEach(q=>{if(q.id===qid)q.opts.forEach((_,j)=>{const e=document.getElementById(`qo-${qid}-${j}`);if(e){e.className='q-opt';if(j===idx)e.className='q-opt sel';}});});
 }
-
-function quizNav(dir) {
-  document.getElementById('qs-'+quizIdx).style.display='none';
-  quizIdx = Math.max(0, Math.min(quizFiltered.length-1, quizIdx+dir));
-  document.getElementById('qs-'+quizIdx).style.display='block';
-  updateQuizNav();
+function qNav(d){
+  document.getElementById('qs-'+qIdx).style.display='none';
+  qIdx=Math.max(0,Math.min(qFilt.length-1,qIdx+d));
+  document.getElementById('qs-'+qIdx).style.display='block';
+  updateQNav();
 }
-
-function updateQuizNav() {
-  document.getElementById('q-cur').textContent = quizIdx+1;
-  const prog = document.getElementById('q-progress');
-  if(prog) prog.style.width = (quizIdx/Math.max(1,quizFiltered.length-1)*100)+'%';
-  document.getElementById('btn-prev').style.display = quizIdx>0?'inline-flex':'none';
-  const isLast = quizIdx===quizFiltered.length-1;
-  document.getElementById('btn-next').style.display = isLast?'none':'inline-flex';
-  document.getElementById('btn-submit').style.display = isLast?'inline-flex':'none';
+function updateQNav(){
+  document.getElementById('q-cur').textContent=qIdx+1;
+  const b=document.getElementById('q-bar');if(b)b.style.width=(qIdx/Math.max(1,qFilt.length-1)*100)+'%';
+  document.getElementById('q-prev').style.display=qIdx>0?'inline-flex':'none';
+  const last=qIdx===qFilt.length-1;
+  document.getElementById('q-next').style.display=last?'none':'inline-flex';
+  document.getElementById('q-sub').style.display=last?'inline-flex':'none';
 }
-
-function submitQuiz() {
-  quizSubmitted = true;
-  let correct = 0;
-  quizFiltered.forEach(q => {
-    const selected = quizAnswers[q.id];
-    q.opts.forEach((_,j)=>{
-      const el = document.getElementById(`opt-${q.id}-${j}`);
-      if(!el) return;
-      if(j===q.ans){ el.className='opt correct'; }
-      else if(j===selected && j!==q.ans){ el.className='opt wrong'; }
-      else { el.className='opt'; }
+function submitQ(){
+  qDone=true;let cor=0;
+  qFilt.forEach(q=>{
+    const s=qAns[q.id];
+    q.opts.forEach((_,j)=>{const e=document.getElementById(`qo-${q.id}-${j}`);if(!e)return;
+      if(j===q.ans)e.className='q-opt ok';else if(j===s&&j!==q.ans)e.className='q-opt no';else e.className='q-opt';
     });
-    const exp = document.getElementById(`exp-${q.id}`);
-    if(exp) exp.style.display='block';
-    if(selected===q.ans) correct++;
+    const ex=document.getElementById(`exp-${q.id}`);if(ex)ex.style.display='block';
+    if(s===q.ans)cor++;
   });
-
-  // Update progress
-  progress.attempted += quizFiltered.length;
-  progress.correct += correct;
-  saveProgress();
-
-  const total = quizFiltered.length;
-  const pct = Math.round(correct/total*100);
-  document.getElementById('quiz-slides').style.display='none';
-  document.getElementById('quiz-nav').style.display='none';
-  const res = document.getElementById('quiz-result');
-  res.style.display='block';
-  document.getElementById('result-score').textContent = pct+'%';
-  document.getElementById('result-score').style.color = pct>=70?'var(--green)':pct>=40?'var(--gold)':'var(--red)';
-  document.getElementById('result-emoji').textContent = pct>=70?'🎉':pct>=40?'📚':'💪';
-  document.getElementById('result-msg').textContent = `You got ${correct} out of ${total} questions correct.`;
-  document.getElementById('r-correct').textContent = correct;
-  document.getElementById('r-wrong').textContent = total-correct;
-  document.getElementById('r-pct').textContent = pct+'%';
+  pg.q+=qFilt.length;pg.c+=cor;savePg();
+  const tot=qFilt.length,pct=Math.round(cor/tot*100);
+  document.getElementById('q-slides').style.display='none';
+  document.getElementById('q-nav').style.display='none';
+  const res=document.getElementById('q-result');res.style.display='block';
+  document.getElementById('r-pct').textContent=pct+'%';
+  document.getElementById('r-pct').style.color=pct>=70?'var(--green)':pct>=40?'var(--gold)':'var(--red)';
+  document.getElementById('r-emo').textContent=pct>=70?'🎉':pct>=40?'📚':'💪';
+  document.getElementById('r-msg').textContent=`You got ${cor} out of ${tot} correct!`;
+  document.getElementById('r-c').textContent=cor;
+  document.getElementById('r-w').textContent=tot-cor;
+  document.getElementById('r-s').textContent=pct+'%';
+}
+function resetQ(){
+  qIdx=0;qAns={};qDone=false;
+  document.getElementById('q-result').style.display='none';
+  document.getElementById('q-slides').style.display='block';
+  document.getElementById('q-nav').style.display='flex';
+  renderQSlides();
 }
 
-function resetQuiz() {
-  quizIdx=0; quizAnswers={}; quizSubmitted=false;
-  document.getElementById('quiz-result').style.display='none';
-  document.getElementById('quiz-slides').style.display='block';
-  document.getElementById('quiz-nav').style.display='flex';
-  renderQuizSlides();
+// ════ FLASHCARDS ════
+function renderFCFilters(){
+  const subs=['All',...new Set(FC_DATA.map(c=>c.sub))];
+  document.getElementById('fc-filter').innerHTML=subs.map(s=>`<button class="qfbtn ${s==='All'?'on':''}" onclick="filterFC('${s}',this)">${s}</button>`).join('');
 }
-
-// ═══════════════════════════════════════
-// FLASHCARDS
-// ═══════════════════════════════════════
-function renderFlashcardFilters() {
-  const subjects = ['All', ...new Set(FLASHCARDS.map(f=>f.subject))];
-  const el = document.getElementById('fc-filters');
-  el.innerHTML = subjects.map(s=>`<button class="btn btn-sm ${s==='All'?'btn-blue':'btn-ghost'}" onclick="filterFC('${s}',this)">${s}</button>`).join('');
+function filterFC(s,btn){
+  fcFilt=s;
+  document.querySelectorAll('#fc-filter .qfbtn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+  renderFC();
 }
-
-function filterFC(subject, btn) {
-  activeFcFilter = subject;
-  document.querySelectorAll('#fc-filters .btn').forEach(b=>b.className='btn btn-sm btn-ghost');
-  btn.className='btn btn-sm btn-blue';
-  renderFlashcardGrid();
-}
-
-const reviewedCards = new Set();
-
-function renderFlashcardGrid() {
-  const el = document.getElementById('fc-grid');
-  const cards = activeFcFilter==='All' ? FLASHCARDS : FLASHCARDS.filter(f=>f.subject===activeFcFilter);
-  el.innerHTML = cards.map(c=>`
-    <div class="fc-wrap ${reviewedCards.has(c.id)?'':''}">
-      <div class="fc-inner" id="fc-inner-${c.id}" onclick="flipFC(${c.id})">
-        <div class="fc-face fc-front" style="background:${c.color};">
-          <div class="fc-subject">${c.subject}</div>
+function renderFC(){
+  const cards=fcFilt==='All'?FC_DATA:FC_DATA.filter(c=>c.sub===fcFilt);
+  document.getElementById('fc-grid').innerHTML=cards.map(c=>`
+    <div class="fc-wrap-outer ${reviewed.has(c.id)?'flipped':''}">
+      <div class="fc-inner" onclick="flipFC(${c.id},this.parentElement)">
+        <div class="fc-face fc-front" style="background:${c.bg}">
+          <div class="fc-sub">${c.sub}</div>
           <div class="fc-q">${c.q}</div>
-          <div class="fc-hint"><i class="fas fa-hand-pointer"></i> Click to flip</div>
+          <div class="fc-hint">👆 Tap to flip</div>
         </div>
         <div class="fc-face fc-back">
-          <div class="fc-subject" style="color:var(--text2);">Answer</div>
+          <div class="fc-sub" style="color:var(--text2)">Answer</div>
           <div class="fc-a">${c.a}</div>
-          <button class="fc-reviewed-btn ${reviewedCards.has(c.id)?'done':''}" onclick="event.stopPropagation();markFC(${c.id})">${reviewedCards.has(c.id)?'✓ Reviewed':'Mark Reviewed'}</button>
+          <button class="fc-rev ${reviewed.has(c.id)?'done':''}" onclick="event.stopPropagation();markFC(${c.id})">${reviewed.has(c.id)?'✓ Reviewed':'Mark Reviewed'}</button>
         </div>
       </div>
     </div>`).join('');
 }
-
-function flipFC(id) {
-  const wrap = document.getElementById('fc-inner-'+id).parentElement;
-  wrap.classList.toggle('flipped');
+function flipFC(id,wrap){wrap.classList.toggle('flipped');}
+function markFC(id){
+  if(reviewed.has(id))return;
+  reviewed.add(id);pg.f++;savePg();
+  renderFC();showToast('Marked as reviewed!');
 }
 
-function markFC(id) {
-  if (reviewedCards.has(id)) return;
-  reviewedCards.add(id);
-  progress.flashcards++;
-  saveProgress(); updateStats();
-  renderFlashcardGrid();
+// ════ NOTES ════
+function renderNotes(){
+  const data=notesMode==='short'?SHORT_NOTES:LONG_NOTES;
+  document.getElementById('notes-list').innerHTML=data.map(n=>`
+    <div class="note-card" onclick="openSheet('${n.title}',${JSON.stringify(n.content).replace(/</g,'\\u003c')})">
+      <div class="note-top">
+        <div class="note-title">${n.icon} ${n.title}</div>
+        <span class="nbadge" style="background:${n.bc};color:${n.btc}">${n.badge}</span>
+      </div>
+      <div class="note-desc">${n.desc}</div>
+      <div class="note-footer"><i class="fas fa-book-open"></i> Tap to read full notes</div>
+    </div>`).join('');
 }
 
-// ═══════════════════════════════════════
-// JOBS
-// ═══════════════════════════════════════
-function renderJobs() {
-  const tags = ['All', ...new Set(JOBS.map(j=>j.tag))];
-  const filterEl = document.getElementById('job-filters');
-  filterEl.innerHTML = tags.map(t=>`<button class="btn btn-sm ${t===activeJobTag?'btn-blue':'btn-ghost'}" onclick="filterJobs('${t}',this)">${t}</button>`).join('');
+// ════ STUDY ════
+function renderStudy(){
+  document.getElementById('study-list').innerHTML=STUDY_MATS.map(s=>`
+    <div class="study-card" onclick="showToast('Opening ${s.title}')">
+      <div class="study-top-bar" style="background:${s.color}"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div class="study-title">${s.icon} ${s.title}</div>
+        <span class="nbadge" style="background:${s.bc};color:${s.btc};flex-shrink:0;margin-left:8px">${s.badge}</span>
+      </div>
+      <div class="study-desc">${s.desc}</div>
+    </div>`).join('');
+}
 
-  const filtered = activeJobTag==='All' ? JOBS : JOBS.filter(j=>j.tag===activeJobTag);
-  const grid = document.getElementById('jobs-grid');
-  grid.innerHTML = filtered.map(j=>`
+// ════ PAPERS ════
+function renderPapers(){
+  document.getElementById('papers-list').innerHTML=PAPERS_DATA.map(p=>`
+    <div class="paper-card" onclick="showToast('Downloading ${p.sub} ${p.year}...')">
+      <div class="paper-ico" style="background:${p.icoBg}">${p.ico}</div>
+      <div class="paper-info">
+        <div class="paper-title">${p.sub}</div>
+        <div class="paper-meta">${p.year} Question Paper</div>
+      </div>
+      <i class="fas fa-download" style="color:var(--blue);font-size:18px;margin-left:auto"></i>
+    </div>`).join('');
+}
+
+// ════ ICAI ════
+function renderICAI(){
+  document.getElementById('icai-list').innerHTML=ICAI_DATA.map(u=>`
+    <div class="icai-card">
+      <div class="icai-dot" style="background:${u.dot};box-shadow:0 0 8px ${u.dot}80"></div>
+      <div style="flex:1">
+        <div class="icai-dt">${u.dt} · ${u.tag}</div>
+        <div class="icai-ttl">${u.title}</div>
+        <div class="icai-desc">${u.desc}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ════ JOBS ════
+function renderJobs(){
+  document.getElementById('jobs-list').innerHTML=JOBS_DATA.map(j=>`
     <div class="job-card">
-      <span class="job-icon">${j.icon}</span>
       <div class="job-top">
-        <div>
-          <div class="job-title">${j.title}</div>
-          <div class="job-co">${j.company}</div>
-        </div>
-        <span class="tag tag-blue">${j.tag}</span>
+        <div class="job-ico">${j.icon}</div>
+        <div style="flex:1"><div class="job-title">${j.title}</div><div class="job-co">${j.co}</div></div>
+        <span class="nbadge" style="background:rgba(255,255,255,.06);color:${j.tc};flex-shrink:0">${j.tag}</span>
       </div>
-      <div class="job-desc">${j.desc}</div>
-      <div class="job-meta">
-        <div class="job-meta-item"><div class="job-meta-label">Type</div><div class="job-meta-val">${j.type}</div></div>
-        <div class="job-meta-item"><div class="job-meta-label">Location</div><div class="job-meta-val">${j.location}</div></div>
-        <div class="job-meta-item" style="background:rgba(0,200,150,0.08);"><div class="job-meta-label" style="color:var(--green);">💰 Salary</div><div class="job-meta-val" style="color:var(--green);">${j.salary}</div></div>
-        <div class="job-meta-item" style="background:rgba(27,91,247,0.08);"><div class="job-meta-label" style="color:var(--blue2);">Eligibility</div><div class="job-meta-val" style="color:var(--blue2);font-size:0.78rem;">${j.eligibility}</div></div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:10px">${j.desc}</div>
+      <div class="jmeta">
+        <div class="jmi"><div class="jmi-lbl">Type</div><div class="jmi-val">${j.type}</div></div>
+        <div class="jmi"><div class="jmi-lbl">Location</div><div class="jmi-val">${j.loc}</div></div>
+        <div class="jmi" style="background:rgba(29,185,84,.05)"><div class="jmi-lbl" style="color:var(--green)">💰 Salary</div><div class="jmi-val" style="color:var(--green)">${j.sal}</div></div>
+        <div class="jmi" style="background:rgba(43,142,240,.05)"><div class="jmi-lbl" style="color:var(--blue)">Eligibility</div><div class="jmi-val" style="color:var(--blue);font-size:11px">${j.elig}</div></div>
       </div>
-      <button class="btn btn-ghost btn-sm" style="width:100%;" onclick="alert('Visit icai.org or company career pages to apply.')"><i class="fas fa-arrow-right"></i> Learn More</button>
+      <button onclick="showToast('Visit icai.org to apply')" style="width:100%;padding:11px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;color:var(--text2);font-size:13px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">Learn More →</button>
     </div>`).join('');
 }
 
-function filterJobs(tag, btn) {
-  activeJobTag = tag;
-  document.querySelectorAll('#job-filters .btn').forEach(b=>b.className='btn btn-sm btn-ghost');
-  btn.className='btn btn-sm btn-blue';
-  renderJobs();
-}
-
-// ═══════════════════════════════════════
-// ICAI UPDATES
-// ═══════════════════════════════════════
-function renderICAI() {
-  document.getElementById('icai-updates').innerHTML = ICAI_UPDATES.map(u=>`
-    <div class="update-item">
-      <div class="update-dot" style="background:${u.dot};box-shadow:0 0 8px ${u.dot}80;"></div>
-      <div style="flex:1;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;">
-          <span class="tag tag-blue" style="font-size:0.72rem;">${u.tag}</span>
-          <span class="update-date">${u.date}</span>
-        </div>
-        <div class="update-title">${u.title}</div>
-        <div class="update-desc">${u.desc}</div>
+// ════ TESTS ════
+function renderTests(){
+  document.getElementById('tests-list').innerHTML=TESTS_DATA.map(t=>`
+    <div class="test-card">
+      <div class="test-top">
+        <div class="test-name">${t.name}</div>
+        <span class="nbadge" style="background:${t.score>=70?'rgba(29,185,84,.15)':t.score>=50?'rgba(245,166,35,.15)':'rgba(255,68,68,.15)'};color:${t.score>=70?'var(--green)':t.score>=50?'var(--gold)':'var(--red)'}">${t.score}%</span>
       </div>
-      <a href="https://www.icai.org" target="_blank" class="btn btn-ghost btn-sm" style="flex-shrink:0;white-space:nowrap;font-size:0.75rem;"><i class="fas fa-arrow-right"></i></a>
+      <div class="test-meta">${t.sub} · ${t.date} · ${t.correct}/${t.total} correct</div>
+      <div class="tbar-wrap"><div class="tbar" style="width:${t.score}%;background:${t.score>=70?'var(--green)':t.score>=50?'var(--gold)':'var(--red)'}"></div></div>
+      <div class="test-footer"><span>${t.correct} correct</span><span>${t.total-t.correct} wrong</span></div>
     </div>`).join('');
 }
 
-// ═══════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════
-renderStudy();
-renderQuizFilters();
-renderQuizSlides();
-renderFlashcardFilters();
-renderFlashcardGrid();
-renderJobs();
-renderICAI();
-updateStats();
+// ════ PROFILE ════
+function syncProfile(){
+  const acc=pg.q?Math.round(pg.c/pg.q*100):null;
+  document.getElementById('ps-q').textContent=pg.q;
+  document.getElementById('ps-f').textContent=pg.f;
+  document.getElementById('ps-a').textContent=acc!==null?acc+'%':'—';
+}
+function resetProg(){pg={q:0,c:0,f:0};savePg();syncProfile();showToast('Progress reset!');}
+
+// ════ SHEET ════
+function openSheet(title,content){
+  document.getElementById('sheet-title').textContent=title;
+  document.getElementById('sheet-body').innerHTML=content;
+  document.getElementById('sheet-ov').classList.add('open');
+}
+function closeSheet(){document.getElementById('sheet-ov').classList.remove('open');}
+
+// ════ TOAST ════
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+// ════ INIT ════
+renderNotes();
 </script>
 </body>
-</html>
+</html>"""
+
+html = html.replace("LOGO_URI", logo_uri)
+
+with open('/mnt/user-data/outputs/ca_mentor_app.html', 'w', encoding='utf-8') as f:
+    f.write(html)
+
+print(f"Done! File size: {len(html)/1024:.1f} KB")
+EOF
