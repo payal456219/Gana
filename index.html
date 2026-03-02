@@ -950,30 +950,6 @@ Formatting rules (IMPORTANT):
         sendBtn.disabled=false;
         inp.focus();
       });
-
-   from flask import Flask, request, jsonify, render_template_string
-
-app = Flask(__name__)
-
-# Simple AI logic based on keywords
-def get_ai_response(user_message):
-    user_message = user_message.lower()
-    if 'hello' in user_message or 'hi' in user_message:
-        return "Hello! How can I assist you today?"
-    elif 'help' in user_message:
-        return "I'm here to help! What do you need assistance with?"
-    elif 'bye' in user_message or 'exit' in user_message:
-        return "Goodbye! Have a wonderful day!"
-    else:
-        return "I’m not sure how to respond to that. Could you ask something else?"
-
-@app.route('/')
-def index():
-    # HTML content in a string
-    html_content = """
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Chatbot</title>
