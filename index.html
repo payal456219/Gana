@@ -1,12 +1,4 @@
-python3 << 'EOF'
-import base64
-
-with open('/mnt/user-data/uploads/Screenshot_2026_0301_225538.jpg','rb') as f:
-    logo_b64 = base64.b64encode(f.read()).decode()
-
-logo_uri = f"data:image/jpeg;base64,{logo_b64}"
-
-html = r"""<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -986,11 +978,3 @@ renderNotes();
 </script>
 </body>
 </html>"""
-
-html = html.replace("LOGO_URI", logo_uri)
-
-with open('/mnt/user-data/outputs/ca_mentor_app.html', 'w', encoding='utf-8') as f:
-    f.write(html)
-
-print(f"Done! File size: {len(html)/1024:.1f} KB")
-EOF
