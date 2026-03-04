@@ -117,79 +117,28 @@ body{
 .ntab .nl{font-size:11px;font-weight:600;color:var(--text2);transition:color .2s;text-align:center;line-height:1.2;}
 .ntab.active .ni,.ntab.active .nl{color:var(--blue);}
 
-/* CHAT - Crisp Style */
-.chat-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#fff;}
-.crisp-hdr{background:linear-gradient(135deg,#1A7EF0,#0F5DC9);padding:18px 16px 14px;display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;}
-.crisp-hdr-tabs{display:flex;gap:0;background:rgba(0,0,0,.18);border-radius:50px;padding:3px;margin-bottom:8px;}
-.crisp-tab{padding:6px 18px;border-radius:50px;font-size:13px;font-weight:700;color:rgba(255,255,255,.6);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;}
-.crisp-tab.active{background:rgba(0,0,0,.28);color:#fff;}
-.crisp-hdr-title{font-size:15px;font-weight:700;color:#fff;text-align:center;}
-.crisp-hdr-title span{font-weight:400;opacity:.85;}
-.chat-msgs{flex:1;overflow-y:auto;padding:0;display:flex;flex-direction:column;scrollbar-width:thin;scrollbar-color:#ddd transparent;background:#f7f8fc;}
-.chat-msgs::-webkit-scrollbar{width:4px;}
-.chat-msgs::-webkit-scrollbar-thumb{background:#ddd;border-radius:4px;}
-.chat-inner{display:flex;flex-direction:column;gap:0;padding:16px 12px 10px;margin-top:auto;}
-/* User messages */
-.msg-row{display:flex;flex-direction:column;margin-bottom:4px;}
-.msg-row.user-row{align-items:flex-end;}
-.msg-row.ai-row{align-items:flex-start;}
-.user-lbl{font-size:11px;color:#aaa;margin-bottom:4px;margin-right:4px;}
-.bub{max-width:82%;padding:11px 15px;font-size:14px;line-height:1.6;}
-.bub.user{background:#1A7EF0;color:#fff;border-radius:18px 18px 4px 18px;margin-bottom:2px;}
-.bub.user+.bub.user{border-radius:18px 4px 4px 18px;margin-top:3px;}
-.bub-time{font-size:10px;color:#bbb;margin-top:3px;margin-bottom:8px;}
-.msg-row.user-row .bub-time{text-align:right;display:flex;align-items:center;justify-content:flex-end;gap:4px;}
-.tick{color:#aaa;font-size:11px;}
-/* AI / Bot messages */
-.ai-row-wrap{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;}
-.bot-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#1A7EF0,#0F5DC9);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:2px;box-shadow:0 2px 8px rgba(26,126,240,.3);}
-.ai-msgs-group{display:flex;flex-direction:column;gap:6px;max-width:80%;}
-.bot-name{font-size:11px;color:#888;font-weight:600;margin-bottom:3px;}
-.bub.ai{background:#fff;color:#222;border-radius:4px 18px 18px 18px;box-shadow:0 1px 4px rgba(0,0,0,.1);border:none;font-size:14px;line-height:1.65;}
-/* AI markdown */
-.ai-md h3{font-size:14px;font-weight:800;color:#111;margin:8px 0 4px;}
-.ai-md p{margin:3px 0;color:#333;font-size:14px;line-height:1.65;}
-.ai-md strong{color:#000;font-weight:700;}
-.ai-md em{color:#555;font-style:italic;}
-.ai-md code{background:#f0f4ff;padding:2px 7px;border-radius:5px;font-size:12px;color:#0055cc;font-family:monospace;border:1px solid #dce6ff;}
-.ai-md ul{padding-left:0;margin:6px 0;list-style:none;}
-.ai-md ol{padding-left:0;margin:6px 0;list-style:none;counter-reset:ol-cnt;}
-.ai-md ul li{display:flex;gap:8px;margin:4px 0;font-size:14px;color:#333;align-items:flex-start;line-height:1.55;}
-.ai-md ul li::before{content:"•";color:#1A7EF0;flex-shrink:0;font-weight:900;margin-top:1px;}
-.ai-md ol li{display:flex;gap:8px;margin:4px 0;font-size:14px;color:#333;align-items:flex-start;counter-increment:ol-cnt;line-height:1.55;}
-.ai-md ol li::before{content:counter(ol-cnt)".";color:#f59e0b;flex-shrink:0;font-weight:700;min-width:18px;}
-.ai-md .tip-line{background:rgba(26,126,240,.06);border-left:3px solid rgba(26,126,240,.5);border-radius:0 8px 8px 0;padding:7px 12px;margin:6px 0;font-size:13px;color:#555;line-height:1.55;}
-.ai-md .spacer{height:6px;}
-/* Typing dots */
-.typing-wrap{display:flex;gap:5px;padding:4px 2px;}
-.td{width:8px;height:8px;border-radius:50%;background:#ccc;animation:tdBounce 1.4s infinite ease-in-out;}
+/* CHAT */
+.chat-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.chat-msgs{flex:1;overflow-y:auto;padding:0 16px;display:flex;flex-direction:column;gap:12px;scrollbar-width:none;}
+.chat-msgs::-webkit-scrollbar{display:none;}
+.bub{max-width:82%;padding:12px 16px;border-radius:18px;font-size:14px;line-height:1.6;}
+.bub.ai{background:#1E1E1E;border:1px solid var(--border);border-bottom-left-radius:4px;align-self:flex-start;}
+.bub.user{background:var(--blue);color:white;border-bottom-right-radius:4px;align-self:flex-end;}
+.bub-time{font-size:11px;color:var(--text2);margin-top:4px;}
+.ai-lbl{font-size:11px;color:var(--blue);font-weight:700;margin-bottom:4px;}
+.chat-inp-wrap{padding:12px 16px 4px;display:flex;gap:8px;align-items:center;flex-shrink:0;}
+.chat-inp{flex:1;background:#1A1A1A;border:1px solid var(--border);border-radius:14px;padding:11px 15px;color:var(--text);font-size:14px;outline:none;font-family:'Plus Jakarta Sans',sans-serif;}
+.chat-inp:focus{border-color:rgba(43,142,240,.5);}
+.chat-inp::placeholder{color:var(--text2);}
+.send-btn{width:42px;height:42px;border-radius:12px;background:var(--blue);border:none;color:white;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+.send-btn:hover{background:#1A7AE0;}
+.sugg-chips{display:flex;flex-wrap:wrap;gap:7px;padding:8px 16px 6px;}
+.chip{background:#1E1E1E;border:1px solid var(--border);border-radius:50px;padding:7px 14px;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;}
+.chip:hover{border-color:var(--blue);color:var(--blue);}
+.typing-wrap{display:flex;gap:5px;padding:4px;}
+.td{width:7px;height:7px;border-radius:50%;background:#555;animation:td 1.2s infinite;}
 .td:nth-child(2){animation-delay:.2s;}.td:nth-child(3){animation-delay:.4s;}
-@keyframes tdBounce{0%,80%,100%{transform:translateY(0);}40%{transform:translateY(-7px);}}
-/* Cursor blink */
-.cursor-blink{display:inline-block;width:2px;height:14px;background:#1A7EF0;margin-left:2px;animation:blink .6s infinite;vertical-align:middle;border-radius:1px;}
-@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.8);}}
-/* Input area */
-.chat-inp-wrap{padding:10px 14px 10px;display:flex;flex-direction:column;gap:0;flex-shrink:0;border-top:1px solid #eee;background:#fff;}
-.chat-inp-row{display:flex;align-items:center;gap:8px;}
-.chat-inp{flex:1;background:transparent;border:none;padding:8px 4px;color:#222;font-size:14px;outline:none;font-family:'Plus Jakarta Sans',sans-serif;}
-.chat-inp::placeholder{color:#bbb;}
-.chat-inp:disabled{opacity:.5;}
-.send-btn{width:38px;height:38px;border-radius:50%;background:#1A7EF0;border:none;color:white;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
-.send-btn:hover{background:#0F5DC9;}
-.send-btn:disabled{background:#ddd;cursor:not-allowed;}
-.inp-footer{display:flex;align-items:center;justify-content:space-between;padding-top:4px;}
-.inp-icons{display:flex;gap:14px;}
-.inp-ico{font-size:16px;color:#bbb;cursor:pointer;}
-.inp-ico:hover{color:#888;}
-.inp-brand{font-size:11px;color:#bbb;display:flex;align-items:center;gap:4px;}
-/* Chips */
-.sugg-chips{display:flex;flex-wrap:wrap;gap:7px;padding:10px 14px 6px;background:#f7f8fc;border-bottom:1px solid #eee;}
-.chip{background:#fff;border:1px solid #e0e0e0;border-radius:50px;padding:7px 14px;font-size:12px;font-weight:600;color:#555;cursor:pointer;transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;box-shadow:0 1px 3px rgba(0,0,0,.06);}
-.chip:hover{border-color:#1A7EF0;color:#1A7EF0;background:#f0f7ff;}
-/* AI dot */
-.ai-dot{width:6px;height:6px;border-radius:50%;background:#1A7EF0;}
-.ai-dot.live{animation:pulse 1s infinite;background:#1A7EF0;box-shadow:0 0 6px #1A7EF0;}
+@keyframes td{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-7px);}}
 
 /* QUIZ */
 .q-filter{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px;}
@@ -437,10 +386,10 @@ body{
       <button class="chip" onclick="askChip('CA course structure')">CA Course</button>
       <button class="chip" onclick="askChip('Golden Rules accounting')">Golden Rules</button>
     </div>
-    <div class="chat-msgs" id="chat-msgs"><div class="chat-inner" id="chat-inner"></div></div>
+    <div class="chat-msgs" id="chat-msgs"></div>
     <div class="chat-inp-wrap">
       <input class="chat-inp" id="chat-inp" placeholder="Ask any CA question…" onkeydown="if(event.key==='Enter')sendChat()">
-      <button class="send-btn" id="send-btn" onclick="sendChat()"><i class="fas fa-paper-plane"></i></button>
+      <button class="send-btn" onclick="sendChat()"><i class="fas fa-paper-plane"></i></button>
     </div>
   </div>
 </div>
@@ -758,229 +707,52 @@ function setLv(lv){
 document.addEventListener('click',e=>{if(!e.target.closest('.level-btn')&&!e.target.closest('.level-drop'))document.getElementById('lv-drop').classList.remove('open');});
 
 // ════ CHAT ════
-let chatHistory = [];
-let isStreaming = false;
-
-/* ── Markdown → HTML renderer ── */
-function renderMarkdown(raw) {
-  // Escape HTML first to prevent XSS from AI output
-  const esc = raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  const lines = esc.split('\n');
-  let html = '';
-  let inList = false, listType = '';
-
-  const closeList = () => { if(inList){html+=listType==='ul'?'</ul>':'</ol>';inList=false;} };
-
-  for(let i=0;i<lines.length;i++){
-    let l = lines[i];
-
-    // Inline formats (bold, italic, code, emoji safe)
-    const inline = t => t
-      .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
-      .replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g,'<em>$1</em>')
-      .replace(/`([^`]+)`/g,'<code>$1</code>');
-
-    // Heading
-    if(/^##\s/.test(l)){closeList();html+=`<h3>${inline(l.replace(/^##\s/,''))}</h3>`;continue;}
-    if(/^#\s/.test(l)){closeList();html+=`<h3>${inline(l.replace(/^#\s/,''))}</h3>`;continue;}
-
-    // Bullet list
-    if(/^[-•*]\s/.test(l)){
-      if(!inList||listType!=='ul'){closeList();html+='<ul>';inList=true;listType='ul';}
-      html+=`<li>${inline(l.replace(/^[-•*]\s/,''))}</li>`;continue;
-    }
-    // Numbered list
-    if(/^\d+[.)]\s/.test(l)){
-      if(!inList||listType!=='ol'){closeList();html+='<ol>';inList=true;listType='ol';}
-      html+=`<li>${inline(l.replace(/^\d+[.)]\s/,''))}</li>`;continue;
-    }
-
-    closeList();
-
-    // Tip/note line (emoji prefix lines like 💡, 📌, ✅)
-    if(/^[📌✅⚠️💡🔑📝🎯🚫❌📚]/.test(l)){
-      html+=`<div class="tip-line">${inline(l)}</div>`;continue;
-    }
-
-    // Empty line
-    if(l.trim()===''){html+='<div class="spacer"></div>';continue;}
-
-    // Normal paragraph
-    html+=`<p>${inline(l)}</p>`;
-  }
-  closeList();
-  return html;
+const KB={
+  "gst":"<strong>GST (Goods & Services Tax)</strong> — from <strong>1 July 2017</strong><br><br>📌 Rates: 0%, 5%, 12%, 18%, 28%<br>📌 CGST+SGST = Intra-state | IGST = Inter-state<br>📌 Registration: ₹40L (goods), ₹20L (services)<br>📌 ITC: Claim GST on inputs to reduce output tax<br>📌 Blocked Credits Sec 17(5): Motor vehicles, food, beauty<br>📌 Returns: GSTR-1 (outward), GSTR-3B (summary), GSTR-9 (annual)",
+  "income tax":"<strong>Income Tax Act 1961</strong><br><br><strong>5 Heads of Income:</strong><br>1️⃣ Salary<br>2️⃣ House Property<br>3️⃣ Business/Profession<br>4️⃣ Capital Gains (STCG/LTCG)<br>5️⃣ Other Sources<br><br>📌 Sec 80C: ₹1.5L — LIC, PPF, ELSS, NSC<br>📌 Sec 80D: Health insurance premium<br>📌 Sec 24(b): Home loan interest ₹2L<br>📌 Advance Tax: If liability > ₹10,000",
+  "audit":"<strong>Key SA Standards:</strong><br><br>📌 SA 200: Overall objectives<br>📌 SA 240: Fraud detection<br>📌 SA 315: Risk assessment<br>📌 SA 570: Going Concern<br>📌 SA 700: Forming opinion<br>📌 SA 705: Modified opinions<br><br><strong>Audit Opinions:</strong><br>✅ Unmodified (Clean)<br>⚠️ Qualified — except for<br>❌ Adverse — material & pervasive<br>🚫 Disclaimer — unable to form opinion",
+  "accounting":"<strong>Golden Rules:</strong><br><br>📌 Personal A/c: Debit Receiver, Credit Giver<br>📌 Real A/c: Debit Comes In, Credit Goes Out<br>📌 Nominal A/c: Debit Expenses, Credit Incomes<br><br><strong>Key Concepts:</strong> Accrual, Matching, Going Concern, Prudence, Consistency",
+  "company law":"<strong>Companies Act 2013:</strong><br><br>📌 Private Co: 2–200 members, min 2 directors<br>📌 Public Co: Min 7 members, min 3 directors<br>📌 AGM: Within 6 months of FY end<br><br>Key Sections: Sec 149 (Directors), Sec 96 (AGM), Sec 139 (Auditors), Sec 166 (Duties)",
+  "financial management":"<strong>Financial Management:</strong><br><br>📌 Accept if NPV > 0 | IRR > Cost of Capital<br>📌 NWC = Current Assets − Current Liabilities<br>📌 OL = Contribution ÷ EBIT<br>📌 FL = EBIT ÷ EBT<br>📌 WACC = weighted cost of all capital sources",
+  "articleship":"<strong>CA Articleship:</strong><br><br>📌 3 years mandatory training in CA firm<br>📌 Areas: Audit, Tax, Accounts, Law<br>📌 Appear CA Final in last 6 months<br>📌 Transfer allowed once per ICAI rules<br>📌 Complete ITT & Orientation before starting",
+  "ca course":"<strong>CA Course — 3 Levels:</strong><br><br>📘 Foundation: 4 subjects, after 10+2<br>📗 Intermediate: 6 subjects + 3-yr articleship<br>📕 Final: 6 subjects, after articleship<br><br>📌 ~5 years total | 40% per subject, 50% aggregate",
+  "depreciation":"<strong>Depreciation:</strong><br><br>📌 SLM: Fixed amount = (Cost − Residual) ÷ Life<br>📌 WDV: % on book value, higher in early years<br>📌 Income Tax: WDV mandatory (Block of Assets)<br>📌 Companies Act: Schedule II specifies useful life",
+  "tds":"<strong>TDS Key Sections:</strong><br><br>📌 Sec 192: Salary — slab rates<br>📌 Sec 194A: Interest — 10%<br>📌 Sec 194J: Professional — 10%<br>📌 Sec 194C: Contractor — 1%/2%<br>📌 Sec 194I: Rent — 10%/20%<br><br>Deposit by 7th of next month. Quarterly TDS returns required.",
+  "default":"👋 I can help you with:<br><br>📌 GST & Indirect Tax<br>📌 Income Tax, TDS, Capital Gains<br>📌 Auditing & SA Standards<br>📌 Accounting & Golden Rules<br>📌 Company Law<br>📌 Financial Management & FM<br>📌 CA Course & Articleship<br>📌 Cost Accounting & BEP<br><br>💡 Use ICAI official material & solve past 5 years papers!"
+};
+function getReply(q){
+  const ql=q.toLowerCase();
+  for(const[k,v]of Object.entries(KB)){if(k!=='default'&&ql.includes(k))return v;}
+  if(ql.includes('bep')||ql.includes('break'))return'<strong>Break-Even Point:</strong><br><br>📌 BEP(units) = Fixed Costs ÷ Contribution per unit<br>📌 BEP(₹) = Fixed Costs ÷ P/V Ratio<br>📌 Contribution = Sales − Variable Costs<br>📌 P/V Ratio = Contribution ÷ Sales × 100<br><br>At BEP: Total Revenue = Total Cost (zero profit/loss)';
+  if(ql.includes('exam')||ql.includes('pass')||ql.includes('prepare'))return'📚 <strong>CA Exam Prep Tips:</strong><br><br>✅ ICAI study material is the Bible<br>✅ Solve ICAI Practice Manual<br>✅ Past 5 years papers — must do<br>✅ Mock tests 2-3 months before exam<br><br>📌 Min: 40% per subject, 50% aggregate per group';
+  if(ql.includes('golden'))return KB['accounting'];
+  return KB['default'];
 }
-
-/* ── Add a message bubble ── */
-function addBub(type, htmlContent){
-  const msgs = document.getElementById('chat-msgs');
-  const inner = document.getElementById('chat-inner');
-  const time = new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
-  const row = document.createElement('div');
-  row.className = `msg-row ${type==='ai'?'ai-row':'user-row'}`;
-
-  if(type==='ai'){
-    row.innerHTML=`
-      <div class="ai-lbl"><div class="ai-dot"></div> CA Mentor AI</div>
-      <div class="bub ai"><div class="ai-md">${htmlContent}</div></div>
-      <div class="bub-time">${time}</div>`;
-  } else {
-    row.innerHTML=`
-      <div class="bub user">${htmlContent}</div>
-      <div class="bub-time" style="text-align:right">${time}</div>`;
-  }
-  inner.appendChild(row);
-  msgs.scrollTop = msgs.scrollHeight;
-  return row;
+function initChat(){
+  addBub('ai','👋 <strong>Namaste! I am CA Mentor AI.</strong><br><br>Ask me anything about CA — GST, Income Tax, Auditing, Accounting, Company Law, Financial Management, Articleship and more!');
 }
-
-/* ── Typing indicator ── */
+function addBub(type,text){
+  const el=document.getElementById('chat-msgs');
+  const time=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  const isAI=type==='ai';
+  const d=document.createElement('div');
+  d.innerHTML=`${isAI?'<div class="ai-lbl">CA Mentor AI</div>':''}<div class="bub ${type}">${text}</div><div class="bub-time" style="text-align:${isAI?'left':'right'}">${time}</div>`;
+  el.appendChild(d);el.scrollTop=el.scrollHeight;
+}
 function showTyping(){
-  const msgs = document.getElementById('chat-msgs');
-  const inner = document.getElementById('chat-inner');
-  const d = document.createElement('div');
-  d.id='tbd';d.className='msg-row ai-row';
-  d.innerHTML=`
-    <div class="ai-lbl"><div class="ai-dot live"></div> CA Mentor AI</div>
-    <div class="bub ai" style="padding:14px 18px">
-      <div class="typing-wrap"><div class="td"></div><div class="td"></div><div class="td"></div></div>
-    </div>`;
-  inner.appendChild(d);
-  msgs.scrollTop=msgs.scrollHeight;
+  const el=document.getElementById('chat-msgs');
+  const d=document.createElement('div');d.id='tbd';
+  d.innerHTML='<div class="ai-lbl">CA Mentor AI</div><div class="bub ai"><div class="typing-wrap"><div class="td"></div><div class="td"></div><div class="td"></div></div></div>';
+  el.appendChild(d);el.scrollTop=el.scrollHeight;
 }
-
-/* ── Stream words into a bubble (Gemini/Claude style) ── */
-function streamWords(rawText, onDone){
-  const msgs = document.getElementById('chat-msgs');
-  const inner = document.getElementById('chat-inner');
-  const time = new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
-  const row = document.createElement('div');
-  row.className='msg-row ai-row';
-  row.innerHTML=`
-    <div class="ai-lbl"><div class="ai-dot live"></div> CA Mentor AI</div>
-    <div class="bub ai"><div class="ai-md" id="stream-md"></div></div>
-    <div class="bub-time" id="stream-time" style="display:none">${time}</div>`;
-  inner.appendChild(row);
-
-  const mdEl = document.getElementById('stream-md');
-  const words = rawText.split(/(\s+)/);   // split keeping whitespace
-  let i=0, accumulated='';
-
-  const WORDS_PER_TICK = 3;   // speed: words per frame
-  const TICK_MS = 35;          // frame interval
-
-  const timer = setInterval(()=>{
-    if(i >= words.length){
-      clearInterval(timer);
-      // Final full render with proper markdown
-      mdEl.innerHTML = renderMarkdown(rawText);
-      document.getElementById('stream-time').style.display='block';
-      // Remove live dot
-      const dot = row.querySelector('.ai-dot');
-      if(dot) dot.classList.remove('live');
-      onDone();
-      return;
-    }
-    // Accumulate next N words, render as plain escaped text with cursor
-    let chunk = words.slice(i, i+WORDS_PER_TICK).join('');
-    accumulated += chunk;
-    i += WORDS_PER_TICK;
-    // During streaming — show plain text with blinking cursor
-    mdEl.textContent = accumulated;
-    mdEl.innerHTML = mdEl.innerHTML + '<span class="cursor-blink"></span>';
-    msgs.scrollTop = msgs.scrollHeight;
-  }, TICK_MS);
-}
-
-/* ── Main send handler ── */
-async function sendChat(){
-  if(isStreaming) return;
-  const inp = document.getElementById('chat-inp');
-  const sendBtn = document.getElementById('send-btn');
-  const t = inp.value.trim();
-  if(!t) return;
-
-  // Show user bubble
-  addBub('user', t.replace(/</g,'&lt;').replace(/>/g,'&gt;'));
-  inp.value='';
-  inp.disabled=true;
-  sendBtn.disabled=true;
+function sendChat(){
+  const inp=document.getElementById('chat-inp');const t=inp.value.trim();if(!t)return;
+  addBub('user',t);inp.value='';
   document.getElementById('sugg-chips').style.display='none';
   showTyping();
-  isStreaming=true;
-
-  chatHistory.push({role:'user', content: t});
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1024,
-        system:`You are CA Mentor AI — an expert AI assistant for Indian CA (Chartered Accountancy) students.
-
-Your expertise covers: GST, Income Tax, TDS, Auditing (SA Standards), Accounting Standards (AS/Ind AS), Company Law (Companies Act 2013), Financial Management, Cost Accounting, CA Course structure, Articleship, and ICAI exam prep.
-
-Formatting rules (IMPORTANT):
-- Use **bold** for key terms, section numbers, rates, and important values
-- Use bullet points (- item) for lists of points
-- Use numbered lists (1. item) for steps or ranked items  
-- Use ## for section headings when answer has multiple parts
-- Start important tips/rules with an emoji: 📌 for rules, ✅ for correct points, ⚠️ for warnings, 💡 for tips
-- Keep answers focused and exam-relevant
-- Always cite section numbers (e.g. Sec 17(5), SA 240) and specific values (rates, limits)
-- End with a 💡 memory tip when helpful`,
-        messages: chatHistory
-      })
-    });
-
-    const data = await res.json();
-    const tb=document.getElementById('tbd'); if(tb) tb.remove();
-
-    if(data.content && data.content[0] && data.content[0].text){
-      const rawText = data.content[0].text;
-      chatHistory.push({role:'assistant', content: rawText});
-
-      // Stream it word by word, then show final markdown
-      streamWords(rawText, ()=>{
-        isStreaming=false;
-        inp.disabled=false;
-        sendBtn.disabled=false;
-        inp.focus();
-      });
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Chatbot</title>
-        <style>
-            body { font-family: Arial, sans-serif; margin: 40px; }
-            #chatbox { width: 100%; height: 400px; border: 1px solid #ccc;
+  setTimeout(()=>{const tb=document.getElementById('tbd');if(tb)tb.remove();addBub('ai',getReply(t));},700+Math.random()*500);
 }
-
-function askChip(q){
-  if(isStreaming) return;
-  document.getElementById('chat-inp').value=q;
-  sendChat();
-}
-
-function initChat(){
-  addBub('ai',`
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-      <div style="font-size:28px">🎓</div>
-      <div><strong style="font-size:15px;color:#fff">Namaste! I'm CA Mentor AI</strong><br><span style="font-size:12px;color:#666">Powered by Claude AI</span></div>
-    </div>
-    <p>Ask me anything about your CA journey:</p>
-    <ul>
-      <li>GST, Income Tax &amp; TDS</li>
-      <li>Auditing &amp; SA Standards</li>
-      <li>Company Law &amp; Accounting</li>
-      <li>Financial Management &amp; Costing</li>
-      <li>CA Course, Articleship &amp; Exam Tips</li>
-    </ul>
-    <div class="tip-line">💡 I give detailed, exam-ready answers with section references!</div>
-  `);
-}
+function askChip(q){document.getElementById('chat-inp').value=q;sendChat();}
 
 // ════ QUIZ ════
 function renderQFilters(){
